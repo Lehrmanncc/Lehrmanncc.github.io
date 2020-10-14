@@ -56,7 +56,7 @@ for i in range(6):
 plt.show()
 </code></pre>
 <p>运行结果如图所示：</p>
-<p><img src="D:\Typora\OpenCV入门学习\1.png" alt="运行结果图" style="zoom:50%;" /></p>
+<p><img src="/.io//asset\1.png" alt="运行结果图" style="zoom:50%;"></p>
 </li>
 </ul>
 <ul>
