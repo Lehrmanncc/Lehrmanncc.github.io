@@ -25,10 +25,15 @@ G(x)=(1-\alpha)f_1(x)+\alpha f_2(x),\quad \alpha\in[0,1]</script></li>
 <script type="math/tex; mode=display">
 dst=\beta\cdot img_1+\alpha\cdot img_2+\gamma\\
 \beta+\alpha=1</script></li>
-<li><p><strong>在OpenCV中进行图像融合的函数为cv.addWeighted(img1,$\beta$,),其有四个参数</strong></p>
+<li><p><strong>在OpenCV中进行图像融合的函数为cv.addWeighted(img1,$\beta$,img2,$\alpha,\gamma$),其有四个参数,img1与img2分别为输入的图像，$\beta,\alpha$分别为各自图像融合时所占的权重，一般情况下$\gamma$为0。</strong></p>
+<p>以下为测试代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span>  cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">img1=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\save.png&#x27;</span>)</span><br><span class="line">img2=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\imori.jpg&#x27;</span>)</span><br><span class="line"></span><br><span class="line">dst1=cv.addWeighted(img1,<span class="number">0.8</span>,img2,<span class="number">0.2</span>,<span class="number">0</span>)</span><br><span class="line">dst2=cv.addWeighted(img1,<span class="number">0.2</span>,img2,<span class="number">0.8</span>,<span class="number">0</span>)</span><br><span class="line">images=[dst1,dst2]</span><br><span class="line">titles=[<span class="string">&#x27;dst1&#x27;</span>,<span class="string">&#x27;dst2&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">    plt.subplot(<span class="number">1</span>,<span class="number">2</span>,i+<span class="number">1</span>)</span><br><span class="line">    plt.imshow(images[i],<span class="string">&#x27;jet&#x27;</span>)</span><br><span class="line">    plt.title(titles[i],fontsize=<span class="number">16</span>)</span><br><span class="line">    plt.xticks([]),plt.yticks([])</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>上述测试代码里的img1为img2的灰度图，可以发现当$\beta$取0.8，$\alpha$取0.2时，img1融合时占比较高，当$\beta$取0.2，$\alpha$取0.8时，二者的对比结果如下图所示：</p>
+<p><img src="/2020/10/14/opencv/asset/4.png" alt="运行结果图" style="zoom:50%;"></p>
+<p>可以发现前者更加偏灰度，后者更加偏向原图。</p>
 </li>
 </ul>
-<h2 id="阈值分割"><a href="#阈值分割" class="headerlink" title="阈值分割"></a>阈值分割</h2><h3 id="固定阈值分割"><a href="#固定阈值分割" class="headerlink" title="固定阈值分割"></a>固定阈值分割</h3><ul>
+<h3 id="按位运算"><a href="#按位运算" class="headerlink" title="按位运算"></a>按位运算</h3><h2 id="阈值分割"><a href="#阈值分割" class="headerlink" title="阈值分割"></a>阈值分割</h2><h3 id="固定阈值分割"><a href="#固定阈值分割" class="headerlink" title="固定阈值分割"></a>固定阈值分割</h3><ul>
 <li><p><strong>阈值分割简单来说，即大于阈值的变成一种值，小于阈值的为另一种值</strong>   </p>
 </li>
 <li><p>在python的cv2库中实现固定阈值分割的为<strong>cv2.threshold()函数</strong>。</p>
