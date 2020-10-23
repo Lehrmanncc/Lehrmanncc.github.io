@@ -1,6 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>OpenCV 基础操作</title>
+    <url>/2020/10/14/opencv/</url>
+    <content><![CDATA[<h2 id="图像上的算术运算"><a href="#图像上的算术运算" class="headerlink" title="图像上的算术运算"></a>图像上的算术运算</h2><h3 id="图像融合"><a href="#图像融合" class="headerlink" title="图像融合"></a>图像融合</h3><ul>
+<li><p><strong>图像融合即也是图像加法，但它是对每个图像乘以相应的权重，使其具有融合或透明的感觉。根据以下等式进行运算。</strong></p>
+<script type="math/tex; mode=display">
+G(x)=(1-\alpha)f_1(x)+\alpha f_2(x),\quad \alpha\in[0,1]</script></li>
+<li><p><strong>f(x)可作为输入的图像，则上式可变为：</strong></p>
+<script type="math/tex; mode=display">
+dst=\beta\cdot img_1+\alpha\cdot img_2+\gamma\\
+\beta+\alpha=1</script></li>
+<li><p><strong>在OpenCV中进行图像融合的函数为cv.addWeighted(img1,$\beta$,img2,$\alpha,\gamma$),其有四个参数,img1与img2分别为输入的图像，$\beta,\alpha$分别为各自图像融合时所占的权重，一般情况下$\gamma$为0。</strong></p>
+<p>以下为测试代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span>  cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">img1=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\save.png&#x27;</span>)</span><br><span class="line">img2=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\imori.jpg&#x27;</span>)</span><br><span class="line"></span><br><span class="line">dst1=cv.addWeighted(img1,<span class="number">0.8</span>,img2,<span class="number">0.2</span>,<span class="number">0</span>)</span><br><span class="line">dst2=cv.addWeighted(img1,<span class="number">0.2</span>,img2,<span class="number">0.8</span>,<span class="number">0</span>)</span><br><span class="line">images=[dst1,dst2]</span><br><span class="line">titles=[<span class="string">&#x27;dst1&#x27;</span>,<span class="string">&#x27;dst2&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">    images[i]=cv.cvtColor(images[i],cv.COLOR_BGR2RGB)</span><br><span class="line">    plt.subplot(<span class="number">1</span>,<span class="number">2</span>,i+<span class="number">1</span>)</span><br><span class="line">    plt.imshow(images[i],<span class="string">&#x27;jet&#x27;</span>)</span><br><span class="line">    plt.title(titles[i],fontsize=<span class="number">16</span>)</span><br><span class="line">    plt.xticks([]),plt.yticks([])</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>代码解读：</p>
+</li>
+<li><p>在这里要注意到，使用Matplotlib显示图片时，要先将图片转换为RGB形式，在OpenCV中，图像是以BGR通道存储的，直接显示会出现问题。</p>
+</li>
+<li><p>上述测试代码里的img1为img2的灰度图，可以发现当$\beta$取0.8，$\alpha$取0.2时，img1融合时占比较高，当$\beta$取0.2，$\alpha$取0.8时，二者的对比结果如下图所示：</p>
+<p><img src="/2020/10/14/opencv/4.png" alt="运行结果图" style="zoom:40%;"></p>
+<p>可以发现前者更加偏灰度，后者更加偏向原图。</p>
+</li>
+</ul>
+<h3 id="按位运算"><a href="#按位运算" class="headerlink" title="按位运算"></a>按位运算</h3><ul>
+<li><p>有时候，我们不想将图像相加或者融合，例如，下面这张图片：</p>
+<p><img src="/2020/10/14/opencv/5.png" style="zoom: 25%;"></p>
+<p>它就是由两张图片——（西电LOGO和人物图）进行“掩盖”合成的。</p>
+</li>
+<li><p><strong>按位操作分为以下四种：AND，OR，NOT，XOR，一一介绍它们的运算：</strong></p>
+<p><strong>1. AND：即“与”运算，（1&amp;1=1，1&amp;0=0，0&amp;1=0，0&amp;0=0），其具体意义可理解为，只有两值都大于0，其为真。而在像素中，其取值在0~255之间，0为黑色，255为白色，而这里大于0的像素值都可以看作1。在两个都大于0的像素值之间进行AND运算，其结果取较小的像素值！</strong></p>
+<p><strong>2. NOT：即“非”运算，（~1=0，~0=1），其具体意义可理解为，取像素的相反值，则当图像为二值图时，原图的黑色变为白色，白色变为黑色。</strong></p>
+<p><strong>3. OR：即“与”运算，（1|1=1，1|0=1，0|1=1，0|0=0），其具体意义可理解为，只有当两值都为0，其为假。而对于两像素值，其先进行二进制转换，后对其进行运算，例如3|5：00000011|00000101=00000111，因此3|5=7。</strong></p>
+<p><strong>4. XOR：即“异或”运算，（1^1=0，1^0=1，0^1=1，0^0=0），其具体意义可理解为，只有当两值不相同时，其为真。对于两两像素值，先进行二进制转换，后对其进行运算，例如3^5：00000011^00000101=00000110，因此3^5=6。</strong></p>
+</li>
+<li><p><strong>OpenCV中，进行按位运算的有以下四个函数：cv.bitwise_not，cv.bitwise_and，cv.bitwise_or，cv.bitwise_xor，这四个函数即对应上面的运算规则。下面将以下两张图片合成为上图：</strong></p>
+<p><img src="/2020/10/14/opencv/6.jpg" style="zoom:25%;"></p>
+<p><img src="/2020/10/14/opencv/7.jpg" style="zoom:25%;"></p>
+<p>代码如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img1=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\xidian1.jpg&#x27;</span>)</span><br><span class="line">img2=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\girl.jpg&#x27;</span>)</span><br><span class="line">row,cols,channels=img1.shape</span><br><span class="line">roi=img2[<span class="number">0</span>:row,<span class="number">0</span>:cols]</span><br><span class="line"></span><br><span class="line">img1_gray=cv.cvtColor(img1,cv.COLOR_BGR2GRAY)</span><br><span class="line">ret,dst1=cv.threshold(img1_gray,<span class="number">200</span>,<span class="number">255</span>,cv.THRESH_BINARY_INV)</span><br><span class="line">dst1_inv=cv.bitwise_not(dst1)</span><br><span class="line"></span><br><span class="line">img2_bg=cv.bitwise_and(roi,roi,mask=dst1_inv)</span><br><span class="line">img1_bg=cv.bitwise_and(img1,img1,mask=dst1)</span><br><span class="line"></span><br><span class="line">dst=cv.add(img1_bg,img2_bg)</span><br><span class="line">img2[<span class="number">0</span>:row,<span class="number">0</span>:cols]=dst</span><br><span class="line"></span><br><span class="line">cv.imshow(<span class="string">&#x27;images&#x27;</span>,img2)</span><br><span class="line"></span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p>代码解读:</p>
+<ul>
+<li><p><strong>首先由shape得到img1（LOGO）图像的大小，即行数和列数。由此，可以在img2图像上，通过numpy直接划分出与img1图像一样大小的 roi图像（为原图的左上角）。</strong></p>
+</li>
+<li><p><strong>通过threshold函数可将img1图像二值化，而在这之前需要将img1图像转换为灰度图，才能将其传入。使用 THRESH_BINARY_INV方法将其二值化，二值化图像如下：</strong></p>
+<p><img src="/2020/10/14/opencv/8.png" style="zoom:33%;"></p>
+<p><strong>将得到的二值化图像（dst1）利用“非”运算，得到的图像如下：</strong></p>
+<p><img src="/2020/10/14/opencv/9.png" style="zoom:33%;"></p>
+<p><strong>可以发现，进行“非”运算后，对二值图来说，其实即进行了颜色反转。</strong></p>
+</li>
+<li></li>
+</ul>
+<hr>
+</li>
+</ul>
+<h2 id="阈值分割"><a href="#阈值分割" class="headerlink" title="阈值分割"></a>阈值分割</h2><h3 id="固定阈值分割"><a href="#固定阈值分割" class="headerlink" title="固定阈值分割"></a>固定阈值分割</h3><ul>
+<li><p><strong>阈值分割简单来说，即大于阈值的变成一种值，小于阈值的为另一种值</strong>   </p>
+</li>
+<li><p>在python的cv2库中实现固定阈值分割的为<strong>cv2.threshold()函数</strong>。</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\imori.jpg&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">ret, th1 = cv.threshold(img, <span class="number">127</span>, <span class="number">255</span>, cv.THRESH_BINARY)</span><br><span class="line">ret,th2=cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_BINARY_INV)</span><br><span class="line">ret,th3=cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TOZERO)</span><br><span class="line">ret,th4=cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TOZERO_INV)</span><br><span class="line">ret,th5=cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TRUNC)</span><br><span class="line"></span><br><span class="line">titles=[<span class="string">&#x27;Org&#x27;</span>,<span class="string">&#x27;Binary&#x27;</span>,<span class="string">&#x27;Binary_inv&#x27;</span>,<span class="string">&#x27;Tozero&#x27;</span>,<span class="string">&#x27;Tozero_inv&#x27;</span>,<span class="string">&#x27;Trunc&#x27;</span>]</span><br><span class="line">images=[img,th1,th2,th3,th4,th5]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6</span>):</span><br><span class="line">    plt.subplot(<span class="number">2</span>,<span class="number">3</span>,i+<span class="number">1</span>)</span><br><span class="line">    plt.imshow(images[i],<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">    plt.title(titles[i],fontsize=<span class="number">16</span>)</span><br><span class="line">    plt.xticks([]),plt.yticks([])</span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  运行结果如图所示：</p>
+<p>  <img src="/2020/10/14/opencv/1.png" alt="运行结果图" style="zoom:40%;"></p>
+<ul>
+<li><p><strong>cv2.threshold()函数由4个参数组成，img为传入函数的图像，127为设置的阈值大小(threshold)，255为阈值设定方式里的阈值最大值(maxval)，THRESH_BINARY为阈值设定的方式。</strong>      </p>
+</li>
+<li><p><strong>ret代表当前的阈值。</strong></p>
+</li>
+<li><p><strong>matplotlib.pyplot中subplot(2,3,i+1)即为将窗口分为2行3列，i+1表示当前的第i+1个子图，imshow()则是对图像进行处理，它不会让图片进行显示，图像显示需要show()</strong></p>
+</li>
+<li><p><strong>阈值设定有5种方法，分别为:</strong></p>
+<ol>
+<li><strong>THRESH_BINARY:</strong></li>
+</ol>
+<script type="math/tex; mode=display">
+dst(x,y)=\begin{cases}
+maxval &\ if\ src(x,y)>thresh\\
+0 &\ otherwise
+\end{cases}</script><p>​        当原像素值大于阈值，原像素值变为maxval，除此之外为0。</p>
+<p>​    2.<strong>THRESH_BINARY_INV:</strong></p>
+<script type="math/tex; mode=display">
+dst(x,y)=\begin{cases}
+0 &\ if \ src(x,y)>thresh\\
+maxval &\ otherwise
+\end{cases}</script><p>​        该阈值方法与上述阈值方法相反，从图像也可以观察得到。</p>
+<p>​    3.<strong>THRESH_TOZERO:</strong></p>
+<script type="math/tex; mode=display">
+dst(x,y)=\begin{cases}
+src(x,y) &\ if\ src(x,y)>thresh\\
+0 &\ oherwise
+\end{cases}</script><p>​        当原像素值大于阈值时，原像素值保持不变，除此之外，原像素值变为0。</p>
+<p>​    4.<strong>THRESH_TOZERO_INV:</strong></p>
+<script type="math/tex; mode=display">
+dst(x,y)=\begin{cases}
+0 &\ if \ src(x,y)>thresh\\
+src(x,y) &\ otherwise
+\end{cases}</script><p>​        该阈值方法与上述阈值方法相反。</p>
+<p>​     5.<strong>THRESH_TRUNC:</strong></p>
+<script type="math/tex; mode=display">
+dst(x,y)=\begin{cases}
+threshold &\ if \ src(x,y)>thresh\\
+src(x,y) &\ otherwise
+\end{cases}</script><p>​        放原像素值大于阈值，则原像素值变为阈值，除此之外，原像素值保持不变。</p>
+</li>
+</ul>
+<h3 id="自适应阈值分割"><a href="#自适应阈值分割" class="headerlink" title="自适应阈值分割"></a>自适应阈值分割</h3><ul>
+<li></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>图像处理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Machine learning</title>
     <url>/2020/10/23/ML/</url>
     <content><![CDATA[<h1 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a><strong>Regression</strong></h1><h2 id="Linear-regression-线性回归"><a href="#Linear-regression-线性回归" class="headerlink" title="Linear regression(线性回归)"></a>Linear regression(线性回归)</h2><h3 id="问题的导入：预测神奇宝贝进化后的战斗力（CP）值"><a href="#问题的导入：预测神奇宝贝进化后的战斗力（CP）值" class="headerlink" title="问题的导入：预测神奇宝贝进化后的战斗力（CP）值"></a>问题的导入：预测神奇宝贝进化后的战斗力（CP）值</h3><ul>
@@ -121,115 +234,8 @@ y=b+\sum_jw_j(x_j+\varDelta x_j) \Longrightarrow \varDelta y=w_j\varDelta x_j</s
 </li>
 </ul>
 ]]></content>
-  </entry>
-  <entry>
-    <title>OpenCV 基础操作</title>
-    <url>/2020/10/14/opencv/</url>
-    <content><![CDATA[<h2 id="图像上的算术运算"><a href="#图像上的算术运算" class="headerlink" title="图像上的算术运算"></a>图像上的算术运算</h2><h3 id="图像融合"><a href="#图像融合" class="headerlink" title="图像融合"></a>图像融合</h3><ul>
-<li><p><strong>图像融合即也是图像加法，但它是对每个图像乘以相应的权重，使其具有融合或透明的感觉。根据以下等式进行运算。</strong></p>
-<script type="math/tex; mode=display">
-G(x)=(1-\alpha)f_1(x)+\alpha f_2(x),\quad \alpha\in[0,1]</script></li>
-<li><p><strong>f(x)可作为输入的图像，则上式可变为：</strong></p>
-<script type="math/tex; mode=display">
-dst=\beta\cdot img_1+\alpha\cdot img_2+\gamma\\
-\beta+\alpha=1</script></li>
-<li><p><strong>在OpenCV中进行图像融合的函数为cv.addWeighted(img1,$\beta$,img2,$\alpha,\gamma$),其有四个参数,img1与img2分别为输入的图像，$\beta,\alpha$分别为各自图像融合时所占的权重，一般情况下$\gamma$为0。</strong></p>
-<p>以下为测试代码：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span>  cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">img1=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\save.png&#x27;</span>)</span><br><span class="line">img2=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\imori.jpg&#x27;</span>)</span><br><span class="line"></span><br><span class="line">dst1=cv.addWeighted(img1,<span class="number">0.8</span>,img2,<span class="number">0.2</span>,<span class="number">0</span>)</span><br><span class="line">dst2=cv.addWeighted(img1,<span class="number">0.2</span>,img2,<span class="number">0.8</span>,<span class="number">0</span>)</span><br><span class="line">images=[dst1,dst2]</span><br><span class="line">titles=[<span class="string">&#x27;dst1&#x27;</span>,<span class="string">&#x27;dst2&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">    images[i]=cv.cvtColor(images[i],cv.COLOR_BGR2RGB)</span><br><span class="line">    plt.subplot(<span class="number">1</span>,<span class="number">2</span>,i+<span class="number">1</span>)</span><br><span class="line">    plt.imshow(images[i],<span class="string">&#x27;jet&#x27;</span>)</span><br><span class="line">    plt.title(titles[i],fontsize=<span class="number">16</span>)</span><br><span class="line">    plt.xticks([]),plt.yticks([])</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>代码解读：</p>
-</li>
-<li><p>在这里要注意到，使用Matplotlib显示图片时，要先将图片转换为RGB形式，在OpenCV中，图像是以BGR通道存储的，直接显示会出现问题。</p>
-</li>
-<li><p>上述测试代码里的img1为img2的灰度图，可以发现当$\beta$取0.8，$\alpha$取0.2时，img1融合时占比较高，当$\beta$取0.2，$\alpha$取0.8时，二者的对比结果如下图所示：</p>
-<p><img src="/2020/10/14/opencv/4.png" alt="运行结果图" style="zoom:40%;"></p>
-<p>可以发现前者更加偏灰度，后者更加偏向原图。</p>
-</li>
-</ul>
-<h3 id="按位运算"><a href="#按位运算" class="headerlink" title="按位运算"></a>按位运算</h3><ul>
-<li><p>有时候，我们不想将图像相加或者融合，例如，下面这张图片：</p>
-<p><img src="/2020/10/14/opencv/5.png" style="zoom: 25%;"></p>
-<p>它就是由两张图片——（西电LOGO和人物图）进行“掩盖”合成的。</p>
-</li>
-<li><p><strong>按位操作分为以下四种：AND，OR，NOT，XOR，一一介绍它们的运算：</strong></p>
-<p><strong>1. AND：即“与”运算，（1&amp;1=1，1&amp;0=0，0&amp;1=0，0&amp;0=0），其具体意义可理解为，只有两值都大于0，其为真。而在像素中，其取值在0~255之间，0为黑色，255为白色，而这里大于0的像素值都可以看作1。在两个都大于0的像素值之间进行AND运算，其结果取较小的像素值！</strong></p>
-<p><strong>2. NOT：即“非”运算，（~1=0，~0=1），其具体意义可理解为，取像素的相反值，则当图像为二值图时，原图的黑色变为白色，白色变为黑色。</strong></p>
-<p><strong>3. OR：即“与”运算，（1|1=1，1|0=1，0|1=1，0|0=0），其具体意义可理解为，只有当两值都为0，其为假。而对于两像素值，其先进行二进制转换，后对其进行运算，例如3|5：00000011|00000101=00000111，因此3|5=7。</strong></p>
-<p><strong>4. XOR：即“异或”运算，（1^1=0，1^0=1，0^1=1，0^0=0），其具体意义可理解为，只有当两值不相同时，其为真。对于两两像素值，先进行二进制转换，后对其进行运算，例如3^5：00000011^00000101=00000110，因此3^5=6。</strong></p>
-</li>
-<li><p><strong>OpenCV中，进行按位运算的有以下四个函数：cv.bitwise_not，cv.bitwise_and，cv.bitwise_or，cv.bitwise_xor，这四个函数即对应上面的运算规则。下面将以下两张图片合成为上图：</strong></p>
-<p><img src="/2020/10/14/opencv/6.jpg" style="zoom:25%;"></p>
-<p><img src="/2020/10/14/opencv/7.jpg" style="zoom:25%;"></p>
-<p>代码如下:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img1=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\xidian1.jpg&#x27;</span>)</span><br><span class="line">img2=cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\girl.jpg&#x27;</span>)</span><br><span class="line">row,cols,channels=img1.shape</span><br><span class="line">roi=img2[<span class="number">0</span>:row,<span class="number">0</span>:cols]</span><br><span class="line"></span><br><span class="line">img1_gray=cv.cvtColor(img1,cv.COLOR_BGR2GRAY)</span><br><span class="line">ret,dst1=cv.threshold(img1_gray,<span class="number">200</span>,<span class="number">255</span>,cv.THRESH_BINARY_INV)</span><br><span class="line">dst1_inv=cv.bitwise_not(dst1)</span><br><span class="line"></span><br><span class="line">img2_bg=cv.bitwise_and(roi,roi,mask=dst1_inv)</span><br><span class="line">img1_bg=cv.bitwise_and(img1,img1,mask=dst1)</span><br><span class="line"></span><br><span class="line">dst=cv.add(img1_bg,img2_bg)</span><br><span class="line">img2[<span class="number">0</span>:row,<span class="number">0</span>:cols]=dst</span><br><span class="line"></span><br><span class="line">cv.imshow(<span class="string">&#x27;images&#x27;</span>,img2)</span><br><span class="line"></span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
-<p>代码解读:</p>
-<ul>
-<li><p><strong>首先由shape得到img1（LOGO）图像的大小，即行数和列数。由此，可以在img2图像上，通过numpy直接划分出与img1图像一样大小的 roi图像（为原图的左上角）。</strong></p>
-</li>
-<li><p><strong>通过threshold函数可将img1图像二值化，而在这之前需要将img1图像转换为灰度图，才能将其传入。使用 THRESH_BINARY_INV方法将其二值化，二值化图像如下：</strong></p>
-<p><img src="/2020/10/14/opencv/8.png" style="zoom:33%;"></p>
-<p><strong>将得到的二值化图像（dst1）利用“非”运算，得到的图像如下：</strong></p>
-<p><img src="/2020/10/14/opencv/9.png" style="zoom:33%;"></p>
-<p><strong>可以发现，进行“非”运算后，对二值图来说，其实即进行了颜色反转。</strong></p>
-</li>
-<li></li>
-</ul>
-<hr>
-</li>
-</ul>
-<h2 id="阈值分割"><a href="#阈值分割" class="headerlink" title="阈值分割"></a>阈值分割</h2><h3 id="固定阈值分割"><a href="#固定阈值分割" class="headerlink" title="固定阈值分割"></a>固定阈值分割</h3><ul>
-<li><p><strong>阈值分割简单来说，即大于阈值的变成一种值，小于阈值的为另一种值</strong>   </p>
-</li>
-<li><p>在python的cv2库中实现固定阈值分割的为<strong>cv2.threshold()函数</strong>。</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = cv.imread(<span class="string">r&#x27;D:\Python\image_processing\exercise\imori.jpg&#x27;</span>,<span class="number">0</span>)</span><br><span class="line">ret, th1 = cv.threshold(img, <span class="number">127</span>, <span class="number">255</span>, cv.THRESH_BINARY)</span><br><span class="line">ret,th2=cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_BINARY_INV)</span><br><span class="line">ret,th3=cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TOZERO)</span><br><span class="line">ret,th4=cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TOZERO_INV)</span><br><span class="line">ret,th5=cv.threshold(img,<span class="number">127</span>,<span class="number">255</span>,cv.THRESH_TRUNC)</span><br><span class="line"></span><br><span class="line">titles=[<span class="string">&#x27;Org&#x27;</span>,<span class="string">&#x27;Binary&#x27;</span>,<span class="string">&#x27;Binary_inv&#x27;</span>,<span class="string">&#x27;Tozero&#x27;</span>,<span class="string">&#x27;Tozero_inv&#x27;</span>,<span class="string">&#x27;Trunc&#x27;</span>]</span><br><span class="line">images=[img,th1,th2,th3,th4,th5]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6</span>):</span><br><span class="line">    plt.subplot(<span class="number">2</span>,<span class="number">3</span>,i+<span class="number">1</span>)</span><br><span class="line">    plt.imshow(images[i],<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">    plt.title(titles[i],fontsize=<span class="number">16</span>)</span><br><span class="line">    plt.xticks([]),plt.yticks([])</span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>  运行结果如图所示：</p>
-<p>  <img src="/2020/10/14/opencv/1.png" alt="运行结果图" style="zoom:40%;"></p>
-<ul>
-<li><p><strong>cv2.threshold()函数由4个参数组成，img为传入函数的图像，127为设置的阈值大小(threshold)，255为阈值设定方式里的阈值最大值(maxval)，THRESH_BINARY为阈值设定的方式。</strong>      </p>
-</li>
-<li><p><strong>ret代表当前的阈值。</strong></p>
-</li>
-<li><p><strong>matplotlib.pyplot中subplot(2,3,i+1)即为将窗口分为2行3列，i+1表示当前的第i+1个子图，imshow()则是对图像进行处理，它不会让图片进行显示，图像显示需要show()</strong></p>
-</li>
-<li><p><strong>阈值设定有5种方法，分别为:</strong></p>
-<ol>
-<li><strong>THRESH_BINARY:</strong></li>
-</ol>
-<script type="math/tex; mode=display">
-dst(x,y)=\begin{cases}
-maxval &\ if\ src(x,y)>thresh\\
-0 &\ otherwise
-\end{cases}</script><p>​        当原像素值大于阈值，原像素值变为maxval，除此之外为0。</p>
-<p>​    2.<strong>THRESH_BINARY_INV:</strong></p>
-<script type="math/tex; mode=display">
-dst(x,y)=\begin{cases}
-0 &\ if \ src(x,y)>thresh\\
-maxval &\ otherwise
-\end{cases}</script><p>​        该阈值方法与上述阈值方法相反，从图像也可以观察得到。</p>
-<p>​    3.<strong>THRESH_TOZERO:</strong></p>
-<script type="math/tex; mode=display">
-dst(x,y)=\begin{cases}
-src(x,y) &\ if\ src(x,y)>thresh\\
-0 &\ oherwise
-\end{cases}</script><p>​        当原像素值大于阈值时，原像素值保持不变，除此之外，原像素值变为0。</p>
-<p>​    4.<strong>THRESH_TOZERO_INV:</strong></p>
-<script type="math/tex; mode=display">
-dst(x,y)=\begin{cases}
-0 &\ if \ src(x,y)>thresh\\
-src(x,y) &\ otherwise
-\end{cases}</script><p>​        该阈值方法与上述阈值方法相反。</p>
-<p>​     5.<strong>THRESH_TRUNC:</strong></p>
-<script type="math/tex; mode=display">
-dst(x,y)=\begin{cases}
-threshold &\ if \ src(x,y)>thresh\\
-src(x,y) &\ otherwise
-\end{cases}</script><p>​        放原像素值大于阈值，则原像素值变为阈值，除此之外，原像素值保持不变。</p>
-</li>
-</ul>
-<h3 id="自适应阈值分割"><a href="#自适应阈值分割" class="headerlink" title="自适应阈值分割"></a>自适应阈值分割</h3><ul>
-<li></li>
-</ul>
-]]></content>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
   </entry>
 </search>
