@@ -1,6 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Machine learning</title>
+    <url>/2020/10/23/ML/</url>
+    <content><![CDATA[<h1 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a><strong>Regression</strong></h1><h2 id="Linear-regression-线性回归"><a href="#Linear-regression-线性回归" class="headerlink" title="Linear regression(线性回归)"></a>Linear regression(线性回归)</h2><h3 id="问题的导入：预测神奇宝贝进化后的战斗力（CP）值"><a href="#问题的导入：预测神奇宝贝进化后的战斗力（CP）值" class="headerlink" title="问题的导入：预测神奇宝贝进化后的战斗力（CP）值"></a>问题的导入：预测神奇宝贝进化后的战斗力（CP）值</h3><ul>
+<li><p><strong>输入：进化前神奇宝贝A的CP值，种类，血量（HP），重量（Weight)，高度（Height）</strong></p>
+</li>
+<li><p><strong>输出：进化后神奇宝贝A的CP值</strong></p>
+<p><img src="/2020/10/23/ML/1.png" style="zoom: 67%;"></p>
+</li>
+</ul>
+<h3 id="机器学习的主要步骤："><a href="#机器学习的主要步骤：" class="headerlink" title="机器学习的主要步骤："></a>机器学习的主要步骤：</h3><p><strong>step 1：Model（确定模型）</strong></p>
+<p><strong>step 2：Goodless of function（确定损失函数）</strong></p>
+<p><strong>step 3：Best function（找到最好的函数）</strong></p>
+<h3 id="S-Model"><a href="#S-Model" class="headerlink" title="$\S $Model"></a>$\S $Model</h3><p>在这里，根据常理推测，神奇宝贝进化后的CP值和进化前的CP值有较大的关系，故我们可以假设进化前的CP值与进化后的CP值呈线性关系。</p>
+<p>设神奇宝贝进化前的CP值为$x_{cp}$，进化后的CP值为$y$，则可建立以下线性关系：</p>
+<script type="math/tex; mode=display">
+y=b+wx_{cp} \tag 1</script><p>在这里我们仅考虑了神奇宝贝进化前的CP值这一特征，如果神奇宝贝影响进化后的CP值的不止这一特征，若有n个特征，那么我们可将$x_{cp}$推广到$x_i$，于是便可得到<strong>==Linear model==</strong>（线性模型）：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+y=b+\sum_i^nw_ix_i\\
+x_i:feature\ (特征)\\
+w_i:weight \ (权重)\\
+b:bias \ (偏差) \\
+\end{cases} \tag 2</script><p>在这个模型里，一般而言，我们会有<strong>==training data==</strong>，假设现在我们有10组训练数据，即：</p>
+<script type="math/tex; mode=display">
+(x^1,\widehat{y}^1)\\
+(x^2,\widehat{y}^2)\\
+\vdots\\
+(x^{10},\widehat{y}^{10}) \tag 3</script><p>对于以上数据来说，它们是已知的，其上标代表了它们的序号，而现在，我们可以将以上数据带入简化模型（式1）中，可得：</p>
+<script type="math/tex; mode=display">
+\widehat{y}^1=b+wx_{cp}^1\\
+\widehat{y}^2=b+wx_{cp}^2\\
+\vdots\\
+\widehat{y}^{10}=b+wx_{cp}^{10}\\  \tag 4</script><p>对于式4，即就是我们训练数据带入模型后所得，而其只有两个未知数，即$b,w$，而现在我们需要做的就是<strong>找到最适合的$b,w$参数值</strong>。现在就需要损失函数发挥作用了。</p>
+<h3 id="S-Goodless-of-function"><a href="#S-Goodless-of-function" class="headerlink" title="$\S $Goodless of  function"></a>$\S $Goodless of  function</h3><ul>
+<li><p><strong>损失函数的作用</strong></p>
+<script type="math/tex; mode=display">
+Loss\ function\ L:
+\begin{cases}
+input:&\ a\ function\\
+output:&\ how\ bad\ it\ is
+\end{cases}</script><p>这里要注意评价函数的输入，即为函数$f$，而其输出是它的好坏，但由上式可知，式（4）其<strong>未知量只有待求参数$b,w$，</strong>那么函数评价函数$L(f)$即为：</p>
+<script type="math/tex; mode=display">
+L(f)=L(w,b) \tag 5</script><p>那么现在，<strong>对于输出所评价函数的好坏即可转化为评价参数$w,b$的好坏。</strong></p>
+</li>
+<li><p><strong>常见的损失函数</strong></p>
+<p>现在我们已有真实数据，那么如何反映其参数的好坏呢，我们可以<strong>通过真实的CP值与预测CP值的差进行衡量</strong>，如下所示：</p>
+<script type="math/tex; mode=display">
+L(f)=\sum_{i=1}^{10}(\widehat{y}^i-f(x_{cp}^i))^2\Longrightarrow\ L(w,b)=\sum_{i=1}^{10}(\widehat{y}^i-(b+w\cdot x_{cp}^i))^2 \tag 6</script><p>当真实值与误差值较小时，那么此时的$w,b$可认为是最好的，则我们的目标即为：</p>
+<script type="math/tex; mode=display">
+min\quad L(w,b)</script><p>于是我们现在就需要对其进行求解。</p>
+</li>
+</ul>
+<h3 id="S-Best-function-——-Gradient-Descent（梯度下降法）"><a href="#S-Best-function-——-Gradient-Descent（梯度下降法）" class="headerlink" title="$\S $Best  function ——-Gradient  Descent（梯度下降法）"></a>$\S $Best  function ——-Gradient  Descent（梯度下降法）</h3><p>我们需要通过$Loss\ Function\Longrightarrow”the \ best\ function”$，即达到我们的目标，令：</p>
+<script type="math/tex; mode=display">
+w*,b*=arg\ \ min_{w,b}\ \ L(w,b)=arg\ \ min_{w,b}\ \ \sum_{i=1}^{10}(\widehat{y}^i-(b+w\cdot x_{cp}^i))^2 \tag 7</script><p>对于以上，我们可以采用穷举法，求得$L(w,b)$的最小值，但下面介绍更加高效的算法。</p>
+<ul>
+<li><p>==梯度下降法==</p>
+<p>若现在损失函数$L(w,b)$只考虑其$w$单变量情况，有以下函数图像：</p>
+<p><img src="/2020/10/23/ML/2.png" style="zoom:60%;"></p>
+<p>当我们现在<strong>随机</strong>在函数上选择一点$w^0$，</p>
+<p>1.如果函数在该点的斜率为负，即导数$\frac{\mathrm{d}L}{\mathrm{d}w}&lt;0$，那么此时函数应该为<strong>递减的</strong>，于是可以考虑增大$w^0$。</p>
+<p>2.如果函数在该点的斜率为正，即导数$\frac{\mathrm{d}L}{\mathrm{d}w}&gt;0$，那么此时函数应该为<strong>递增的</strong>，于是可以考虑减少$w^0$。</p>
+<p>增大多少或减少多少？</p>
+<p>定义每次移动的步长为：</p>
+<script type="math/tex; mode=display">
+step=\eta\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^0 \tag 8</script><p>在式（8）中，$\eta$称为”learning rate（学习率）”，<strong>我们可以通过控制$\eta$的大小，从而增加step，以此可以提高求解效率，但若$\eta$过大，则会导致步长过大，那么有可能会错过最优解，故我们需要选取合适的$\eta$。而$\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^0$，其微分值越大$\rightarrow$曲线越陡峭$\rightarrow$移动步长越大$\rightarrow$提高求解效率。</strong></p>
+<p>以上图为例，其算法如下：</p>
+<script type="math/tex; mode=display">
+w^0-\eta\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^0\Longrightarrow w^1\\
+w^1-\eta\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^1\Longrightarrow w^2\\
+\vdots \ \ 更新循环\\
+w^{t-1}-\eta\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^{t-1}\Longrightarrow w^t</script><p>在上式中，因为$\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^{0}&lt;0$，故需给其添加负号。对点不断更新循环，直到$(\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^{t})=0$停止，此时$w=w^t$即所求参数的最优解。</p>
+<p><strong>但从上图我们可以发现$w^t$其实并不为global optimal solution(全局最优解)，其为local optimal solution(局部最优解)，不过由于我们研究的为线性回归，所以不存在局部最优解。故在线性回归中，梯度下降法是有效的。</strong></p>
+<p>现在，我们可以将单变量$w$推广到多变量$w,b$，函数如下图所示：</p>
+<p><img src="/2020/10/23/ML/3.png" style="zoom:67%;"></p>
+<p>随机选取点$(w^0,b^0)$，计算函数在该点的偏导$\frac{\partial L}{\partial w}|w=w^0,b=b^0,\frac{\partial L}{\partial b}|w=w^0,b=b^0$。</p>
+<p>那么函数在该点的梯度即为：</p>
+<script type="math/tex; mode=display">
+grad\ L(w^0,b^0)=\nabla L(w^0,b^0)=(\frac{\partial L}{\partial w}|w^0,b^0)\overrightarrow{i}+(\frac{\partial L}{\partial b}|w^0,b^0)\overrightarrow{j}\tag 9</script><p>其中$\nabla$为向量微分算子。</p>
+<p><strong>而对于梯度向量，其方向为曲线在等值线上的法线方向（高数中有对其的证明），其通过不断的增加步长以更新点，从而达到最优解，如上图所示。</strong></p>
+<p>与单变量相同，多变量算法与其相同：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+w^0-\eta\frac{\partial L}{\partial w}|w=w^0,b=b^0\Longrightarrow w^1\\
+b^0-\eta\frac{\partial L}{\partial b}|w=w^0,b=b^0\Longrightarrow b^1
+\end{cases}\\
+\begin{cases}
+w^1-\eta\frac{\partial L}{\partial w}|w=w^1,b=b^1\Longrightarrow w^2\\
+b^1-\eta\frac{\partial L}{\partial b}|w=w^1,b=b^1\Longrightarrow b^2
+\end{cases}\\
+\vdots\ \ 更新循环\\
+\begin{cases}
+w^t-\eta\frac{\partial L}{\partial w}|w=w^t,b=b^t\Longrightarrow w^t\\
+b^t-\eta\frac{\partial L}{\partial b}|w=w^t,b=b^t\Longrightarrow b^t
+\end{cases}\\</script><p>最后直到$\nabla L(w^t,b^t)=0$停止，此时<strong>$w^t,b^t$即为所求得的最优解，由于在线性回归中，所以不同担心会由于初始值的选取，而影响达到全局最优解。</strong></p>
+</li>
+</ul>
+<h3 id="S-Result"><a href="#S-Result" class="headerlink" title="$\S $Result"></a>$\S $Result</h3><p>如果现在通过十组训练数据，得到的结果如下图所示：</p>
+<p><img src="/2020/10/23/ML/4.png" style="zoom: 67%;"></p>
+<p>如图所示，其通过梯度下降法，所求得的最优参数$b,w$分别为-188.4，2.7，其中，损失值可用$\frac{1}{10}\sum_{n=1}^{10}\mathrm{e}^n$表示，<strong>$e^n$即为第n组真实值与预测值的差值。</strong></p>
+<p>现在将model改用不同函数，观察其结果变化情况，如下图所示：</p>
+<p><img src="/2020/10/23/ML/5.png" style="zoom: 67%;"><br><img src="/2020/10/23/ML/6.png" style="zoom: 67%;"><br><img src="/2020/10/23/ML/7.png" style="zoom: 67%;"><br><img src="/2020/10/23/ML/8.png" style="zoom: 67%;"></p>
+<p>可以发现，<strong>随着Model改用函数的阶数的升高，训练集损失值越来越小，但可以发现测试集损失值却并不是越来越少，相反，当阶数大于4后，其测试集损失值增大较多，而这种现象叫做”Overfitting”(过拟合)。</strong></p>
+<p>那么我们如何才能防止过拟合的发生呢？</p>
+<ul>
+<li><p><strong>Regularization(正则化)</strong></p>
+<p><strong>由于过拟合是model过度拟合其在训练集的数据，则其会造成曲线波动较大，而如果能让曲线变得smooth平滑，便可防止过拟合。</strong></p>
+<p><strong>于是考虑，增加一个与参数$w$（斜率）相关的值，如果loss function 越小的话，那么对应这个值也会越小，即$w$也会越小，于是便会使函数更加平滑。</strong></p>
+<p>于是可在线性回归模型中，将loss function变为：</p>
+<script type="math/tex; mode=display">
+L=\sum_{i=1}^{10}(\widehat{y}^i-(b+\sum_jw_jx_j))^2+\lambda\sum_j(w_j)^2 \tag{10}</script><p>而在式（10）中，$\lambda\sum_j(w_j)^2$称为正则化项，$\lambda$称为正则化参数，它的作用就是平衡loss function这两项，若$\lambda$取得非常大，即对参数$w_j$惩罚的非常大，那么相当于$w_j$趋于0，即相当于原线性回归模型中删除了这些项，那么函数就变成了一条$y=b$的水平直线。</p>
+<p>那么为什么减小$w_j$能够使其函数不宜发生overfitting呢？</p>
+<p>若现在令$\varDelta x_j$为输入时的干扰项，那么输出所形成的误差即为：</p>
+<script type="math/tex; mode=display">
+y=b+\sum_jw_j(x_j+\varDelta x_j) \Longrightarrow \varDelta y=w_j\varDelta x_j</script><p>由此我们可以发现，当$w_j$较小时，产生的误差$\varDelta y$也更小，则更加光滑的函数会受更少的影响。</p>
+<p>但观察正则化项，我们会发现为什么没有$b$呢？</p>
+<p><strong>其实，正则化调整的是函数的平滑程度，但我们调整b对函数的平滑程度不会造成影响，它只能让函数上下移动。</strong></p>
+</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
     <title>Hello Hexo</title>
     <url>/2020/10/12/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -121,138 +243,6 @@ src(x,y) &\ otherwise
 </ul>
 <h3 id="自适应阈值分割"><a href="#自适应阈值分割" class="headerlink" title="自适应阈值分割"></a>自适应阈值分割</h3><ul>
 <li></li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2020/10/23/ML/</url>
-    <content><![CDATA[<h1 id="Machine-Learning"><a href="#Machine-Learning" class="headerlink" title="Machine Learning"></a><strong>Machine</strong> <strong>Learning</strong></h1><h2 id="Linear-regression-线性回归"><a href="#Linear-regression-线性回归" class="headerlink" title="Linear regression(线性回归)"></a>Linear regression(线性回归)</h2><h3 id="问题的导入：预测神奇宝贝进化后的战斗力（CP）值"><a href="#问题的导入：预测神奇宝贝进化后的战斗力（CP）值" class="headerlink" title="问题的导入：预测神奇宝贝进化后的战斗力（CP）值"></a>问题的导入：预测神奇宝贝进化后的战斗力（CP）值</h3><ul>
-<li><p><strong>输入：进化前神奇宝贝A的CP值，种类，血量（HP），重量（Weight)，高度（Height）</strong></p>
-</li>
-<li><p><strong>输出：进化后神奇宝贝A的CP值</strong></p>
-<p><img src="/2020/10/23/ML/ML\img\1.png" style="zoom: 67%;"></p>
-</li>
-</ul>
-<h3 id="机器学习的主要步骤："><a href="#机器学习的主要步骤：" class="headerlink" title="机器学习的主要步骤："></a>机器学习的主要步骤：</h3><p><strong>step 1：==Model==（确定模型）</strong></p>
-<p><strong>step 2：==Goodless of function==（确定损失函数）</strong></p>
-<p><strong>step 3：==Best function==（找到最好的函数）</strong></p>
-<h3 id="S-Model"><a href="#S-Model" class="headerlink" title="$\S $Model"></a>$\S $Model</h3><p>在这里，根据常理推测，神奇宝贝进化后的CP值和进化前的CP值有较大的关系，故我们可以假设进化前的CP值与进化后的CP值呈线性关系。</p>
-<p>设神奇宝贝进化前的CP值为$x_{cp}$，进化后的CP值为$y$，则可建立以下线性关系：</p>
-<script type="math/tex; mode=display">
-y=b+wx_{cp} \tag 1</script><p>在这里我们仅考虑了神奇宝贝进化前的CP值这一特征，如果神奇宝贝影响进化后的CP值的不止这一特征，若有n个特征，那么我们可将$x_{cp}$推广到$x_i$，于是便可得到<strong>==Linear model==</strong>（线性模型）：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-y=b+\sum_i^nw_ix_i\\
-x_i:feature\ (特征)\\
-w_i:weight \ (权重)\\
-b:bias \ (偏差) \\
-\end{cases} \tag 2</script><p>在这个模型里，一般而言，我们会有<strong>==training data==</strong>，假设现在我们有10组训练数据，即：</p>
-<script type="math/tex; mode=display">
-(x^1,\widehat{y}^1)\\
-(x^2,\widehat{y}^2)\\
-\vdots\\
-(x^{10},\widehat{y}^{10}) \tag 3</script><p>对于以上数据来说，它们是已知的，其上标代表了它们的序号，而现在，我们可以将以上数据带入简化模型（式1）中，可得：</p>
-<script type="math/tex; mode=display">
-\widehat{y}^1=b+wx_{cp}^1\\
-\widehat{y}^2=b+wx_{cp}^2\\
-\vdots\\
-\widehat{y}^{10}=b+wx_{cp}^{10}\\  \tag 4</script><p>对于式4，即就是我们训练数据带入模型后所得，而其只有两个未知数，即$b,w$，而现在我们需要做的就是<strong>找到最适合的$b,w$参数值</strong>。现在就需要损失函数发挥作用了。</p>
-<h3 id="S-Goodless-of-function"><a href="#S-Goodless-of-function" class="headerlink" title="$\S $Goodless of  function"></a>$\S $Goodless of  function</h3><ul>
-<li><p><strong>损失函数的作用</strong></p>
-<script type="math/tex; mode=display">
-Loss\ function\ L:
-\begin{cases}
-input:&\ a\ function\\
-output:&\ how\ bad\ it\ is
-\end{cases}</script><p>这里要注意评价函数的输入，即为函数$f$，而其输出是它的好坏，但由上式可知，式（4）其<strong>未知量只有待求参数$b,w$，</strong>那么函数评价函数$L(f)$即为：</p>
-<script type="math/tex; mode=display">
-L(f)=L(w,b) \tag 5</script><p>那么现在，<strong>对于输出所评价函数的好坏即可转化为评价参数$w,b$的好坏。</strong></p>
-</li>
-<li><p><strong>常见的损失函数</strong></p>
-<p>现在我们已有真实数据，那么如何反映其参数的好坏呢，我们可以<strong>==通过真实的CP值与预测CP值的差进行衡量==</strong>，如下所示：</p>
-<script type="math/tex; mode=display">
-L(f)=\sum_{i=1}^{10}(\widehat{y}^i-f(x_{cp}^i))^2\Longrightarrow\ L(w,b)=\sum_{i=1}^{10}(\widehat{y}^i-(b+w\cdot x_{cp}^i))^2 \tag 6</script><p>当真实值与误差值较小时，那么此时的$w,b$可认为是最好的，则我们的目标即为：</p>
-<script type="math/tex; mode=display">
-min\quad L(w,b)</script><p>于是我们现在就需要对其进行求解。</p>
-</li>
-</ul>
-<h3 id="S-Best-function-——-Gradient-Descent（梯度下降法）"><a href="#S-Best-function-——-Gradient-Descent（梯度下降法）" class="headerlink" title="$\S $Best  function ——-Gradient  Descent（梯度下降法）"></a>$\S $Best  function ——-Gradient  Descent（梯度下降法）</h3><p>我们需要通过$Loss\ Function\Longrightarrow”the \ best\ function”$，即达到我们的目标，令：</p>
-<script type="math/tex; mode=display">
-w*,b*=arg\ \ min_{w,b}\ \ L(w,b)=arg\ \ min_{w,b}\ \ \sum_{i=1}^{10}(\widehat{y}^i-(b+w\cdot x_{cp}^i))^2 \tag 7</script><p>对于以上，我们可以采用穷举法，求得$L(w,b)$的最小值，但下面介绍更加高效的算法。</p>
-<ul>
-<li><p>==梯度下降法==</p>
-<p>若现在损失函数$L(w,b)$只考虑其$w$单变量情况，有以下函数图像：</p>
-<p><img src="/2020/10/23/ML/ML\img\2.png" style="zoom:60%;"></p>
-<p>当我们现在<strong>随机</strong>在函数上选择一点$w^0$，</p>
-<p>1.如果函数在该点的斜率为负，即导数$\frac{\mathrm{d}L}{\mathrm{d}w}&lt;0$，那么此时函数应该为<strong>递减的</strong>，于是可以考虑增大$w^0$。</p>
-<p>2.如果函数在该点的斜率为正，即导数$\frac{\mathrm{d}L}{\mathrm{d}w}&gt;0$，那么此时函数应该为<strong>递增的</strong>，于是可以考虑减少$w^0$。</p>
-<p>增大多少或减少多少？</p>
-<p>定义每次移动的步长为：</p>
-<script type="math/tex; mode=display">
-step=\eta\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^0 \tag 8</script><p>在式（8）中，$\eta$称为”learning rate（学习率）”，<strong>我们可以通过控制$\eta$的大小，从而增加step，以此可以提高求解效率，但若$\eta$过大，则会导致步长过大，那么有可能会错过最优解，故我们需要选取合适的$\eta$。而$\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^0$，其微分值越大$\rightarrow$曲线越陡峭$\rightarrow$移动步长越大$\rightarrow$提高求解效率。</strong></p>
-<p>以上图为例，其算法如下：</p>
-<script type="math/tex; mode=display">
-w^0-\eta\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^0\Longrightarrow w^1\\
-w^1-\eta\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^1\Longrightarrow w^2\\
-\vdots \ \ 更新循环\\
-w^{t-1}-\eta\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^{t-1}\Longrightarrow w^t</script><p>在上式中，因为$\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^{0}&lt;0$，故需给其添加负号。对点不断更新循环，直到$(\frac{\mathrm{d}L}{\mathrm{d}w}|w=w^{t})=0$停止，此时$w=w^t$即所求参数的最优解。</p>
-<p><strong>但从上图我们可以发现$w^t$其实并不为global optimal solution(全局最优解)，其为local optimal solution(局部最优解)，不过由于我们研究的为线性回归，所以不存在局部最优解。故在线性回归中，梯度下降法是有效的。</strong></p>
-<p>现在，我们可以将单变量$w$推广到多变量$w,b$，函数如下图所示：</p>
-<p><img src="/2020/10/23/ML/ML\img\3.png" style="zoom:67%;"></p>
-<p>随机选取点$(w^0,b^0)$，计算函数在该点的偏导$\frac{\partial L}{\partial w}|w=w^0,b=b^0,\frac{\partial L}{\partial b}|w=w^0,b=b^0$。</p>
-<p>那么函数在该点的梯度即为：</p>
-<script type="math/tex; mode=display">
-grad\ L(w^0,b^0)=\nabla L(w^0,b^0)=(\frac{\partial L}{\partial w}|w^0,b^0)\overrightarrow{i}+(\frac{\partial L}{\partial b}|w^0,b^0)\overrightarrow{j}\tag 9</script><p>其中$\nabla$为向量微分算子。</p>
-<p><strong>而对于梯度向量，其方向为曲线在等值线上的法线方向（高数中有对其的证明），其通过不断的增加步长以更新点，从而达到最优解，如上图所示。</strong></p>
-<p>与单变量相同，多变量算法与其相同：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-w^0-\eta\frac{\partial L}{\partial w}|w=w^0,b=b^0\Longrightarrow w^1\\
-b^0-\eta\frac{\partial L}{\partial b}|w=w^0,b=b^0\Longrightarrow b^1
-\end{cases}\\
-\begin{cases}
-w^1-\eta\frac{\partial L}{\partial w}|w=w^1,b=b^1\Longrightarrow w^2\\
-b^1-\eta\frac{\partial L}{\partial b}|w=w^1,b=b^1\Longrightarrow b^2
-\end{cases}\\
-\vdots\ \ 更新循环\\
-\begin{cases}
-w^t-\eta\frac{\partial L}{\partial w}|w=w^t,b=b^t\Longrightarrow w^t\\
-b^t-\eta\frac{\partial L}{\partial b}|w=w^t,b=b^t\Longrightarrow b^t
-\end{cases}\\</script><p>最后直到$\nabla L(w^t,b^t)=0$停止，此时<strong>$w^t,b^t$即为所求得的最优解，由于在线性回归中，所以不同担心会由于初始值的选取，而影响达到全局最优解。</strong></p>
-</li>
-</ul>
-<h3 id="S-Result"><a href="#S-Result" class="headerlink" title="$\S $Result"></a>$\S $Result</h3><p>如果现在通过十组训练数据，得到的结果如下图所示：</p>
-<p><img src="/2020/10/23/ML/ML\img\4.png" style="zoom: 67%;"></p>
-<p>如图所示，其通过梯度下降法，所求得的最优参数$b,w$分别为-188.4，2.7，其中，损失值可用$\frac{1}{10}\sum_{n=1}^{10}\mathrm{e}^n$表示，<strong>$e^n$即为第n组真实值与预测值的差值。</strong></p>
-<p>现在将model改用不同函数，观察其结果变化情况，如下图所示：</p>
-<center class="half">
-    <img src="D://ML//img//5.png" width="280">
-    <img src="D://ML//img//6.png" width="280">
-</center>
-
-<center class="half">
-    <img src="D://ML//img//7.png" width="280">
-    <img src="D://ML//img//8.png" width="280">
-</center>
-
-
-<p>可以发现，<strong>随着Model改用函数的阶数的升高，训练集损失值越来越小，但可以发现测试集损失值却并不是越来越少，相反，当阶数大于4后，其测试集损失值增大较多，而这种现象叫做”Overfitting”(过拟合)。</strong></p>
-<p>那么我们如何才能防止过拟合的发生呢？</p>
-<ul>
-<li><p>==<strong>Regularization(正则化)</strong>==</p>
-<p><strong>由于过拟合是model过度拟合其在训练集的数据，则其会造成曲线波动较大，而如果能让曲线变得smooth平滑，便可防止过拟合。</strong></p>
-<p><strong>于是考虑，增加一个与参数$w$（斜率）相关的值，如果loss function 越小的话，那么对应这个值也会越小，即$w$也会越小，于是便会使函数更加平滑。</strong></p>
-<p>于是可在线性回归模型中，将loss function变为：</p>
-<script type="math/tex; mode=display">
-L=\sum_{i=1}^{10}(\widehat{y}^i-(b+\sum_jw_jx_j))^2+\lambda\sum_j(w_j)^2 \tag{10}</script><p>而在式（10）中，$\lambda\sum_j(w_j)^2$称为正则化项，$\lambda$称为正则化参数，它的作用就是平衡loss function这两项，若$\lambda$取得非常大，即对参数$w_j$惩罚的非常大，那么相当于$w_j$趋于0，即相当于原线性回归模型中删除了这些项，那么函数就变成了一条$y=b$的水平直线。</p>
-<p>那么为什么减小$w_j$能够使其函数不宜发生overfitting呢？</p>
-<p>若现在令$\varDelta x_j$为输入时的干扰项，那么输出所形成的误差即为：</p>
-<script type="math/tex; mode=display">
-y=b+\sum_jw_j(x_j+\varDelta x_j) \Longrightarrow \varDelta y=w_j\varDelta x_j</script><p>由此我们可以发现，当$w_j$较小时，产生的误差$\varDelta y$也更小，则更加光滑的函数会受更少的影响。</p>
-<p>但观察正则化项，我们会发现为什么没有$b$呢？</p>
-<p><strong>其实，正则化调整的是函数的平滑程度，但我们调整b对函数的平滑程度不会造成影响，它只能让函数上下移动。</strong></p>
-</li>
 </ul>
 ]]></content>
   </entry>
