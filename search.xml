@@ -342,23 +342,23 @@ P(C_1|x)=\frac{1}{1+\mathrm{e}^{-z}}=\sigma(z)</script><p>而<script type="math/
 z=\ln\frac{P(x|C_1)}{P(x|C_2)}+\ln\frac{P(C_1)}{P(C_2)}\implies \ln\frac{P(x|C_1)}{P(x|C_2)}+\ln\frac{\frac{N_1}{N_1+N_2}}{\frac{N_2}{N_1+N_2}}</script><script type="math/tex; mode=display">
 P(x|c_1)=\frac{1}{(2\pi)^{\frac{n}{2}}|B^1|^{\frac{1}{2}}}e^{-\frac{1}{2}(x-\mu^1)(B^1)^{-1}(x-\mu^1)^T}</script><script type="math/tex; mode=display">
 P(x|c_2)=\frac{1}{(2\pi)^{\frac{n}{2}}|B^2|^{\frac{1}{2}}}e^{-\frac{1}{2}(x-\mu^2)(B^2)^{-1}(x-\mu^2)^T}</script><script type="math/tex; mode=display">
-\begin{align}
+\begin{align*}
 \ln\frac{\frac{1}{(2\pi)^{\frac{n}{2}}|B^1|^{\frac{1}{2}}}e^{-\frac{1}{2}(x-\mu^1)(B^1)^{-1}(x-\mu^1)^T}}{\frac{1}{(2\pi)^{\frac{n}{2}}|B^2|^{\frac{1}{2}}}e^{-\frac{1}{2}(x-\mu^2)(B^2)^{-1}(x-\mu^2)^T}}
 &=\ln\frac{|B^2|^\frac{1}{2}}{|B^1|^\frac{1}{2}}\exp\{-\frac{1}{2}[(x-\mu^1)(B^1)^{-1}(x-\mu^1)^T-(x-\mu^2)(B^2)^{-1}(x-\mu^2)^T]\}\\
 &=\ln\frac{|B^2|^\frac{1}{2}}{|B^1|^\frac{1}{2}}-\frac{1}{2}[(x-\mu^1)(B^1)^{-1}(x-\mu^1)^T-(x-\mu^2)(B^2)^{-1}(x-\mu^2)^T]
-\end{align}</script><script type="math/tex; mode=display">
-\begin{align}
+\end{align*}</script><script type="math/tex; mode=display">
+\begin{align*}
 (x-\mu^1)(B^1)^{-1}(x-\mu^1)^T
 &=(x-\mu^1)(B^1)^{-1}(x^T-(\mu^1)^T)\\
 &=x(B^1)^{-1}x^T-x(B^1)^{-1}(\mu^1)^T-\mu^1(B^1)x^T+\mu^1(B^1)(\mu^1)^{T}\quad B^1\mbox{为对称矩阵}\\
 &=x(B^1)^{-1}x^T-2\mu^1(B^1)x^T+\mu^1(B^1)(\mu^1)^{T}
-\end{align}</script><script type="math/tex; mode=display">
+\end{align*}</script><script type="math/tex; mode=display">
 z=\ln\frac{|B^2|^\frac{1}{2}}{|B^1|^\frac{1}{2}}-\frac{1}{2}x(B^1)^{-1}x^T+\mu^1(B^1)^{-1}x^T-\frac{1}{2}\mu^1(B^1)^{-1}(\mu^1)^{T}+\frac{1}{2}x(B^2)^{-1}x^T-\mu^2(B^2)^{-1}x^T+\frac{1}{2}\mu^2(B^2)^{-1}(\mu^2)^{T}+\ln\frac{N_1}{N_2}</script><p>若假设<script type="math/tex">B^1=B^2=B</script>，则有：</p>
 <script type="math/tex; mode=display">
-\begin{align}
+\begin{align*}
 z&=(\mu^1-\mu^2)B^{-1}x^T-\frac{1}{2}\mu^1B^{-1}(\mu^1)^{T}+\frac{1}{2}\mu^2B^{-1}(\mu^2)^{T}+\ln\frac{N_1}{N_2}\\
 &=wx^T+b
-\end{align}</script><p>综上所述：</p>
+\end{align*}</script><p>综上所述：</p>
 <script type="math/tex; mode=display">
 P(C_1|x)=\sigma(w\cdot x+b)</script><h3 id="Function-set-函数集"><a href="#Function-set-函数集" class="headerlink" title="Function set(函数集)"></a>Function set(函数集)</h3><p>由以上公式推导可以得到:</p>
 <script type="math/tex; mode=display">
@@ -367,10 +367,10 @@ P(C_1|x)=\sigma(z),\ z=w\cdot x+b=\sum_iw_ix_i+b</script><p>可以发现，<scri
 <p><strong>这种函数集的分类问题叫做logistic regression(逻辑回归)。</strong></p>
 <h3 id="Goodness-of-a-Function"><a href="#Goodness-of-a-Function" class="headerlink" title="Goodness of a Function"></a>Goodness of a Function</h3><p>假设现在有以下的training data:</p>
 <script type="math/tex; mode=display">
-\begin{align}
+\begin{align*}
 data:&\ x^1 \ \ x^2 \ \ x^3 \dots x^n\\
 class:&\ C_1 \ C_1 \ C_2 \dots C_1
-\end{align}</script><p>令<script type="math/tex">f_{w,b}(x)=P(C_1|x)</script>，则由极大似然估计，可定义以下损失函数：</p>
+\end{align*}</script><p>令<script type="math/tex">f_{w,b}(x)=P(C_1|x)</script>，则由极大似然估计，可定义以下损失函数：</p>
 <script type="math/tex; mode=display">
 L(w,b)=f_{w,b}(x^1)f_{w,b}(x^2)(1-f_{w,b}(x^3))\dots f_{w,b}(x^n)</script><p>而目标即为找到最大的<script type="math/tex">L(w,b)</script>，此时该函数的参数即为最佳参数值。</p>
 <script type="math/tex; mode=display">
