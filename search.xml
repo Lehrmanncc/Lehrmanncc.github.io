@@ -386,7 +386,19 @@ class1:\widehat{y}^1=1,\widehat{y}^2=1\ \ class2:\widehat{y}^3=0\ \cdots</script
 <script type="math/tex; mode=display">
 -\ln L(w,b)=\sum_i\color{orange}-[\widehat{y}^i\ln f(x^i)+(1-\widehat{y}^i)\ln (1-f(x^i))]</script><p>而橙色部分其实就是<strong>两个伯努利分布的交叉熵（Cross entropy)。</strong></p>
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201121154624.png" style="zoom:67%;"></p>
-<p>如图所示，假设有两个分布：<script type="math/tex">p,q</script>如蓝色框所示，那么交叉熵的计算方式即<script type="math/tex">H(p,q)=-\sum_xp(x)ln(q(x))</script>。交叉熵代表的含义就是<strong>这两个分布有多接近</strong>。当两个分布相同时，计算的交叉熵就是熵。</p>
+<p>如图所示，假设有两个分布：<script type="math/tex">p,q</script>如蓝色框所示，那么交叉熵的计算方式即$H(p,q)=-\sum_xp(x)ln(q(x))$。交叉熵代表的含义就是<strong>这两个分布有多接近</strong>。当两个分布相同时，计算的交叉熵就是熵。</p>
+<h3 id="Find-the-best-function"><a href="#Find-the-best-function" class="headerlink" title="Find the best function"></a>Find the best function</h3><p>梯度下降求最小，计算步骤如图所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201123003816.png" style="zoom:67%;"></p>
+<p>对$\ln L(w,b)$求$w_i$的偏微分，只需要计算出$\frac{\ln f_{w,b}(x^n)}{\partial w_i}$与$\frac{\ln (1-f_{w,b}(x^n))}{\partial w_i}$。$f_{w,b}(x)$即为sigmoid 函数，$z=\sum_nw_ix_i+b$。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201123005251.png" style="zoom:67%;"></p>
+<p>计算可得到$\frac{\ln (1-f_{w,b}(x^n))}{\partial w_i}$，将两个偏微分计算带入可得到：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+-\frac{\ln L(w,b)}{\partial w_i}&=\sum_n-[\widehat{y}^n(1-f_{w,b}(x^n_i))x^n_i+(1-\widehat{y}^n)f_{w,b}(x^n_i)x^n_i]\\
+&=\sum_n-{\color{purple}(\widehat{y}^n-f_{w,b}(x^n))}x^n_i
+\end{align*}</script><p>紫色部分其实直观的表示了真实数据值与函数值之间的差距大小。</p>
+<h3 id="逻辑回归与线性回归的比较"><a href="#逻辑回归与线性回归的比较" class="headerlink" title="逻辑回归与线性回归的比较"></a>逻辑回归与线性回归的比较</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201123011427.png" style="zoom:67%;"></p>
+<p>可以发现，<strong>逻辑回归其实是在线性回归的基础上，对原线性模型在加上一层sigoid 函数，从而将函数的输出介于(0,1)之间。而线性回归其输出可为任意值。</strong></p>
 ]]></content>
       <tags>
         <tag>机器学习</tag>
