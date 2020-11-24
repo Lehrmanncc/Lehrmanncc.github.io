@@ -400,6 +400,32 @@ class1:\widehat{y}^1=1,\widehat{y}^2=1\ \ class2:\widehat{y}^3=0\ \cdots</script
 <h3 id="逻辑回归与线性回归的比较"><a href="#逻辑回归与线性回归的比较" class="headerlink" title="逻辑回归与线性回归的比较"></a>逻辑回归与线性回归的比较</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201123011427.png" style="zoom:67%;"></p>
 <p>可以发现，<strong>逻辑回归其实是在线性回归的基础上，对原线性模型再加上一层sigmoid 函数，从而将函数的输出介于(0,1)之间。而线性回归其输出可为任意值。</strong></p>
 <p>在Logistic regression中，<strong>target的值为0或1</strong>，而在Linear regression中，<strong>target的值可为任意值</strong>。</p>
+<h3 id="Discriminative-V-S-Generative-判别模型VS生成模型"><a href="#Discriminative-V-S-Generative-判别模型VS生成模型" class="headerlink" title="Discriminative V.S. Generative(判别模型VS生成模型)"></a>Discriminative V.S. Generative(判别模型VS生成模型)</h3><p>在前文中，其实已经介绍了两种不同的方法进行分类。</p>
+<ol>
+<li>通过假设概率密度函数求解类条件概率，从而通过贝叶斯公式分类，而这种分类方法就叫做生成模型(Generative model)。</li>
+<li>通过利用梯度下降算法求解$w,b$。于是可带入逻辑回归模型进行分类，而这种分类方法就叫做判别模型(Discriminative model)。</li>
+</ol>
+<p>而对于这两种模型，<strong>它们的函数集都是相同的</strong>：</p>
+<script type="math/tex; mode=display">
+P(C_1|x)=\sigma(wx+b)</script><p>对于判别模型，仅需要利用梯度下降算法，直接求解出参数$w,b$。</p>
+<p>对于生成模型，需要通过假设概率分布求解出$\mu_1,\mu_2,B^{-1}$，而在<strong>手推公式</strong>这一节中，有如下代换：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+w&=(\mu^1-\mu^2)B^{-1}\\
+b&=-\frac{1}{2}\mu^1B^{-1}(\mu^1)^{T}+\frac{1}{2}\mu^2B^{-1}(\mu^2)^{T}+\ln\frac{N_1}{N_2}
+\end{align*}</script><p>那么这两个不同模型得到的$w,b$相同吗？</p>
+<p><strong>其实是不同的</strong>，为什么呢？因为在生成模型中，它是<strong>有假设</strong>的，例如它<strong>假设data满足高斯分布或伯努利分布等等</strong>，但在逻辑回归中，<strong>并没有这些假设</strong>，所以这导致了虽然它们的函数相同却最后计算得到的参数不同。</p>
+<p>有些时候生成模型可能会出现一些问题。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201125003150.png" style="zoom:67%;"></p>
+<p>例如，在这个例子中，共有13组数据，其中1组为class1，另外12组全部为class2。每组数据均有两个特征。现在当给出一个testing data，问其属于哪个类别。</p>
+<p>对于人来说，第一反应它应该就是class1的。那么现在我们看看朴素贝叶斯分类器(naive bayes)是什么结果。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201125003002.png" style="zoom:67%;"></p>
+<p>可以发现最后计算结果$P(C_1|x)&lt;0.5$，那么即朴素贝叶斯分类器认为当前tesing data属于class2，那么为什么会造成这个结果呢？<strong>朴素贝叶斯分类器是有假设这种情况存在的（机器脑补这种可能性）。所以结果和人类直观判断的结果不太一样。</strong></p>
+<p>对于这两种模型，它们各自有各自的优势：</p>
+<ol>
+<li>当data数量较少时，<strong>生成模型受数据影响与判别模型相比，影响较小</strong>，因为它有<strong>自己的假设</strong>，甚至无视一些data。而当data较大时，判别模型的优势就较为明显了，因为当数据越多，<strong>它的误差就可以越小</strong>，从而模型越精确。</li>
+<li><strong>当遇到一些data有问题时，而生成模型有做假设，有时候就可以把data中有问题的部分忽略掉。</strong></li>
+</ol>
 ]]></content>
       <tags>
         <tag>机器学习</tag>
