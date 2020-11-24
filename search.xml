@@ -398,7 +398,8 @@ class1:\widehat{y}^1=1,\widehat{y}^2=1\ \ class2:\widehat{y}^3=0\ \cdots</script
 &=\sum_n-{\color{purple}(\widehat{y}^n-f_{w,b}(x^n))}x^n_i
 \end{align*}</script><p>紫色部分其实直观的表示了真实数据值与函数值之间的差距大小。</p>
 <h3 id="逻辑回归与线性回归的比较"><a href="#逻辑回归与线性回归的比较" class="headerlink" title="逻辑回归与线性回归的比较"></a>逻辑回归与线性回归的比较</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201123011427.png" style="zoom:67%;"></p>
-<p>可以发现，<strong>逻辑回归其实是在线性回归的基础上，对原线性模型在加上一层sigoid 函数，从而将函数的输出介于(0,1)之间。而线性回归其输出可为任意值。</strong></p>
+<p>可以发现，<strong>逻辑回归其实是在线性回归的基础上，对原线性模型再加上一层sigmoid 函数，从而将函数的输出介于(0,1)之间。而线性回归其输出可为任意值。</strong></p>
+<p>在Logistic regression中，<strong>target的值为0或1</strong>，而在Linear regression中，<strong>target的值可为任意值</strong>。</p>
 ]]></content>
       <tags>
         <tag>机器学习</tag>
