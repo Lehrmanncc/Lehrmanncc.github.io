@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Love guarantee</title>
+    <title>Love record</title>
     <url>/2020/11/10/Love/</url>
     <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
   <div class="hbe-input-container">
@@ -13,7 +13,7 @@
 </div>
 <script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
-        <tag>爱情故事</tag>
+        <tag>Love record</tag>
       </tags>
   </entry>
   <entry>
@@ -120,7 +120,7 @@ src(x,y) &\ otherwise
 \end{cases}</script><p>​        放原像素值大于阈值，则原像素值变为阈值，除此之外，原像素值保持不变。</p>
 ]]></content>
       <tags>
-        <tag>图像处理</tag>
+        <tag>CV</tag>
       </tags>
   </entry>
   <entry>
@@ -405,6 +405,11 @@ class1:\widehat{y}^1=1,\widehat{y}^2=1\ \ class2:\widehat{y}^3=0\ \cdots</script
 <li>通过假设概率密度函数求解类条件概率，从而通过贝叶斯公式分类，而这种分类方法就叫做生成模型(Generative model)。</li>
 <li>通过利用梯度下降算法求解$w,b$。于是可带入逻辑回归模型进行分类，而这种分类方法就叫做判别模型(Discriminative model)。</li>
 </ol>
+<p>而判别模型和生成模型有什么区别呢?可以用一个例子来说明：</p>
+<ul>
+<li>判别模型：要确定一只羊是🐐还是🐏，用判别模型的方法是从历史数据中，直接学习到模型，然后通过提取到这只羊的特征带入模型进行预测这只羊是山羊的概率，是绵羊的概率。</li>
+<li>生成模型：利用生成模型首先根据山羊的特征学习出山羊的模型，然后根据绵羊的特征学习出绵羊的模型。然后从这只羊中提取特征，放到山羊的模型中，看概率是多少；放到绵羊的模型中，看概率是多少，哪个概率大就是哪个。</li>
+</ul>
 <p>而对于这两种模型，<strong>它们的函数集都是相同的</strong>：</p>
 <script type="math/tex; mode=display">
 P(C_1|x)=\sigma(wx+b)</script><p>对于判别模型，仅需要利用梯度下降算法，直接求解出参数$w,b$。</p>
@@ -428,7 +433,7 @@ b&=-\frac{1}{2}\mu^1B^{-1}(\mu^1)^{T}+\frac{1}{2}\mu^2B^{-1}(\mu^2)^{T}+\ln\frac
 </ol>
 ]]></content>
       <tags>
-        <tag>机器学习</tag>
+        <tag>ML</tag>
       </tags>
   </entry>
 </search>
