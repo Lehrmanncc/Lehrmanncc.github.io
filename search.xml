@@ -397,7 +397,7 @@ class1:\widehat{y}^1=1,\widehat{y}^2=1\ \ class2:\widehat{y}^3=0\ \cdots</script
 -\frac{\ln L(w,b)}{\partial w_i}&=\sum_n-[\widehat{y}^n(1-f_{w,b}(x^n_i))x^n_i+(1-\widehat{y}^n)f_{w,b}(x^n_i)x^n_i]\\
 &=\sum_n-{\color{purple}(\widehat{y}^n-f_{w,b}(x^n))}x^n_i
 \end{align*}</script><p>紫色部分其实直观的表示了真实数据值与函数值之间的差距大小。</p>
-<h3 id="逻辑回归与线性回归的比较"><a href="#逻辑回归与线性回归的比较" class="headerlink" title="逻辑回归与线性回归的比较"></a>逻辑回归与线性回归的比较</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201123011427.png" style="zoom:67%;"></p>
+<h3 id="S-逻辑回归与线性回归的比较"><a href="#S-逻辑回归与线性回归的比较" class="headerlink" title="$\S$逻辑回归与线性回归的比较"></a>$\S$逻辑回归与线性回归的比较</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201123011427.png" style="zoom:67%;"></p>
 <p>可以发现，<strong>逻辑回归其实是在线性回归的基础上，对原线性模型再加上一层sigmoid 函数，从而将函数的输出介于(0,1)之间。而线性回归其输出可为任意值。</strong></p>
 <p>在Logistic regression中，<strong>target的值为0或1</strong>，而在Linear regression中，<strong>target的值可为任意值</strong>。</p>
 <h3 id="S-Discriminative-V-S-Generative-判别模型VS生成模型"><a href="#S-Discriminative-V-S-Generative-判别模型VS生成模型" class="headerlink" title="$\S$Discriminative V.S. Generative(判别模型VS生成模型)"></a>$\S$Discriminative V.S. Generative(判别模型VS生成模型)</h3><p>在前文中，其实已经介绍了两种不同的方法进行分类。</p>
@@ -438,6 +438,34 @@ b&=-\frac{1}{2}\mu^1B^{-1}(\mu^1)^{T}+\frac{1}{2}\mu^2B^{-1}(\mu^2)^{T}+\ln\frac
 <script type="math/tex; mode=display">
 Softmax(z_i)=\frac{e^{z_i}}{\sum_{c=1}^{C}e^{c}}</script><p>那么为什么叫做Softmax呢？从字面意思上看，有soft和max，而max就是最大的意思，而Softmax的核心在于soft。通常情况下，给定一组数，我们要求它的最大值，而这里的最大值就是hardmax，而最大值只有一个，即非黑即白。但在多类别分类中，我们希望找出x的最大概率分类，而这并不能仅仅是一个hardmax。而Softmax的含义在于<strong>不再唯一的确定某个最大值，而是为每个输出分类的结果赋予一个概率值，代表属于该分类的可能性。</strong>它可以对最大的值进行强化，这样会导致大的值和小的值的差距会拉大。</p>
 <p>也就是说，<strong>Softmax的输出值可以代表x属于每个类别的概率，即近似表示后验概率。</strong>为什么呢？当假设有三个Class服从高斯分布，当它们公用一个协方差矩阵时，就可以推导得到Softmax。</p>
+<h3 id="S-Limitation-of-Logistic-Regression"><a href="#S-Limitation-of-Logistic-Regression" class="headerlink" title="$\S$Limitation of Logistic Regression"></a>$\S$Limitation of Logistic Regression</h3><p>假定现在一组数据有两个feature，则根据Logistic regression则有以下过程：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201130191550.png" style="zoom:50%;"></p>
+<p>对$x_1,x_2$分别赋予weight和bias，得到$z$带入sigmiod函数便可得到输出的概率值，根据$y$的值从而进行分类。这看似是没有任何问题的，但若现在有下面四组数据：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201130192029.png" style="zoom: 67%;"></p>
+<p>对两个feature分别赋予0,1，并且已经知道了它们各自的类别。现在我们可以把这四组数据当作四个点，表示在二维平面上。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201130192414.png" style="zoom: 50%;"></p>
+<p>观察图可以发现，蓝色的点就是属于Class 2的数据，红色的点就是属于Class 1的数据。<strong>如果用逻辑回归处理数据的话，根据逻辑回归的物理意义，它的分界面就是一条直线，使得这两组Class分开，从而达到分类的效果</strong>。</p>
+<p>但很明显，观察上图可以发现，不存在这样的直线，能够使红点和蓝点分开。那么如何才能让它们可以用逻辑回归处理呢？</p>
+<h3 id="S-Feature-Transformation-特征变换"><a href="#S-Feature-Transformation-特征变换" class="headerlink" title="$\S$Feature Transformation(特征变换)"></a>$\S$Feature Transformation(特征变换)</h3><p>所谓特征变换就是让特征通过某种变换变成新的特征。举个例子，现在如果有定义两个特征：$x_1,x_2$，它们经过某种变换变为新特征：$x_1^{’},x_2^{‘}$。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201130195306.png" style="zoom:50%;"></p>
+<p>现在假若定义如下变换：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201130200034.png" style="zoom:67%;"></p>
+<p>那么可以原来二维平面的坐标点可变为新平面下的坐标点：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201130200631.png" style="zoom:67%;"></p>
+<p>可以发现，在新平面下，原来不可分的点，现在是可分的了。这是为什么呢？</p>
+<p>实际上，在通常情况下，我们的数据不一定是完全线性可分的，很多情况下会存在线性不可分，如同上面所举例子。而我们要将数据处理成线性可分，<strong>则需要进行特征变换，将数据投影到别的空间</strong>，例如上图，数据在$X$空间不可分，但在$X^{’}$空间就是可分的。<strong>而$X^{’}$空间的维度一般是高于$X$空间的维度的。</strong></p>
+<p>但有时候很难去寻找有效的特征变换，于是能否有一种通用的方法进行特征变换？</p>
+<h3 id="S-Cascading-logistic-regression-models-级联逻辑回归模型"><a href="#S-Cascading-logistic-regression-models-级联逻辑回归模型" class="headerlink" title="$\S$Cascading logistic regression models(级联逻辑回归模型)"></a>$\S$Cascading logistic regression models(级联逻辑回归模型)</h3><p>级联逻辑回归模型从字面意思上就可以看出就是将多个逻辑回归连接起来。而它就是为了解决上述特征变换的问题。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201201133501.png" style="zoom:67%;"></p>
+<p>原理过程如图所示，由特征变换和分类两个过程组成。特征$x_1,x_2$作为输入，带入逻辑回归模型，可得到输出$x_1^{’},x_2^{‘}$，而这便是经过逻辑回归得到的两个新的特征。将新特征再作为输入带入逻辑回归模型，可得到分类概率$y$。</p>
+<p>下面还是用一个例子来说明。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201201161411.png" style="zoom:67%;"></p>
+<p>四组数据，通过调整参数$w_1,w_2,w_3,w_4,b_1,b_2$，可以得到四组数据经过逻辑回归的新特征$x_1^{’},x_2^{‘}$。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201201161240.png" style="zoom:67%;"></p>
+<p>将新特征$x_1^{’},x_2^{‘}$带入新逻辑回归模型中，可以发现，新特征新特征$x_1^{’},x_2^{‘}$是线性可分的，由图可知，存在一条直线，将两组Class分开。</p>
+<p>至此我们可以引入一个新的概念！</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201201163205.png" style="zoom:67%;"></p>
+<p>由以上可知，<strong>一个逻辑回归的输入可以来源于其他逻辑回归的输出，这个逻辑回归的输出也可以是其他逻辑回归的输入，将每一个逻辑回归称为Neuron（神经元），把这些神经元连接起来的网络叫做Neuron Network（神经网络）！</strong></p>
 ]]></content>
       <tags>
         <tag>ML</tag>
