@@ -523,7 +523,12 @@ x_n^1 & \dots & x_n^4}\right]</script><p>其中$x_n^4$代表第n组样本的第�
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151420.png" alt></p>
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151445.png" alt></p>
 <p>经过大量的迭代后，模型能够很好的拟合测试数据。</p>
-]]></content>
+<h3 id="Example-Ⅱ"><a href="#Example-Ⅱ" class="headerlink" title="Example Ⅱ"></a>Example Ⅱ</h3><p>实现更复杂的曲线拟合，这里我们对心形曲线进行拟合，函数表达式如下：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x=16sin^3(t)\\
+y=13cos(t)-5cos(2t)-2cos(3t)-cos(4t)
+\end{cases}</script>]]></content>
       <tags>
         <tag>PyTorch</tag>
       </tags>
