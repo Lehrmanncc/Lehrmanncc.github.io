@@ -552,4 +552,42 @@ y=13cos(t)-5cos(2t)-2cos(3t)-cos(4t)
         <tag>PyTorch</tag>
       </tags>
   </entry>
+  <entry>
+    <title>PyTorch问题记录</title>
+    <url>/2021/03/22/pytorch%20problem/</url>
+    <content><![CDATA[<h1 id="PyTorch-中torch-nn-与torch-nn-function-的区别"><a href="#PyTorch-中torch-nn-与torch-nn-function-的区别" class="headerlink" title="PyTorch 中torch.nn. 与torch.nn.function.的区别"></a>PyTorch 中torch.nn. 与torch.nn.function.的区别</h1><p>今天我在定义一个卷积网络的过程中，发现nn.Conv2d与nn.functional.conv2d看似都是相同的。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DogCat_Net</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(Dog_Cat,self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br><span class="line">        self.conv1 = nn.functional.conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>类似的还有很多，在卷积，激活，池化等操作中，nn.Conv2d与nn.functional.conv2d均很相似。</p>
+<p>通过查看PyTorch的文档发现，例如torch.nn.Conv2d是一个类</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210322202215.png" style="zoom: 50%;"></p>
+<p>torch.nn.functional.conv2d则更像一个函数：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210322202712.png" style="zoom:50%;"></p>
+<p>简而言之：</p>
+<ul>
+<li><strong>nn.Conv2d可以理解为一个Class类，需要继承nn.Module类</strong></li>
+<li><strong>nn.functional.conv2d可以理解为一个纯函数，由def function(input)定义</strong></li>
+</ul>
+<p>对于nn中定义的类，可以提取变化的学习参数。而nn.functional中的是函数，是一个固定的运算公式。</p>
+<p>由于在深度学习中会有很多权重是不断变化的，所以需要采用类的方式，以确保参数改变后，仍能正确进行运算。</p>
+<p><strong>所以一般在建立网络模型时，在__init__函数中，通常使用nn中的类；而在forward函数中，通常使用nn.functional中的函数。</strong></p>
+<p>例如以下网络模型：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog_Cat</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(Dog_Cat,self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">16</span>, <span class="number">32</span> ,kernel_size = <span class="number">5</span>)</span><br><span class="line">        self.dropout = nn.Dropout2d()</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">55696</span>,<span class="number">1000</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">1000</span>,<span class="number">50</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">50</span>,<span class="number">2</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        x = F.relu(F.max_pool2d(self.conv1(x),<span class="number">2</span>))</span><br><span class="line">        x = F.relu(F.max_pool2d(self.dropout(self.conv2(x)),<span class="number">2</span>))</span><br><span class="line">        x = x.view(<span class="number">-1</span>,<span class="number">55696</span>)</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = F.dropout(x)</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = F.dropout(x)</span><br><span class="line">        x = F.log_softmax(self.fc3(x),dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p>当网络模型使用了Dropout层时，其只需要在模型训练的时候进行使用，在模型测试时并不会使用它。</p>
+<p><strong>当Dropout层是使用nn.Dropout定义时，在模型训练时，可以通过model.train()开启它，在模型测试时，可以通过model.eval()关闭它。</strong></p>
+<p><strong>但当Dropout层是用nn.functional.dropout定义的，那么在使用model.eval()后，也没办法关闭Dropout层。</strong></p>
+<p>以上提到了model.train()与model.eval()，那么它们的具体作用是什么呢？为什么要在模型训练与测试的时候加上这两段代码呢？</p>
+<h3 id="model-train"><a href="#model-train" class="headerlink" title="model.train()"></a>model.train()</h3><p>如果模型中有BN层(Batch Normalization）和Dropout，需要在训练时添加model.train()。model.train()是保证BN层能够用到每一批数据的<strong>均值</strong>和<strong>方差</strong>。对于Dropout，<strong>model.train()是随机取一部分网络连接来训练更新参数。</strong></p>
+<h3 id="model-eval"><a href="#model-eval" class="headerlink" title="model.eval()"></a>model.eval()</h3><p>如果模型中有BN层(Batch Normalization）和Dropout，在测试时添加model.eval()。model.eval()是保证BN层能够用全部训练数据的均值和方差，即测试过程中要保证BN层的均值和方差不变。对于Dropout，model.eval()是利用到了所有网络连接，即<strong>不进行随机舍弃神经元。</strong></p>
+<p>训练完train样本后，生成的模型model要用来测试样本。在model(test)之前，需要加上model.eval()，<strong>框架会自动把BN和Dropout固定住，不会取平均，而是用训练好的值</strong>，否则的话，有输入数据，即使不训练，它也会改变权值。这是model中含有BN层和Dropout所带来的的性质。</p>
+<p>而在模型测试中，通常还会看见torch.no_grad()，它有什么作用呢？</p>
+<ul>
+<li>用于停止autograd模块的工作，起到加速和节省显存的作用（具体行为就是停止gradient计算，从而节省了GPU算力和显存）</li>
+<li>不会影响dropout和batchnorm层的行为</li>
+</ul>
+<p>model.eval()与torch.no_grad()同时用，可以更加节省cpu算力，加速计算。</p>
+]]></content>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
 </search>
