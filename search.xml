@@ -593,56 +593,204 @@ y=13cos(t)-5cos(2t)-2cos(3t)-cos(4t)
   <entry>
     <title>Linux学习笔记(ubuntu)</title>
     <url>/2021/04/01/Linux/</url>
-    <content><![CDATA[<h1 id="Linux笔记"><a href="#Linux笔记" class="headerlink" title="Linux笔记"></a>Linux笔记</h1><h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><p>对于Linux来说，使用统一的目录树结构：</p>
+    <content><![CDATA[<h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><p>对于Linux来说，使用统一的目录树结构：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/bin        二进制文件，系统常规命令</span><br><span class="line">/boot       系统启动分区，系统启动时读取的文件</span><br><span class="line">/dev        设备文件</span><br><span class="line">/etc        大多数配置文件</span><br><span class="line">/home       普通用户的家目录</span><br><span class="line">/lib        32位函数库</span><br><span class="line">/lib64      64位库</span><br><span class="line">/media      手动临时挂载点</span><br><span class="line">/mnt        手动临时挂载点</span><br><span class="line">/opt        第三方软件安装位置</span><br><span class="line">/proc       进程信息及硬件信息</span><br><span class="line">/root       临时设备的默认挂载点</span><br><span class="line">/sbin       系统管理命令</span><br><span class="line">/srv        数据</span><br><span class="line">/var        数据</span><br><span class="line">/sys        内核相关信息</span><br><span class="line">/tmp        临时文件</span><br><span class="line">/usr        用户相关设定</span><br></pre></td></tr></table></figure>
 <p>Linux下没有C：D：这种盘符的概念</p>
 <p>在\home目录下存放着用户目录</p>
 <p>超级用户root，其用户目录为/root</p>
-<h2 id="Linux命令行"><a href="#Linux命令行" class="headerlink" title="Linux命令行"></a>Linux命令行</h2><h3 id="命令行含义"><a href="#命令行含义" class="headerlink" title="命令行含义"></a>命令行含义</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">示例：root@app00:~<span class="comment"># </span></span><br><span class="line">root    //用户名，root为超级用户</span><br><span class="line">@       //分隔符</span><br><span class="line">app00   //主机名称</span><br><span class="line">~       //当前所在目录，默认用户目录为~，会随着目录切换而变化，例如：（root@app00:/bin<span class="comment"># ，当前位置在bin目录下）</span></span><br><span class="line"><span class="comment">#       //表示当前用户是超级用户，普通用户为$，例如：（&quot;yao@app00:/root$&quot; ，表示使用用户&quot;yao&quot;访问/root文件夹）</span></span><br></pre></td></tr></table></figure>
-<h3 id="命令行的组成"><a href="#命令行的组成" class="headerlink" title="命令行的组成"></a>命令行的组成</h3><figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">示例: 命令 参数名 参数值</span></span><br></pre></td></tr></table></figure>
-<h3 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h3><h4 id="重启系统"><a href="#重启系统" class="headerlink" title="重启系统"></a>重启系统</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(1)立刻关机</span><br><span class="line">  shutdown -h now 或者 poweroff</span><br><span class="line">(2)两分钟后关机</span><br><span class="line">  shutdown -h 2</span><br></pre></td></tr></table></figure>
-<h4 id="关闭系统"><a href="#关闭系统" class="headerlink" title="关闭系统"></a>关闭系统</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(1)立刻重启</span><br><span class="line">  shutdown -r now 或者 reboot</span><br><span class="line">(2)两分钟后重启</span><br><span class="line">  shutdown -r 2 </span><br></pre></td></tr></table></figure>
-<h4 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig --<span class="built_in">help</span>   //查看ifconfig命令的用法</span><br></pre></td></tr></table></figure>
-<h4 id="命令说明书（man"><a href="#命令说明书（man" class="headerlink" title="命令说明书（man)"></a>命令说明书（man)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man shutdown         //打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
-<h4 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Lehrmann Lehrmanncc   //切换为用户<span class="string">&quot;yao&quot;</span>,输入后回车需要输入该用户的密码</span><br><span class="line"><span class="built_in">exit</span>                 //退出当前用户man shutdown         //打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
-<h3 id="目录操作"><a href="#目录操作" class="headerlink" title="目录操作"></a>目录操作</h3><h4 id="切换目录-cd"><a href="#切换目录-cd" class="headerlink" title="切换目录(cd)"></a>切换目录(cd)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /                 //切换到根目录</span><br><span class="line"><span class="built_in">cd</span> /bin              //切换到根目录下的bin目录</span><br><span class="line"><span class="built_in">cd</span> ../               //切换到上一级目录 或者使用命令：<span class="built_in">cd</span> ..</span><br><span class="line"><span class="built_in">cd</span> ~                 //切换到home目录</span><br><span class="line"><span class="built_in">cd</span> -                 //切换到上次访问的目录</span><br><span class="line"><span class="built_in">cd</span> xx(文件夹名)       //切换到本目录下的名为xx的文件目录，如果目录不存在报错</span><br><span class="line"><span class="built_in">cd</span> /xxx/xx/x         //可以输入完整的路径，直接切换到目标目录，输入过程中可以使用tab键快速补全</span><br></pre></td></tr></table></figure>
-<h4 id="查看目录-ls"><a href="#查看目录-ls" class="headerlink" title="查看目录(ls)"></a>查看目录(ls)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls                   //查看当前目录下的所有目录和文件</span><br><span class="line">ls -a                //查看当前目录下的所有目录和文件（包括隐藏的文件）</span><br><span class="line">ls -l                //列表查看当前目录下的所有目录和文件（列表查看，显示更多信息），与命令<span class="string">&quot;ll&quot;</span>效果一样</span><br><span class="line">ls /bin              //查看指定目录下的所有目录和文件 </span><br></pre></td></tr></table></figure>
-<h4 id="创建目录-mkdir"><a href="#创建目录-mkdir" class="headerlink" title="创建目录(mkdir)"></a>创建目录(mkdir)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir tools   			//在当前目录下创建一个名为tools的目录</span><br><span class="line">mkdir /bin/tools		//在指定目录下创建一个名为tools的目录</span><br><span class="line">mkdir -p /abc/123/<span class="built_in">test</span>   //使用-p参数，可以将路径的层次目录全部创建</span><br></pre></td></tr></table></figure>
-<h4 id="删除目录与文件-rm"><a href="#删除目录与文件-rm" class="headerlink" title="删除目录与文件(rm)"></a>删除目录与文件(rm)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rm 文件名              //删除当前目录下的文件</span><br><span class="line">rm -f 文件名           //删除当前目录的的文件（不询问）</span><br><span class="line">rm -r 目录名         	//递归删除当前目录下此名的目录</span><br><span class="line">rm -rf 目录名        	//递归删除当前目录下此名的目录（不询问）</span><br><span class="line">rm -rf *              //将当前目录下的所有目录和文件全部删除</span><br><span class="line">rm -rf /*             //将根目录下的所有文件全部删除【慎用！相当于格式化系统】</span><br></pre></td></tr></table></figure>
-<h4 id="修改目录-mv"><a href="#修改目录-mv" class="headerlink" title="修改目录(mv)"></a>修改目录(mv)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mv 当前目录名 新目录名        //修改目录名，同样适用与文件操作</span><br><span class="line">mv /usr/tmp/tool /opt       //将/usr/tmp目录下的tool目录剪切到 /opt目录下面</span><br><span class="line">mv -r /usr/tmp/tool /opt    //递归剪切目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
-<h4 id="拷贝目录-cp"><a href="#拷贝目录-cp" class="headerlink" title="拷贝目录(cp)"></a>拷贝目录(cp)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cp /usr/tmp/tool /opt       //将/usr/tmp目录下的tool目录复制到 /opt目录下面</span><br><span class="line">cp -rf /usr/tmp/tool /opt    //递归强制复制目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
-<h4 id="搜索目录-find"><a href="#搜索目录-find" class="headerlink" title="搜索目录(find)"></a>搜索目录(find)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find /bin -name <span class="string">&#x27;a*&#x27;</span>  		//查找/bin目录下的所有以a开头的文件或者目录</span><br></pre></td></tr></table></figure>
-<h4 id="查看当前目录（pwd）"><a href="#查看当前目录（pwd）" class="headerlink" title="查看当前目录（pwd）"></a>查看当前目录（pwd）</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">pwd</span>                         //显示当前位置路径</span><br></pre></td></tr></table></figure>
-<h3 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h3><h4 id="新增文件-touch"><a href="#新增文件-touch" class="headerlink" title="新增文件(touch)"></a>新增文件(touch)</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">touch example/test.txt    //在example目录下创建test.txt文件</span><br></pre></td></tr></table></figure>
-<h3 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h3><h4 id="文件权限说明"><a href="#文件权限说明" class="headerlink" title="文件权限说明"></a>文件权限说明</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">文件权限简介：<span class="string">&#x27;r&#x27;</span> 代表可读（4），<span class="string">&#x27;w&#x27;</span> 代表可写（2），<span class="string">&#x27;x&#x27;</span> 代表执行权限（1），括号内代表<span class="string">&quot;8421法&quot;</span></span><br><span class="line"><span class="comment">##文件权限信息示例：-rwxrw-r--</span></span><br><span class="line">-第一位：<span class="string">&#x27;-&#x27;</span>就代表是文件，<span class="string">&#x27;d&#x27;</span>代表是文件夹</span><br><span class="line">-第一组三位：拥有者的权限</span><br><span class="line">-第二组三位：拥有者所在的组，组员的权限</span><br><span class="line">-第三组三位：代表的是其他用户的权限</span><br></pre></td></tr></table></figure>
-<h4 id="文件权限-1"><a href="#文件权限-1" class="headerlink" title="文件权限"></a>文件权限</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">普通授权    chmod +x a.txt    </span><br><span class="line">8421法     chmod 777 a.txt     //1+2+4=7，<span class="string">&quot;7&quot;</span>说明授予所有权限</span><br></pre></td></tr></table></figure>
-<h3 id="打包与解压"><a href="#打包与解压" class="headerlink" title="打包与解压"></a>打包与解压</h3><h4 id="压缩文件说明"><a href="#压缩文件说明" class="headerlink" title="压缩文件说明"></a>压缩文件说明</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.zip、.rar        //windows系统中压缩文件的扩展名</span><br><span class="line">.tar              //Linux中打包文件的扩展名</span><br><span class="line">.gz               //Linux中压缩文件的扩展名</span><br><span class="line">.tar.gz           //Linux中打包并压缩文件的扩展名</span><br></pre></td></tr></table></figure>
-<h4 id="打包文件"><a href="#打包文件" class="headerlink" title="打包文件"></a>打包文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -cvf 打包压缩后的文件名 要打包的文件</span><br><span class="line">参数说明： c：打包文件; v：显示运行过程; f：指定文件名;</span><br><span class="line">示例：</span><br><span class="line">tar -cvf a.tar file1 file2,...      //多个文件打包</span><br><span class="line">tar -zcvf a.tar.gz file1            //文件打包并压缩</span><br></pre></td></tr></table></figure>
-<h4 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf a.tar                      //解包至当前目录</span><br><span class="line">tar -zxvf a.tar -C /usr------        //‘C’表示切换目录，指定解压的位置</span><br><span class="line">unzip test.zip             //解压*.zip文件 </span><br><span class="line">unzip -l test.zip          //查看*.zip文件的内容 </span><br></pre></td></tr></table></figure>
-<h3 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用ln命令来创建软连接</span></span><br><span class="line">ln -s example example3    // 其中-s表示soft软连接（默认为硬）</span><br><span class="line"><span class="comment"># example为原始目录或文件名，example2为软连接名</span></span><br></pre></td></tr></table></figure>
+<h1 id="Linux命令行"><a href="#Linux命令行" class="headerlink" title="Linux命令行"></a>Linux命令行</h1><h2 id="命令行含义"><a href="#命令行含义" class="headerlink" title="命令行含义"></a>命令行含义</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">示例：root@app00:~<span class="comment"># </span></span><br><span class="line">root    //用户名，root为超级用户</span><br><span class="line">@       //分隔符</span><br><span class="line">app00   //主机名称</span><br><span class="line">~       //当前所在目录，默认用户目录为~，会随着目录切换而变化，例如：（root@app00:/bin<span class="comment"># ，当前位置在bin目录下）</span></span><br><span class="line"><span class="comment">#       //表示当前用户是超级用户，普通用户为$，例如：（&quot;yao@app00:/root$&quot; ，表示使用用户&quot;yao&quot;访问/root文件夹）</span></span><br></pre></td></tr></table></figure>
+<h2 id="命令行的组成"><a href="#命令行的组成" class="headerlink" title="命令行的组成"></a>命令行的组成</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">示例: 命令 参数名 参数值</span><br></pre></td></tr></table></figure>
+<h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><h3 id="重启系统"><a href="#重启系统" class="headerlink" title="重启系统"></a>重启系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(1)立刻关机</span><br><span class="line">  shutdown -h now 或者 poweroff</span><br><span class="line">(2)两分钟后关机</span><br><span class="line">  shutdown -h 2</span><br></pre></td></tr></table></figure>
+<h3 id="关闭系统"><a href="#关闭系统" class="headerlink" title="关闭系统"></a>关闭系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(1)立刻重启</span><br><span class="line">  shutdown -r now 或者 reboot</span><br><span class="line">(2)两分钟后重启</span><br><span class="line">  shutdown -r 2 </span><br></pre></td></tr></table></figure>
+<h3 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig --<span class="built_in">help</span>   //查看ifconfig命令的用法</span><br></pre></td></tr></table></figure>
+<h3 id="命令说明书（man"><a href="#命令说明书（man" class="headerlink" title="命令说明书（man)"></a>命令说明书（man)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man shutdown         //打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
+<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Lehrmann Lehrmanncc   //切换为用户<span class="string">&quot;yao&quot;</span>,输入后回车需要输入该用户的密码</span><br><span class="line"><span class="built_in">exit</span>                 //退出当前用户man shutdown         //打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
+<h2 id="目录操作"><a href="#目录操作" class="headerlink" title="目录操作"></a>目录操作</h2><h3 id="切换目录-cd"><a href="#切换目录-cd" class="headerlink" title="切换目录(cd)"></a>切换目录(cd)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /                 //切换到根目录</span><br><span class="line"><span class="built_in">cd</span> /bin              //切换到根目录下的bin目录</span><br><span class="line"><span class="built_in">cd</span> ../               //切换到上一级目录 或者使用命令：<span class="built_in">cd</span> ..</span><br><span class="line"><span class="built_in">cd</span> ~                 //切换到home目录</span><br><span class="line"><span class="built_in">cd</span> -                 //切换到上次访问的目录</span><br><span class="line"><span class="built_in">cd</span> xx(文件夹名)       //切换到本目录下的名为xx的文件目录，如果目录不存在报错</span><br><span class="line"><span class="built_in">cd</span> /xxx/xx/x         //可以输入完整的路径，直接切换到目标目录，输入过程中可以使用tab键快速补全</span><br></pre></td></tr></table></figure>
+<h3 id="查看目录-ls"><a href="#查看目录-ls" class="headerlink" title="查看目录(ls)"></a>查看目录(ls)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls                   //查看当前目录下的所有目录和文件</span><br><span class="line">ls -a                //查看当前目录下的所有目录和文件（包括隐藏的文件）</span><br><span class="line">ls -l                //列表查看当前目录下的所有目录和文件（列表查看，显示更多信息），与命令<span class="string">&quot;ll&quot;</span>效果一样</span><br><span class="line">ls /bin              //查看指定目录下的所有目录和文件 </span><br></pre></td></tr></table></figure>
+<h3 id="创建目录-mkdir"><a href="#创建目录-mkdir" class="headerlink" title="创建目录(mkdir)"></a>创建目录(mkdir)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir tools   			//在当前目录下创建一个名为tools的目录</span><br><span class="line">mkdir /bin/tools		//在指定目录下创建一个名为tools的目录</span><br><span class="line">mkdir -p /abc/123/<span class="built_in">test</span>   //使用-p参数，可以将路径的层次目录全部创建</span><br></pre></td></tr></table></figure>
+<h3 id="删除目录与文件-rm"><a href="#删除目录与文件-rm" class="headerlink" title="删除目录与文件(rm)"></a>删除目录与文件(rm)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rm 文件名              //删除当前目录下的文件</span><br><span class="line">rm -f 文件名           //删除当前目录的的文件（不询问）</span><br><span class="line">rm -r 目录名         	//递归删除当前目录下此名的目录</span><br><span class="line">rm -rf 目录名        	//递归删除当前目录下此名的目录（不询问）</span><br><span class="line">rm -rf *              //将当前目录下的所有目录和文件全部删除</span><br><span class="line">rm -rf /*             //将根目录下的所有文件全部删除【慎用！相当于格式化系统】</span><br></pre></td></tr></table></figure>
+<h3 id="修改目录-mv"><a href="#修改目录-mv" class="headerlink" title="修改目录(mv)"></a>修改目录(mv)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mv 当前目录名 新目录名        //修改目录名，同样适用与文件操作</span><br><span class="line">mv /usr/tmp/tool /opt       //将/usr/tmp目录下的tool目录剪切到 /opt目录下面</span><br><span class="line">mv -r /usr/tmp/tool /opt    //递归剪切目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
+<h3 id="拷贝目录-cp"><a href="#拷贝目录-cp" class="headerlink" title="拷贝目录(cp)"></a>拷贝目录(cp)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cp /usr/tmp/tool /opt       //将/usr/tmp目录下的tool目录复制到 /opt目录下面</span><br><span class="line">cp -rf /usr/tmp/tool /opt    //递归强制复制目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
+<h3 id="搜索目录-find"><a href="#搜索目录-find" class="headerlink" title="搜索目录(find)"></a>搜索目录(find)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find /bin -name <span class="string">&#x27;a*&#x27;</span>  		//查找/bin目录下的所有以a开头的文件或者目录</span><br></pre></td></tr></table></figure>
+<h3 id="查看当前目录（pwd）"><a href="#查看当前目录（pwd）" class="headerlink" title="查看当前目录（pwd）"></a>查看当前目录（pwd）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">pwd</span>                         //显示当前位置路径</span><br></pre></td></tr></table></figure>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><h3 id="新增文件-touch"><a href="#新增文件-touch" class="headerlink" title="新增文件(touch)"></a>新增文件(touch)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">touch example/test.txt    //在example目录下创建test.txt文件</span><br></pre></td></tr></table></figure>
+<h3 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h3><h3 id="文件权限说明"><a href="#文件权限说明" class="headerlink" title="文件权限说明"></a>文件权限说明</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">文件权限简介：<span class="string">&#x27;ower&#x27;</span>代表文件的属主ower，<span class="string">&#x27;r&#x27;</span> 代表可读<span class="built_in">read</span>（4），<span class="string">&#x27;w&#x27;</span> 代表可写write（2），<span class="string">&#x27;x&#x27;</span> 代表执行权限excute（1），括号内代表<span class="string">&quot;8421法&quot;</span></span><br></pre></td></tr></table></figure>
+<p>例如以下用ls-l命令查看example目录下的文件</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403110420.png" style="zoom:67%;"></p>
+<p>第一段就是文件的权限，第二段为文件属主，第三段为属主所在用户组，第四段为文件大小，第五段为创建时间，第六段为创建文件名。</p>
+<p>文件权限的含义如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">文件权限信息示例：-rw-rw-r--</span><br><span class="line">-第一位：<span class="string">&#x27;-&#x27;</span>就代表是文件，<span class="string">&#x27;d&#x27;</span>代表是目录，<span class="string">&#x27;l&#x27;</span>代表软连接</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403111138.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-第一组三位：拥有者的权限</span><br><span class="line">-第二组三位：拥有者所在的组，组员的权限</span><br><span class="line">-第三组三位：代表的是其他用户的权限</span><br></pre></td></tr></table></figure>
+<p>于是-rw-rw-r—即表示：用户自己可以读写，但不能执行；同用户组的成员也可以读写，但无法执行；其他用户仅能读，但无法写、执行。</p>
+<h3 id="修改文件权限"><a href="#修改文件权限" class="headerlink" title="修改文件权限"></a>修改文件权限</h3><p>文件的权限仅能由文件的属主或root用户进行修改。</p>
+<p>chmod，change file mode 修改文件的访问权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">普通授权    chmod o+w a.txt     // o表示other，w表示增加write的权限</span><br><span class="line">		  chmod o-w a.txt	  // 表示other减少write权限</span><br><span class="line">		  chmod a-w a.txt 	  // a表示all，即所有人都不具有write权限</span><br><span class="line">		  chmod u-w a.txt  	  // u表示user，即用户自己减少wirte权限</span><br><span class="line">		  chmod +w a.txt  	  // 省略写法，默认为修改用户与本组的权限</span><br><span class="line">8421法     chmod 777 a.txt     //1+2+4=7，<span class="string">&quot;7&quot;</span>说明授予所有权限</span><br></pre></td></tr></table></figure>
+<p>使用普通授权，可以发现train1.txt文件其他用户组已经增加了write的权限。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403112446.png" style="zoom:67%;"></p>
+<h3 id="修改文件属主"><a href="#修改文件属主" class="headerlink" title="修改文件属主"></a>修改文件属主</h3><p>一般来说，每个用户仅操作自己的用户目录，所以修改文件属主并不常用。</p>
+<p>使用chown命令，change owner修改文件的属主</p>
+<p>只有文件的owner和root用户才有权限修改文件属主</p>
+<h2 id="打包与解压"><a href="#打包与解压" class="headerlink" title="打包与解压"></a>打包与解压</h2><h3 id="压缩文件说明"><a href="#压缩文件说明" class="headerlink" title="压缩文件说明"></a>压缩文件说明</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.zip、.rar        //windows系统中压缩文件的扩展名</span><br><span class="line">.tar              //Linux中打包文件的扩展名</span><br><span class="line">.gz               //Linux中压缩文件的扩展名</span><br><span class="line">.tar.gz           //Linux中打包并压缩文件的扩展名</span><br></pre></td></tr></table></figure>
+<h3 id="打包文件"><a href="#打包文件" class="headerlink" title="打包文件"></a>打包文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -cvf 打包压缩后的文件名 要打包的文件</span><br><span class="line">参数说明： c：打包文件; v：显示运行过程; f：指定文件名;</span><br><span class="line">示例：</span><br><span class="line">tar -cvf a.tar file1 file2,...      //多个文件打包</span><br><span class="line">tar -zcvf a.tar.gz file1            //文件打包并压缩</span><br></pre></td></tr></table></figure>
+<h3 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf a.tar                      //解包至当前目录</span><br><span class="line">tar -zxvf a.tar -C /usr------        //‘C’表示切换目录，指定解压的位置</span><br><span class="line">unzip test.zip             //解压*.zip文件 </span><br><span class="line">unzip -l test.zip          //查看*.zip文件的内容 </span><br></pre></td></tr></table></figure>
+<h2 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用ln命令来创建软连接</span></span><br><span class="line">ln -s example example3    // 其中-s表示soft软连接（默认为硬）</span><br><span class="line"><span class="comment"># example为原始目录或文件名，example2为软连接名</span></span><br></pre></td></tr></table></figure>
 <ol>
 <li>删除软连接，对原目录没有任何影响</li>
 <li>删除原目录，则软连接失效</li>
 </ol>
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210402165356.png" style="zoom:67%;"></p>
 <p>可以发现根目录下有较多的软连接，例如bin、lib等，bin其实指向目录user/bin。</p>
-<h3 id="用户操作"><a href="#用户操作" class="headerlink" title="用户操作"></a>用户操作</h3><h4 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo useradd -m test1</span><br></pre></td></tr></table></figure>
+<h2 id="用户操作"><a href="#用户操作" class="headerlink" title="用户操作"></a>用户操作</h2><h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo useradd -m test1</span><br></pre></td></tr></table></figure>
 <p>其中，sudo（super use)表示以管理员身份运行；-m参数表示在/home目录下添加用户目录。</p>
-<h4 id="添加密码"><a href="#添加密码" class="headerlink" title="添加密码"></a>添加密码</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo passwd test1</span><br></pre></td></tr></table></figure>
-<h4 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo userdel test1</span><br></pre></td></tr></table></figure>
+<h3 id="添加密码"><a href="#添加密码" class="headerlink" title="添加密码"></a>添加密码</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo passwd test1</span><br></pre></td></tr></table></figure>
+<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo userdel test1</span><br></pre></td></tr></table></figure>
 <p>但这个时候虽然已经将test1用户删除了，但在\home目录下仍有\test1用户目录，所以需要将其目录删除</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /home/test1/</span><br></pre></td></tr></table></figure>
 <ol>
 <li>在登陆系统时，Linux默认不能使用root用户进行登陆</li>
 <li>只有特殊的用户才能执行sudo，例如刚才创建的新用户test1就不能使用sudo。而用户lehrmann便可以。在Linux下，把能执行sudo命令的用户叫sudoer。</li>
 </ol>
-<h3 id="root用户"><a href="#root用户" class="headerlink" title="root用户"></a>root用户</h3><p>首次使用root用户，需要给root用户设置密码(只需要设置一次，需要妥善保管root用户密码)</p>
+<h2 id="root用户"><a href="#root用户" class="headerlink" title="root用户"></a>root用户</h2><p>首次使用root用户，需要给root用户设置密码(只需要设置一次，需要妥善保管root用户密码)</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
 <p>切换root用户，使用su（switch user)命令</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
 <p>su root仅会切换终端(terminal)用户为root用户，桌面环境并不会切换</p>
 <p>退出root用户，</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h1 id="可执行脚本"><a href="#可执行脚本" class="headerlink" title="可执行脚本"></a>可执行脚本</h1><p>脚本script，一种解释执行的程序</p>
+<p>Linux下有常见的三种脚本程序</p>
+<ol>
+<li>Shell脚本    *.sh</li>
+<li>Perl脚本      *.pl</li>
+<li>Python脚本 *.py</li>
+</ol>
+<p>脚本程序都是由脚本解释器来运行的</p>
+<p>例如：Python脚本解释器：/bin/python3</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403134944.png" style="zoom:67%;"></p>
+<p>执行一个脚本时，可以采用以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/bin/python3 hello.py</span><br></pre></td></tr></table></figure>
+<p>也可以采用以下方式，首先创建python脚本后，在第一行添加python脚本解释器路径</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#！/bin/python3</span></span><br></pre></td></tr></table></figure>
+<p>但这个时候通过以下命令运行hello.py仍会出错</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143205.png" style="zoom:67%;"></p>
+<p>为什么会出现这种情况呢？提示权限不够，于是我用以下命令查看hello.py</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143600.png" style="zoom:67%;"></p>
+<p>会发现hello.py在用户的权限中仅能读写，不能执行，于是我们给用户增加权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod u+x hello.py</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143916.png" style="zoom:67%;"></p>
+<p>现在hello.py便可用过 ./hello.py 成功运行。</p>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><h2 id="用户环境变量"><a href="#用户环境变量" class="headerlink" title="用户环境变量"></a>用户环境变量</h2><p>用户环境变量，定义在 ~/.profile中，在Linux中，以 . 开头的文件为隐藏文件，可以通过以下命令查看</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls -a </span><br></pre></td></tr></table></figure>
+<p>采用gedit可以对.profile文件进行编辑</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit .profile</span><br></pre></td></tr></table></figure>
+<p>用户环境变量仅对当前用户有效，若切换用户后，则之前编辑的用户环境变量无效，因为每个用户都有自己的 .profile文件。</p>
+<h2 id="系统环境变量"><a href="#系统环境变量" class="headerlink" title="系统环境变量"></a>系统环境变量</h2><p>系统环境变量定义在：/etc/profile 中，这里面的环境变量对所有的用户都有效。</p>
+<p><strong>修改系统变量需要root用户权限，因为/etc下的东西都是需要超级用户才能进行修改。但官方建议不要直接修改/etc/profile文件，一般建议在/etc/profile.d/ 目录下创建一个自定义脚本。因为在profile中对profile.d目录下的文件进行嵌套调用。</strong></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403152245.png" style="zoom:67%;"></p>
+<h2 id="PATH环境变量"><a href="#PATH环境变量" class="headerlink" title="PATH环境变量"></a>PATH环境变量</h2><p>在运行python脚本时，若直接输入脚本名称进行运行，我们发现会出现如下情况</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403161159.png" style="zoom:67%;"></p>
+<p>为什么会找不到命令呢？这就和PATH环境变量有关系。</p>
+<p>PATH是一个最常见的环境变量，用于描述可执行文件的搜索路径。</p>
+<p>使用echo命令将PATH环境变量的值显示出来</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403161550.png" style="zoom:67%;"></p>
+<p>可以发现PATH环境变量的值就是一堆路径，然后用  ：进行分隔开。</p>
+<p>默认系统从以下目录搜索可执行程序</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/usr/bin            //例如tar命令</span><br><span class="line">/usr/sbin		   //例如useradd命令</span><br><span class="line">/usr/<span class="built_in">local</span>/bin</span><br><span class="line">/usr/<span class="built_in">local</span>/sbin</span><br></pre></td></tr></table></figure>
+<ol>
+<li>bin表示普通用户就能执行的程序，其中sbin为超级用户root才能执行的程序</li>
+<li>/usr/为系统自带的程序</li>
+<li>/usr/local/是用户安装的程序</li>
+</ol>
+<p>由于在输入hello.py后，系统会从PATH的路径下搜索命令，而搜索完后会发现没有hello.py这个命令，所以会返回未找到命令。</p>
+<p>所以我们可以在用户环境变量或系统环境变量里，修改PATH的值，然后注销便可生效。</p>
+<p>例如在系统环境变量中</p>
+<ol>
+<li><p>编辑/etc/profile.d/myprofile.sh，myprofile.sh为自定义的shell脚本</p>
+</li>
+<li><p>设定PATH环境变量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/opt/tomcat/bin</span><br></pre></td></tr></table></figure>
+<p>为PATH环境变量新增路径  /opt/tomcat/bin。</p>
+</li>
+</ol>
+<h1 id="SSH服务器"><a href="#SSH服务器" class="headerlink" title="SSH服务器"></a>SSH服务器</h1><p>使用SSH协议，可以实现：</p>
+<ol>
+<li>远程操控Linux终端（Xshell实现）</li>
+<li>进行文件传输至Linux服务器（Xftp实现）</li>
+</ol>
+<h2 id="虚拟机准备工作"><a href="#虚拟机准备工作" class="headerlink" title="虚拟机准备工作"></a>虚拟机准备工作</h2><p>首先需要保证ubuntu防火墙处于关闭状态，查看防火墙状态</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw status</span><br></pre></td></tr></table></figure>
+<p>接着安装ssh</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get installl openssh-server</span><br></pre></td></tr></table></figure>
+<p>进入查看ssh，若安装成功，则如下所示</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403191811.png" style="zoom:67%;"></p>
+<p>接着查看虚拟机的ip地址</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403191941.png" style="zoom:67%;"></p>
+<p>其中，ens33中inet即为ip地址：192.168.233.128。</p>
+<p>最后在本地打开cmd，如过可以ping通虚拟机ip地址，则说明可以连接了</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192436.jpg" style="zoom:67%;"></p>
+<p>如果没有ping通，则可以看一下ubuntu的防火墙有没有关闭。</p>
+<h2 id="Xshell连接"><a href="#Xshell连接" class="headerlink" title="Xshell连接"></a>Xshell连接</h2><p>点击【文件】-&gt;【新建】打开新建会话属性弹框，输入虚拟机的主机ip</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192713.png" style="zoom:67%;"></p>
+<p>切换选项卡【用户身份验证】。输入用户名，密码</p>
+<p>注意用户名可以在命令行中查看</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">who</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192916.png" style="zoom:67%;"></p>
+<p>lehrmann : 0中，lehrmann即为用户名</p>
+<p>设置完属性 点击【确定】按钮就不出意外可以连接上了</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403193313.png" style="zoom:67%;"></p>
+<p>上图即连接成功后的，至此Xshell即可远程对虚拟机进行操作了。</p>
+<h2 id="Xftp传输文件"><a href="#Xftp传输文件" class="headerlink" title="Xftp传输文件"></a>Xftp传输文件</h2><p>安装Xftp后，打开Xshell，连接虚拟机后，如图所示</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403231817.png" style="zoom:67%;"></p>
+<p>右键点击localhost，如图</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403231935.png" style="zoom:67%;"></p>
+<p>点击即可打开Xftp，如图</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403232116.png" style="zoom:67%;"></p>
+<p>即可进行文件传输</p>
+<h1 id="vim编辑器"><a href="#vim编辑器" class="headerlink" title="vim编辑器"></a>vim编辑器</h1><p>vi / vim 是一个基于控制台的文本编辑器，vim为vi的升级版。</p>
+<p>gedit是一个基于GUI的文本编辑器</p>
+<p>由于以后可能没有图形界面，只有一个控制台终端，故无法使用gedit，之能只用vim</p>
+<h2 id="打开文本编辑"><a href="#打开文本编辑" class="headerlink" title="打开文本编辑"></a>打开文本编辑</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim test.txt</span><br></pre></td></tr></table></figure>
+<p>如果目标文件存在，则打开编辑器；如果不存才会创建一个文件</p>
+<p>如果系统上没有vim编辑器，则可以进行安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt install vim</span><br></pre></td></tr></table></figure>
+<h2 id="切换模式"><a href="#切换模式" class="headerlink" title="切换模式"></a>切换模式</h2><ul>
+<li>编辑模式 Insert Mode：按i键</li>
+<li>命令模式 Command Mode：按Esc键</li>
+</ul>
+<h2 id="退出编辑"><a href="#退出编辑" class="headerlink" title="退出编辑"></a>退出编辑</h2><ol>
+<li><p>按Esc键，进入命令模式</p>
+</li>
+<li><p>输入 :wq  保存并退出</p>
+<p>输入 :q     退出</p>
+<p>输入 :q!    强制退出（放弃保存）</p>
+</li>
+</ol>
+<p>例如</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim test.txt</span><br></pre></td></tr></table></figure>
+<p>进入以下页面</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403220728.png" style="zoom:67%;"></p>
+<p>输入响应的文本后，可按Esc键，接着输入:wq，按回车即可退出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat test.txt</span><br></pre></td></tr></table></figure>
+<p>即可得到test.txt的文本内容</p>
+<h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><p>每运行一个可执行程序，其相应的在系统中都会有相应的进程</p>
+<p>在Linux系统中，可以使用如下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -ef</span><br></pre></td></tr></table></figure>
+<p>便可得到如下的进程信息</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403225647.png" style="zoom:67%;"></p>
+<p>其中，各字段的含义：</p>
+<ol>
+<li>UID：执行者</li>
+<li>PID：进程ID</li>
+<li>PPID：父进程ID</li>
+<li>STIME：启动时间</li>
+<li>CMD：启动时调用的命令行</li>
+</ol>
+<p>如果要查特定的进程时，可以使用如下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -ef | grep vi</span><br></pre></td></tr></table></figure>
+<p>将前者输出的信息，重定向给grep命令进行过滤处理</p>
 ]]></content>
       <tags>
         <tag>Linux</tag>
