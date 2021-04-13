@@ -634,6 +634,8 @@ y=13cos(t)-5cos(2t)-2cos(3t)-cos(4t)
 <h2 id="打包与解压"><a href="#打包与解压" class="headerlink" title="打包与解压"></a>打包与解压</h2><h3 id="压缩文件说明"><a href="#压缩文件说明" class="headerlink" title="压缩文件说明"></a>压缩文件说明</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.zip、.rar        //windows系统中压缩文件的扩展名</span><br><span class="line">.tar              //Linux中打包文件的扩展名</span><br><span class="line">.gz               //Linux中压缩文件的扩展名</span><br><span class="line">.tar.gz           //Linux中打包并压缩文件的扩展名</span><br></pre></td></tr></table></figure>
 <h3 id="打包文件"><a href="#打包文件" class="headerlink" title="打包文件"></a>打包文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -cvf 打包压缩后的文件名 要打包的文件</span><br><span class="line">参数说明： c：打包文件; v：显示运行过程; f：指定文件名;</span><br><span class="line">示例：</span><br><span class="line">tar -cvf a.tar file1 file2,...      //多个文件打包</span><br><span class="line">tar -zcvf a.tar.gz file1            //文件打包并压缩</span><br></pre></td></tr></table></figure>
 <h3 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf a.tar                      //解包至当前目录</span><br><span class="line">tar -zxvf a.tar -C /usr------        //‘C’表示切换目录，指定解压的位置</span><br><span class="line">unzip test.zip             //解压*.zip文件 </span><br><span class="line">unzip -l test.zip          //查看*.zip文件的内容 </span><br></pre></td></tr></table></figure>
+<h2 id="关机与重启"><a href="#关机与重启" class="headerlink" title="关机与重启"></a>关机与重启</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">shutdown -h now   //参数h为halt，即立即关机</span><br><span class="line">shutdown -r now   //参数r为reboot，即为立即重启</span><br><span class="line">shutdown -h 20:30 //即8点半关机</span><br></pre></td></tr></table></figure>
+<p><strong>但如果是远程管理服务器的话，应当注意不能将服务器关机，之能进行重启</strong></p>
 <h2 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用ln命令来创建软连接</span></span><br><span class="line">ln -s example example3    // 其中-s表示soft软连接（默认为硬）</span><br><span class="line"><span class="comment"># example为原始目录或文件名，example2为软连接名</span></span><br></pre></td></tr></table></figure>
 <ol>
 <li>删除软连接，对原目录没有任何影响</li>
@@ -791,9 +793,183 @@ y=13cos(t)-5cos(2t)-2cos(3t)-cos(4t)
 <p>如果要查特定的进程时，可以使用如下命令</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -ef | grep vi</span><br></pre></td></tr></table></figure>
 <p>将前者输出的信息，重定向给grep命令进行过滤处理</p>
+<h2 id="进程监视"><a href="#进程监视" class="headerlink" title="进程监视"></a>进程监视</h2><p>查看所有进程，并且可以动态的刷新显示进程的状态</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top</span><br></pre></td></tr></table></figure>
+<ol>
+<li>按上下键翻阅</li>
+<li>按 q 或CTRL + C中止退出</li>
+</ol>
+<p>可以查看特定进程，</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top -p NUM</span><br></pre></td></tr></table></figure>
+<p>其中NUM为特定进程的PID，所以我们可以先使用 ps 命令查看进程PID。</p>
+<h2 id="杀死进程"><a href="#杀死进程" class="headerlink" title="杀死进程"></a>杀死进程</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 NUM</span><br></pre></td></tr></table></figure>
+<h2 id="前台进程与后台进程"><a href="#前台进程与后台进程" class="headerlink" title="前台进程与后台进程"></a>前台进程与后台进程</h2><p>前台进程：运行在前台</p>
+<ul>
+<li>有父进程，父进程为当前终端</li>
+<li>当终端关闭时，前台进程被一同关闭</li>
+</ul>
+<p>后台进程：运行在后台</p>
+<ul>
+<li>父进程为系统进程（1号进程）</li>
+<li>当终端关闭时，后台进程不被影响</li>
+</ul>
 ]]></content>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL(Linux)</title>
+    <url>/2021/04/05/MySQL(Linux)/</url>
+    <content><![CDATA[<h1 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a>MySQL安装</h1><p>通过apt安装MySQL服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 更新源</span></span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="comment"># 安装</span></span><br><span class="line">sudo apt-get install mysql-server</span><br></pre></td></tr></table></figure>
+<p>安装完成后，进行初始化配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<p>配置项如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1</span></span><br><span class="line">VALIDATE PASSWORD PLUGIN can be used to test passwords...</span><br><span class="line">Press y|Y for Yes, any other key for No: N (选择N ,不会进行密码的强校验)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2</span></span><br><span class="line">Please <span class="keyword">set</span> the <span class="keyword">password</span> <span class="keyword">for</span> root here...</span><br><span class="line"><span class="keyword">New</span> <span class="keyword">password</span>: (输入密码)</span><br><span class="line">Re-enter <span class="keyword">new</span> <span class="keyword">password</span>: (重复输入)</span><br><span class="line"></span><br><span class="line"><span class="comment">#3</span></span><br><span class="line"><span class="keyword">By</span> <span class="keyword">default</span>, a MySQL installation has an anonymous <span class="keyword">user</span>,</span><br><span class="line">allowing anyone <span class="keyword">to</span> <span class="keyword">log</span> <span class="keyword">into</span> MySQL <span class="keyword">without</span> <span class="keyword">having</span> <span class="keyword">to</span> have</span><br><span class="line">a <span class="keyword">user</span> <span class="keyword">account</span> created <span class="keyword">for</span> them...</span><br><span class="line">Remove anonymous <span class="keyword">users</span>? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，不删除匿名用户)</span><br><span class="line"></span><br><span class="line"><span class="comment">#4</span></span><br><span class="line">Normally, root should <span class="keyword">only</span> be allowed <span class="keyword">to</span> <span class="keyword">connect</span> <span class="keyword">from</span></span><br><span class="line"><span class="string">&#x27;localhost&#x27;</span>. This ensures that someone cannot guess <span class="keyword">at</span></span><br><span class="line">the root <span class="keyword">password</span> <span class="keyword">from</span> the network...</span><br><span class="line"><span class="keyword">Disallow</span> root login remotely? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，允许root远程连接)</span><br><span class="line"></span><br><span class="line"><span class="comment">#5</span></span><br><span class="line"><span class="keyword">By</span> <span class="keyword">default</span>, MySQL comes <span class="keyword">with</span> a <span class="keyword">database</span> named <span class="string">&#x27;test&#x27;</span> that</span><br><span class="line">anyone can access...</span><br><span class="line">Remove <span class="keyword">test</span> <span class="keyword">database</span> <span class="keyword">and</span> <span class="keyword">access</span> <span class="keyword">to</span> it? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，不删除<span class="keyword">test</span>数据库)</span><br><span class="line"></span><br><span class="line"><span class="comment">#6</span></span><br><span class="line">Reloading the privilege <span class="keyword">tables</span> will ensure that <span class="keyword">all</span> changes</span><br><span class="line">made so <span class="keyword">far</span> will take effect immediately.</span><br><span class="line">Reload privilege <span class="keyword">tables</span> <span class="keyword">now</span>? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : Y (选择Y，修改权限立即生效)</span><br></pre></td></tr></table></figure>
+<h1 id="Mycil安装"><a href="#Mycil安装" class="headerlink" title="Mycil安装"></a>Mycil安装</h1><p>传统的MySQL安装后是没有语法补全的，这当然会令我们比较痛苦，效率也比较低。而Mycil是其MySQL的命令行界面，其具有语法提示和语法高亮。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install mycil</span><br></pre></td></tr></table></figure>
+<p>这样便安装好了mycil。</p>
+<h1 id="MySQL服务"><a href="#MySQL服务" class="headerlink" title="MySQL服务"></a>MySQL服务</h1><h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>Linux下要进入mysql服务器首先要启动mysql服务，其命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service mysql start</span><br></pre></td></tr></table></figure>
+<p>相应的，若要关闭或重启mysql服务，则命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service mysql stop</span><br><span class="line">sudo service mysql restart</span><br></pre></td></tr></table></figure>
+<p>这样后，Linux便启动mysql的服务了，之后我们便可以登陆进mysql</p>
+<h2 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h2><p>在最新版本的mysql8.0中，其为了安全性，默认要进行用户验证，必须使用sudo才能进行登陆</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>之后便是输入root用户的密码，然后便可进入mysql数据库了。</p>
+<p>mycil与mysql登陆基本一致，不过它是将root密码一次性输入，例如</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mycil -u root -p 123456</span><br></pre></td></tr></table></figure>
+<p>这里的123456即为root密码，这样就可以登陆进mycil了。</p>
+<h1 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h1><h2 id="查看数据库"><a href="#查看数据库" class="headerlink" title="查看数据库"></a>查看数据库</h2><p>进入mysql后，我们可以先查看mysql的版本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select version();</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410234424.png" style="zoom:67%;"></p>
+<p>可以发现mysql的版本是8.0.23</p>
+<p>当进入mysql数据库后，可以使用show语句进行查看所有数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">show databases;</span><br></pre></td></tr></table></figure>
+<p>不能忘记分号 “;”</p>
+<h2 id="创建新数据库"><a href="#创建新数据库" class="headerlink" title="创建新数据库"></a>创建新数据库</h2><p>新建一个数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create database 数据库名称;</span><br></pre></td></tr></table></figure>
+<p>相应的删除操作即为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">drop database 数据库名称;</span><br></pre></td></tr></table></figure>
+<h2 id="数据表操作"><a href="#数据表操作" class="headerlink" title="数据表操作"></a>数据表操作</h2><p>对于创建的数据库，如果我们要使用它，便有以下语句</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">use 数据库名称;</span><br></pre></td></tr></table></figure>
+<p>在使用这个数据库后，即进入了该数据库，而数据库是由表构成的，于是我们可以新建一个表：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create table stuinfo(id int,name varchar(10),loaction char(20));</span><br></pre></td></tr></table></figure>
+<p>注意：这里的varchar与char不同，char是固定长度，而varchar为可变长度。故char(20)是固定长度20的字符类型，而varchar(10)则是可变最大长度为10的字符类型。</p>
+<p>现在我们可以使用命令，观察刚才创建表的结构</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">desc stuinfo;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410213513.png" style="zoom:67%;"></p>
+<h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><p>现在这个表还是空的，那我们要为它插入一些值，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">insert into stuinfo values (1,&#39;xiaoming&#39;,&#39;shanghai&#39;);</span><br><span class="line">insert into stuinfo values (2,&#39;lihan&#39;,&#39;xian&#39;);</span><br><span class="line">insert into stuinfo values (3,&#39;wanggang&#39;,&#39;beijing&#39;);</span><br></pre></td></tr></table></figure>
+<p>现在我们可以查看整个表，命令如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from stuinfo;</span><br></pre></td></tr></table></figure>
+<p>其中 * 代表所有列，而表名后不加where，则代表所有行，因此取出所有行，所有列。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410214441.png" style="zoom:67%;"></p>
+<p><strong>但我们需要知道，这条语句是暴力查询，在平时我们应尽量避免使用，当我们要查特定某些列或行时，应指明列名，避免查询整张表，从而减少系统的负担。</strong></p>
+<h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><p>当我们要替换其中的一个值时，要怎么办呢？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">update stuinfo set name&#x3D;&#39;liliang&#39; where id&#x3D;2;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410215805.png" style="zoom:67%;"></p>
+<p>可以发现，原来’lihan’已经被替换成了’liliang’</p>
+<h3 id="删"><a href="#删" class="headerlink" title="删"></a>删</h3><p>删除就是指删除一整行，我们可以使用如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">delete from stuinfo where id&#x3D;3;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410220406.png" style="zoom:67%;"></p>
+<p>可以发现，第三行已经删除了。</p>
+<p>那如果我们想删除整个表，使用什么命令比较简洁呢？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">drop table stuinfo;</span><br></pre></td></tr></table></figure>
+<p>便可以直接删除整个stuinfo表。</p>
+<h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><p>如果我们要特定查看某一行的数值是否存在，则可以使用select语句实现</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from student_1 where name&#x3D;&#39;ppp&#39;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411105320.png" style="zoom:67%;"></p>
+<p>这样name=’ppp’的这一行就能被特定搜索出来了。</p>
+<p>当然我们也可以指定特定的某些列，如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select age,location from student_1 where name&#x3D;&#39;王明&#39;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411110257.png" style="zoom:67%;"></p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>单行注释</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#注释文字</span><br><span class="line">-- 注释，注意--后有空格</span><br></pre></td></tr></table></figure>
+<p>多行注释</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* 注释文字 *&#x2F;</span><br></pre></td></tr></table></figure>
+<h2 id="保存文件"><a href="#保存文件" class="headerlink" title="保存文件"></a>保存文件</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tee ~&#x2F;sql&#x2F;</span><br></pre></td></tr></table></figure>
+<p>将sql文件保存在sql文件夹下</p>
+<h1 id="列类型"><a href="#列类型" class="headerlink" title="列类型"></a>列类型</h1><h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><h3 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h3><ul>
+<li><p>tinyint</p>
+<p>占据空间：1字节(八位)，存储范围：(有符号)：-128~127，(无符号)：0~255。</p>
+</li>
+<li><p>smallint</p>
+<p>占据空间：2字节(16位)，存储范围：-32768~32767，0~65535</p>
+</li>
+<li><p>mediumint</p>
+<p>占据空间：3字节(24位)</p>
+</li>
+<li><p>int</p>
+<p>占据空间：4字节(32位)</p>
+</li>
+<li><p>bigint</p>
+<p>占据空间：8字节(64位)</p>
+<p>$n$字节，其共有$8n$位，则存储范围为：</p>
+<script type="math/tex; mode=display">
+\mbox{无符号：}0\sim2^{8n}-1\\
+\mbox{有符号：}-2^{8n-1}\sim2^{8n-1}-1</script></li>
+</ul>
+<p>但在申明类型时，例如int型，我们该如何选择它是无符号还是有符号的呢？</p>
+<p>首先创建一个表，其中age采用tinyint 型</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411202853.png" style="zoom:67%;"></p>
+<p>向表里插入一个age值为128的人</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411203009.png" style="zoom:67%;"></p>
+<p>可以发现，其报错了，128超过了tinyint的范围，则证明tinyint不加特殊说明时，默认是有符号的，其范围为-128~127。</p>
+<p>为表再加一列，其命令为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alter table 表名 add 列明 参数</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411204922.png" style="zoom:67%;"></p>
+<p>上述即为创建了一个名为score的列，其tinyint为unsigned，即无符号；不允许为空，默认值为0。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411205526.png" style="zoom:67%;"></p>
+<p>可以发现，在定义了tinyint 为unsigned后，其范围即变为0~255。</p>
+<p>但如果现在要求我们给班级的每个人添加上学号应该怎么办？学号一般是有固定长度的，例如：000001，000029等，这应该怎么实现呢？</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210412203140.png" style="zoom:67%;"></p>
+<p>在这里我们使用了(6)与zerofill两个参数，可以发现num的默认值变为000000了。同时可以发现num的类型多出来了unsigned（<strong>由于零填充不可能为负值，故zerofill同时也是unsigned类型</strong>）现在插入几个值试试。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210412203524.png" style="zoom:67%;"></p>
+<p>于是我们可以总结一下int型的参数：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\mbox{unsinged：      int型值无符号}\\
+\mbox{(M)，zerofill：两者搭配使用，M为补零长度，单独使用使没有意义的}
+\end{cases}</script><h3 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h3><p><strong>float(M,D)</strong>与<strong>decimal(M,D)</strong></p>
+<p>其中M表示“精度”——代表总位数，而D代表“标度”——小数点右边的位数。</p>
+<p>同时浮点型也可以在其后面定义unsigned，如下所示定义</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413142003.png" style="zoom:67%;"></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413142107.png" style="zoom:67%;"></p>
+<p>而float的整数部分能存10\^38，小数部分能存10\^-38。</p>
+<p>如果M&lt;24，则其占4个字节，否则占8个字节。</p>
+<p><strong>另一种存储方式叫定点decimal，是把整数部分和小数部分分开存储的，其比float精确。</strong></p>
+<p>我们通过实验可以发现两者差异，首先创建一个表</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413160657.png" style="zoom:67%;"></p>
+<p>后向表中插入值，可以发现</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413162910.png" style="zoom:67%;"></p>
+<p>acc1中的值与真实值不相符，为1234567.38，而真实值为1234567.36。其中acc1是float型的，acc2是decimal型的。故可以发现float的精度有时会有损精度</p>
+<h3 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h3><ul>
+<li><p><strong>char</strong>：</p>
+<p>定长，例如char(4)即创建4个长度的字符型，不管内容如何其长度都为4。这会导致浪费空间。<strong>创建n个长度，如果内容不够nn个长度，则会用空格补齐至n个长度。</strong></p>
+<p>但char类型由于其每个是固定长度的，所以其<strong>查找较快</strong>，因为可通过固定长度直接计算得到文件指针位置。</p>
+</li>
+<li><p><strong>varchar</strong>：</p>
+<p>变长，其不用空格补齐。<strong>例如varchar(10)，如果现在存储字符串’小明’，则它的存储长度并不是2，在’小明’的前面会有前缀，来记录内容的长度，在这个例子里该前缀的填入的内容即为2</strong>。</p>
+</li>
+</ul>
+<p>则以上可以发现char的利用率可能得到100%，但varchar的利用率一定&lt;100%。</p>
+<p><strong>注意char(M)，varchar(M)限制的是字符，不是字节。</strong></p>
+<ul>
+<li><p>text：</p>
+<p>文本类型，可以存比较大的文本，但搜索较慢。因此，如果不是特别大的内容，建议用char、varchar来代替。</p>
+<p>注意，<strong>声明text列时，不必给它默认值。</strong></p>
+</li>
+</ul>
+<h2 id="时期时间类型"><a href="#时期时间类型" class="headerlink" title="时期时间类型"></a>时期时间类型</h2><h3 id="date型"><a href="#date型" class="headerlink" title="date型"></a>date型</h3><p>创建一个具有date列类型的表，一般例如一个人的生日会用到时期。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000446.png" style="zoom:67%;"></p>
+<p>插入数值，可以得到</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000645.png" style="zoom:67%;"></p>
+<p><strong>date型的的标准格式为：YYYY-MM-DD，而其范围为1000-01-01~9999-12-31。</strong></p>
+]]></content>
+      <tags>
+        <tag>Mysql</tag>
       </tags>
   </entry>
 </search>
