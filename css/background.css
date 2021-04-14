@@ -20,7 +20,11 @@ img {
 #footer {
     background: transparent !important;
 }
+/*文章透明*/
 
+.layout_post>#post {
+    background: rgba(255, 255, 255, .7);
+}
 
 /* a标签默认颜色 */
 
