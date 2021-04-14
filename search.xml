@@ -1,6 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MySQL(Linux)</title>
+    <url>/2021/04/05/MySQL(Linux)/</url>
+    <content><![CDATA[<h1 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a>MySQL安装</h1><p>通过apt安装MySQL服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 更新源</span></span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="comment"># 安装</span></span><br><span class="line">sudo apt-get install mysql-server</span><br></pre></td></tr></table></figure>
+<p>安装完成后，进行初始化配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<p>配置项如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1</span></span><br><span class="line">VALIDATE PASSWORD PLUGIN can be used to test passwords...</span><br><span class="line">Press y|Y for Yes, any other key for No: N (选择N ,不会进行密码的强校验)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2</span></span><br><span class="line">Please <span class="keyword">set</span> the <span class="keyword">password</span> <span class="keyword">for</span> root here...</span><br><span class="line"><span class="keyword">New</span> <span class="keyword">password</span>: (输入密码)</span><br><span class="line">Re-enter <span class="keyword">new</span> <span class="keyword">password</span>: (重复输入)</span><br><span class="line"></span><br><span class="line"><span class="comment">#3</span></span><br><span class="line"><span class="keyword">By</span> <span class="keyword">default</span>, a MySQL installation has an anonymous <span class="keyword">user</span>,</span><br><span class="line">allowing anyone <span class="keyword">to</span> <span class="keyword">log</span> <span class="keyword">into</span> MySQL <span class="keyword">without</span> <span class="keyword">having</span> <span class="keyword">to</span> have</span><br><span class="line">a <span class="keyword">user</span> <span class="keyword">account</span> created <span class="keyword">for</span> them...</span><br><span class="line">Remove anonymous <span class="keyword">users</span>? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，不删除匿名用户)</span><br><span class="line"></span><br><span class="line"><span class="comment">#4</span></span><br><span class="line">Normally, root should <span class="keyword">only</span> be allowed <span class="keyword">to</span> <span class="keyword">connect</span> <span class="keyword">from</span></span><br><span class="line"><span class="string">&#x27;localhost&#x27;</span>. This ensures that someone cannot guess <span class="keyword">at</span></span><br><span class="line">the root <span class="keyword">password</span> <span class="keyword">from</span> the network...</span><br><span class="line"><span class="keyword">Disallow</span> root login remotely? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，允许root远程连接)</span><br><span class="line"></span><br><span class="line"><span class="comment">#5</span></span><br><span class="line"><span class="keyword">By</span> <span class="keyword">default</span>, MySQL comes <span class="keyword">with</span> a <span class="keyword">database</span> named <span class="string">&#x27;test&#x27;</span> that</span><br><span class="line">anyone can access...</span><br><span class="line">Remove <span class="keyword">test</span> <span class="keyword">database</span> <span class="keyword">and</span> <span class="keyword">access</span> <span class="keyword">to</span> it? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，不删除<span class="keyword">test</span>数据库)</span><br><span class="line"></span><br><span class="line"><span class="comment">#6</span></span><br><span class="line">Reloading the privilege <span class="keyword">tables</span> will ensure that <span class="keyword">all</span> changes</span><br><span class="line">made so <span class="keyword">far</span> will take effect immediately.</span><br><span class="line">Reload privilege <span class="keyword">tables</span> <span class="keyword">now</span>? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : Y (选择Y，修改权限立即生效)</span><br></pre></td></tr></table></figure>
+<h1 id="Mycil安装"><a href="#Mycil安装" class="headerlink" title="Mycil安装"></a>Mycil安装</h1><p>传统的MySQL安装后是没有语法补全的，这当然会令我们比较痛苦，效率也比较低。而Mycil是其MySQL的命令行界面，其具有语法提示和语法高亮。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install mycil</span><br></pre></td></tr></table></figure>
+<p>这样便安装好了mycil。</p>
+<h1 id="MySQL服务"><a href="#MySQL服务" class="headerlink" title="MySQL服务"></a>MySQL服务</h1><h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>Linux下要进入mysql服务器首先要启动mysql服务，其命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service mysql start</span><br></pre></td></tr></table></figure>
+<p>相应的，若要关闭或重启mysql服务，则命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service mysql stop</span><br><span class="line">sudo service mysql restart</span><br></pre></td></tr></table></figure>
+<p>这样后，Linux便启动mysql的服务了，之后我们便可以登陆进mysql</p>
+<h2 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h2><p>在最新版本的mysql8.0中，其为了安全性，默认要进行用户验证，必须使用sudo才能进行登陆</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mysql -u root -p</span><br></pre></td></tr></table></figure>
+<p>之后便是输入root用户的密码，然后便可进入mysql数据库了。</p>
+<p>mycil与mysql登陆基本一致，不过它是将root密码一次性输入，例如</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mycil -u root -p 123456</span><br></pre></td></tr></table></figure>
+<p>这里的123456即为root密码，这样就可以登陆进mycil了。</p>
+<h1 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h1><h2 id="查看数据库"><a href="#查看数据库" class="headerlink" title="查看数据库"></a>查看数据库</h2><p>进入mysql后，我们可以先查看mysql的版本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select version();</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410234424.png" style="zoom:67%;"></p>
+<p>可以发现mysql的版本是8.0.23</p>
+<p>当进入mysql数据库后，可以使用show语句进行查看所有数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">show databases;</span><br></pre></td></tr></table></figure>
+<p>不能忘记分号 “;”</p>
+<h2 id="创建新数据库"><a href="#创建新数据库" class="headerlink" title="创建新数据库"></a>创建新数据库</h2><p>新建一个数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create database 数据库名称;</span><br></pre></td></tr></table></figure>
+<p>相应的删除操作即为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">drop database 数据库名称;</span><br></pre></td></tr></table></figure>
+<h2 id="数据表操作"><a href="#数据表操作" class="headerlink" title="数据表操作"></a>数据表操作</h2><p>对于创建的数据库，如果我们要使用它，便有以下语句</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">use 数据库名称;</span><br></pre></td></tr></table></figure>
+<p>在使用这个数据库后，即进入了该数据库，而数据库是由表构成的，于是我们可以新建一个表：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create table stuinfo(id int,name varchar(10),loaction char(20));</span><br></pre></td></tr></table></figure>
+<p>注意：这里的varchar与char不同，char是固定长度，而varchar为可变长度。故char(20)是固定长度20的字符类型，而varchar(10)则是可变最大长度为10的字符类型。</p>
+<p>现在我们可以使用命令，观察刚才创建表的结构</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">desc stuinfo;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410213513.png" style="zoom:67%;"></p>
+<h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><p>现在这个表还是空的，那我们要为它插入一些值，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">insert into stuinfo values (1,&#39;xiaoming&#39;,&#39;shanghai&#39;);</span><br><span class="line">insert into stuinfo values (2,&#39;lihan&#39;,&#39;xian&#39;);</span><br><span class="line">insert into stuinfo values (3,&#39;wanggang&#39;,&#39;beijing&#39;);</span><br></pre></td></tr></table></figure>
+<p>现在我们可以查看整个表，命令如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from stuinfo;</span><br></pre></td></tr></table></figure>
+<p>其中 * 代表所有列，而表名后不加where，则代表所有行，因此取出所有行，所有列。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410214441.png" style="zoom:67%;"></p>
+<p><strong>但我们需要知道，这条语句是暴力查询，在平时我们应尽量避免使用，当我们要查特定某些列或行时，应指明列名，避免查询整张表，从而减少系统的负担。</strong></p>
+<h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><p>当我们要替换其中的一个值时，要怎么办呢？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">update stuinfo set name&#x3D;&#39;liliang&#39; where id&#x3D;2;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410215805.png" style="zoom:67%;"></p>
+<p>可以发现，原来’lihan’已经被替换成了’liliang’</p>
+<h3 id="删"><a href="#删" class="headerlink" title="删"></a>删</h3><p>删除就是指删除一整行，我们可以使用如下命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">delete from stuinfo where id&#x3D;3;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410220406.png" style="zoom:67%;"></p>
+<p>可以发现，第三行已经删除了。</p>
+<p>那如果我们想删除整个表，使用什么命令比较简洁呢？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">drop table stuinfo;</span><br></pre></td></tr></table></figure>
+<p>便可以直接删除整个stuinfo表。</p>
+<h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><p>如果我们要特定查看某一行的数值是否存在，则可以使用select语句实现</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from student_1 where name&#x3D;&#39;ppp&#39;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411105320.png" style="zoom:67%;"></p>
+<p>这样name=’ppp’的这一行就能被特定搜索出来了。</p>
+<p>当然我们也可以指定特定的某些列，如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select age,location from student_1 where name&#x3D;&#39;王明&#39;</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411110257.png" style="zoom:67%;"></p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>单行注释</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#注释文字</span><br><span class="line">-- 注释，注意--后有空格</span><br></pre></td></tr></table></figure>
+<p>多行注释</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* 注释文字 *&#x2F;</span><br></pre></td></tr></table></figure>
+<h2 id="保存文件"><a href="#保存文件" class="headerlink" title="保存文件"></a>保存文件</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tee ~&#x2F;sql&#x2F;</span><br></pre></td></tr></table></figure>
+<p>将sql文件保存在sql文件夹下</p>
+<h1 id="列类型"><a href="#列类型" class="headerlink" title="列类型"></a>列类型</h1><h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><h3 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h3><ul>
+<li><p>tinyint</p>
+<p>占据空间：1字节(八位)，存储范围：(有符号)：-128~127，(无符号)：0~255。</p>
+</li>
+<li><p>smallint</p>
+<p>占据空间：2字节(16位)，存储范围：-32768~32767，0~65535</p>
+</li>
+<li><p>mediumint</p>
+<p>占据空间：3字节(24位)</p>
+</li>
+<li><p>int</p>
+<p>占据空间：4字节(32位)</p>
+</li>
+<li><p>bigint</p>
+<p>占据空间：8字节(64位)</p>
+<p>$n$字节，其共有$8n$位，则存储范围为：</p>
+<script type="math/tex; mode=display">
+\mbox{无符号：}0\sim2^{8n}-1\\
+\mbox{有符号：}-2^{8n-1}\sim2^{8n-1}-1</script></li>
+</ul>
+<p>但在申明类型时，例如int型，我们该如何选择它是无符号还是有符号的呢？</p>
+<p>首先创建一个表，其中age采用tinyint 型</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411202853.png" style="zoom:67%;"></p>
+<p>向表里插入一个age值为128的人</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411203009.png" style="zoom:67%;"></p>
+<p>可以发现，其报错了，128超过了tinyint的范围，则证明tinyint不加特殊说明时，默认是有符号的，其范围为-128~127。</p>
+<p>为表再加一列，其命令为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alter table 表名 add 列明 参数</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411204922.png" style="zoom:67%;"></p>
+<p>上述即为创建了一个名为score的列，其tinyint为unsigned，即无符号；不允许为空，默认值为0。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411205526.png" style="zoom:67%;"></p>
+<p>可以发现，在定义了tinyint 为unsigned后，其范围即变为0~255。</p>
+<p>但如果现在要求我们给班级的每个人添加上学号应该怎么办？学号一般是有固定长度的，例如：000001，000029等，这应该怎么实现呢？</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210412203140.png" style="zoom:67%;"></p>
+<p>在这里我们使用了(6)与zerofill两个参数，可以发现num的默认值变为000000了。同时可以发现num的类型多出来了unsigned（<strong>由于零填充不可能为负值，故zerofill同时也是unsigned类型</strong>）现在插入几个值试试。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210412203524.png" style="zoom:67%;"></p>
+<p>于是我们可以总结一下int型的参数：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\mbox{unsinged：      int型值无符号}\\
+\mbox{(M)，zerofill：两者搭配使用，M为补零长度，单独使用使没有意义的}
+\end{cases}</script><h3 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h3><p><strong>float(M,D)</strong>与<strong>decimal(M,D)</strong></p>
+<p>其中M表示“精度”——代表总位数，而D代表“标度”——小数点右边的位数。</p>
+<p>同时浮点型也可以在其后面定义unsigned，如下所示定义</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413142003.png" style="zoom:67%;"></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413142107.png" style="zoom:67%;"></p>
+<p>而float的整数部分能存10\^38，小数部分能存10\^-38。</p>
+<p>如果M&lt;24，则其占4个字节，否则占8个字节。</p>
+<p><strong>另一种存储方式叫定点decimal，是把整数部分和小数部分分开存储的，其比float精确。</strong></p>
+<p>我们通过实验可以发现两者差异，首先创建一个表</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413160657.png" style="zoom:67%;"></p>
+<p>后向表中插入值，可以发现</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413162910.png" style="zoom:67%;"></p>
+<p>acc1中的值与真实值不相符，为1234567.38，而真实值为1234567.36。其中acc1是float型的，acc2是decimal型的。故可以发现float的精度有时会有损精度</p>
+<h3 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h3><ul>
+<li><p><strong>char</strong>：</p>
+<p>定长，例如char(4)即创建4个长度的字符型，不管内容如何其长度都为4。这会导致浪费空间。<strong>创建n个长度，如果内容不够nn个长度，则会用空格补齐至n个长度。</strong></p>
+<p>但char类型由于其每个是固定长度的，所以其<strong>查找较快</strong>，因为可通过固定长度直接计算得到文件指针位置。</p>
+</li>
+<li><p><strong>varchar</strong>：</p>
+<p>变长，其不用空格补齐。<strong>例如varchar(10)，如果现在存储字符串’小明’，则它的存储长度并不是2，在’小明’的前面会有前缀，来记录内容的长度，在这个例子里该前缀的填入的内容即为2</strong>。</p>
+</li>
+</ul>
+<p>则以上可以发现char的利用率可能得到100%，但varchar的利用率一定&lt;100%。</p>
+<p><strong>注意char(M)，varchar(M)限制的是字符，不是字节。</strong></p>
+<ul>
+<li><p>text：</p>
+<p>文本类型，可以存比较大的文本，但搜索较慢。因此，如果不是特别大的内容，建议用char、varchar来代替。</p>
+<p>注意，<strong>声明text列时，不必给它默认值。</strong></p>
+</li>
+</ul>
+<h2 id="时期时间类型"><a href="#时期时间类型" class="headerlink" title="时期时间类型"></a>时期时间类型</h2><h3 id="date型"><a href="#date型" class="headerlink" title="date型"></a>date型</h3><p>创建一个具有date列类型的表，一般例如一个人的生日会用到时期。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000446.png" style="zoom:67%;"></p>
+<p>插入数值，可以得到</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000645.png" style="zoom:67%;"></p>
+<p><strong>date型的的标准格式为：YYYY-MM-DD，而其范围为1000-01-01~9999-12-31。</strong></p>
+]]></content>
+      <tags>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Love record</title>
     <url>/2020/11/10/Love/</url>
     <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -14,6 +168,87 @@
 <script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
         <tag>Love record</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PyTorch实现回归</title>
+    <url>/2021/01/06/Regression/</url>
+    <content><![CDATA[<h1 id="实现回归"><a href="#实现回归" class="headerlink" title="实现回归"></a>实现回归</h1><h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><p>首先是一些基础包的导入</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> torch <span class="keyword">as</span> t</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line"><span class="comment">#sns.set()可以设置绘图格式</span></span><br><span class="line">sns.set()</span><br><span class="line">sns.set_context(<span class="string">&quot;notebook&quot;</span>, rc=&#123;<span class="string">&quot;font.size&quot;</span>:<span class="number">16</span>,</span><br><span class="line"><span class="string">&quot;axes.titlesize&quot;</span>:<span class="number">20</span>,</span><br><span class="line"><span class="string">&quot;axes.labelsize&quot;</span>:<span class="number">18</span>&#125;)</span><br><span class="line">CB91_Blue = <span class="string">&#x27;#2CBDFE&#x27;</span></span><br><span class="line">CB91_Green = <span class="string">&#x27;#47DBCD&#x27;</span></span><br><span class="line">CB91_Pink = <span class="string">&#x27;#F3A0F2&#x27;</span></span><br><span class="line">CB91_Purple = <span class="string">&#x27;#9D2EC5&#x27;</span></span><br><span class="line">CB91_Violet = <span class="string">&#x27;#661D98&#x27;</span></span><br><span class="line">CB91_Amber = <span class="string">&#x27;#F5B14C&#x27;</span></span><br><span class="line">color_list = [CB91_Blue, CB91_Pink, CB91_Green, CB91_Amber, CB91_Purple, CB91_Violet]</span><br><span class="line">plt.rcParams[<span class="string">&#x27;axes.prop_cycle&#x27;</span>] = plt.cycler(color=color_list)</span><br></pre></td></tr></table></figure>
+<p>产生随机数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x=np.arange(<span class="number">20</span>)</span><br><span class="line">y=np.array([<span class="number">5</span>*x[i]+random.randint(<span class="number">1</span>,<span class="number">20</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(len(x))])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(x)</span><br><span class="line">print(y)</span><br><span class="line"><span class="comment">#输出如下</span></span><br><span class="line">[ <span class="number">0</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">3</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">6</span>  <span class="number">7</span>  <span class="number">8</span>  <span class="number">9</span> <span class="number">10</span> <span class="number">11</span> <span class="number">12</span> <span class="number">13</span> <span class="number">14</span> <span class="number">15</span> <span class="number">16</span> <span class="number">17</span> <span class="number">18</span> <span class="number">19</span>]</span><br><span class="line">[  <span class="number">2</span>  <span class="number">20</span>  <span class="number">24</span>  <span class="number">24</span>  <span class="number">30</span>  <span class="number">43</span>  <span class="number">40</span>  <span class="number">55</span>  <span class="number">45</span>  <span class="number">48</span>  <span class="number">66</span>  <span class="number">73</span>  <span class="number">80</span>  <span class="number">76</span>  <span class="number">75</span>  <span class="number">79</span>  <span class="number">88</span> <span class="number">104</span> <span class="number">100</span> <span class="number">107</span>]</span><br></pre></td></tr></table></figure>
+<p>作图如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.scatter(x,y)</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106211206.png" alt="img"></p>
+<p>训练数据，首先要转换为Tensor类型</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x_train = t.from_numpy(x).float() </span><br><span class="line">y_train = t.from_numpy(y).float()</span><br><span class="line"></span><br><span class="line">print(x_train)</span><br><span class="line">print(y_train)</span><br><span class="line"><span class="comment">#打印输出后的结果</span></span><br><span class="line">tensor([ <span class="number">0.</span>,  <span class="number">1.</span>,  <span class="number">2.</span>,  <span class="number">3.</span>,  <span class="number">4.</span>,  <span class="number">5.</span>,  <span class="number">6.</span>,  <span class="number">7.</span>,  <span class="number">8.</span>,  <span class="number">9.</span>, <span class="number">10.</span>, <span class="number">11.</span>, <span class="number">12.</span>, <span class="number">13.</span>,</span><br><span class="line">        <span class="number">14.</span>, <span class="number">15.</span>, <span class="number">16.</span>, <span class="number">17.</span>, <span class="number">18.</span>, <span class="number">19.</span>])</span><br><span class="line">tensor([  <span class="number">2.</span>,  <span class="number">20.</span>,  <span class="number">24.</span>,  <span class="number">24.</span>,  <span class="number">30.</span>,  <span class="number">43.</span>,  <span class="number">40.</span>,  <span class="number">55.</span>,  <span class="number">45.</span>,  <span class="number">48.</span>,  <span class="number">66.</span>,  <span class="number">73.</span>,</span><br><span class="line">         <span class="number">80.</span>,  <span class="number">76.</span>,  <span class="number">75.</span>,  <span class="number">79.</span>,  <span class="number">88.</span>, <span class="number">104.</span>, <span class="number">100.</span>, <span class="number">107.</span>])</span><br></pre></td></tr></table></figure>
+<p>定义训练模型</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LinearRegression</span>(<span class="params">t.nn.Module</span>):</span>  <span class="comment">#继承父类:t.nn.Module</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(LinearRegression,self).__init__() </span><br><span class="line">        self.linear = t.nn.Linear(<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.linear(x)</span><br></pre></td></tr></table></figure>
+<p>super()函数作用：<strong>首先找到父类t.nn.Module,后将类LinearRegression的对象self转换为t.nn.Module的对象,然后“被转换”的类nn.Module对象调用自己的__init__函数.</strong></p>
+<p>进行模型的训练</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model = LinearRegression()</span><br><span class="line">criterion = t.nn.MSELoss()  <span class="comment">#定义损失函数</span></span><br><span class="line">optimizer = t.optim.SGD(model.parameters(),<span class="number">0.001</span>)  <span class="comment">#利用SGD优化算法,首先传入需要优化的参数,与学习率</span></span><br><span class="line"></span><br><span class="line">num_epochs = <span class="number">1000</span>   <span class="comment">#迭代次数</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(num_epochs):</span><br><span class="line">    input_data = x_train.unsqueeze(<span class="number">1</span>)  <span class="comment">#输入数据进行升维:[20]---&gt;[20,1]</span></span><br><span class="line">    target = y_train.unsqueeze(<span class="number">1</span>)  </span><br><span class="line">    out = model(input_data)   <span class="comment">#模型输出</span></span><br><span class="line">    loss = criterion(out,target) <span class="comment">#将模型输出与target进行比较,计算loss</span></span><br><span class="line">    optimizer.zero_grad()  <span class="comment">#梯度信息置为0,作用:将前一个batch的梯度计算结果置为0,因为它没有保留的作用了</span></span><br><span class="line">    loss.backward()   <span class="comment">#利用反向传播计算梯度</span></span><br><span class="line">    optimizer.step()  <span class="comment">#进行单次的优化,参数的更新</span></span><br><span class="line">    <span class="comment">#print(&quot;Epoch:[&#123;&#125;/&#123;&#125;],loss:[&#123;:.4f&#125;]&quot;.format(i+1,num_epochs,loss.item()))  </span></span><br><span class="line">    <span class="comment">#loss.item()可以直接获得loss的值,loss是仅有一个量的张量,故用item()可转换为python标量</span></span><br><span class="line">    <span class="keyword">if</span> ((i+<span class="number">1</span>)%<span class="number">200</span>==<span class="number">0</span>):   </span><br><span class="line">        predict = model(input_data)</span><br><span class="line">        plt.plot(x_train.data.numpy(),predict.squeeze(<span class="number">1</span>).data.numpy())</span><br><span class="line">        loss=criterion(predict,target)</span><br><span class="line">        plt.title(<span class="string">&quot;Loss:&#123;:.4f&#125;&quot;</span>.format(loss.item()))</span><br><span class="line">        plt.xlabel(<span class="string">&quot;X&quot;</span>)</span><br><span class="line">        plt.ylabel(<span class="string">&quot;Y&quot;</span>)</span><br><span class="line">        plt.scatter(x_train,y_train)</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure>
+<p>进行1000次迭代，每两百次打印图片</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213013.png"></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213057.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213121.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213202.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213241.png" alt></p>
+<h2 id="多项式回归"><a href="#多项式回归" class="headerlink" title="多项式回归"></a>多项式回归</h2><p>线性回归虽然可以拟合出来一条直线，但精度较低，可以看到上图的线性回归的Loss的值为<strong>43.2122</strong>，是较高的。我们可以通过多项式回归提高模型精度，多项式回归就是提高特征的次数，如前面的线性回归的$x$是1次，实际上可以采用二次、三次的，增加模型的复杂度，可能会带来overfitting。</p>
+<h3 id="Example-Ⅰ"><a href="#Example-Ⅰ" class="headerlink" title="Example Ⅰ"></a>Example Ⅰ</h3><p>下面实现一个简单的多项式回归，用模型拟合一个复杂的多项式方程：</p>
+<script type="math/tex; mode=display">
+f(x)=-1.13x-2.14x^2+3.15x^3-0.01x^4+0.512</script><p>多项式数据准备：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在[-3,3]之间生成50个点,返回一个一维张量</span></span><br><span class="line">x = t.linspace(<span class="number">-3</span>,<span class="number">3</span>,<span class="number">50</span>)  </span><br><span class="line">y = <span class="number">-1.13</span>*x<span class="number">-2.14</span>*t.pow(x,<span class="number">2</span>)+<span class="number">3.15</span>*t.pow(x,<span class="number">3</span>)<span class="number">-0.01</span>*t.pow(x,<span class="number">4</span>)+<span class="number">0.512</span></span><br><span class="line">plt.scatter(x.data.numpy(),y.data.numpy())</span><br></pre></td></tr></table></figure>
+<p>借助公式随机产生50个点，可视化图像如下：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210113232837.png" alt></p>
+<p>由于现在的输入不再是一元函数的一维，而是现在的四维，输入变成一个矩阵的形式：</p>
+<script type="math/tex; mode=display">
+X=\left[\array{x_1^1 & \dots &x_1^4\\
+\vdots & \ddots & \vdots\\
+x_n^1 & \dots & x_n^4}\right]</script><p>其中$x_n^4$代表第n组样本的第四个feature。</p>
+<p>下面将数据拼接成如上所示的矩阵形式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">features</span>(<span class="params">x</span>):</span></span><br><span class="line">    x = x.unsqueeze(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> t.cat([x**i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">5</span>)],<span class="number">1</span>)   <span class="comment">#将各向量连接在一起,形成矩阵形式</span></span><br></pre></td></tr></table></figure>
+<p>现在得到了标准的输入矩阵$X$，还缺少$y$的值，而$y$是通过函数$f(x)$计算出来的，通过以下函数来计算得到$y$值：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x_weight = t.Tensor([<span class="number">-1.13</span>,<span class="number">-2.14</span>,<span class="number">3.15</span>,<span class="number">-0.01</span>])</span><br><span class="line">x_weight = x_weight.unsqueeze(<span class="number">1</span>)</span><br><span class="line">b = t.Tensor([<span class="number">0.512</span>])</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">target</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="keyword">return</span> x.mm(x_weight)+b.item()   <span class="comment">#矩阵相乘,表示x*x_weight,b,item()获取b标量中的数值</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码用到了Tensor的mm方法，它是表示矩阵相乘（Matrix Multiplication）。现在通过上面两个方法，批量生成用于训练的数据：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 新建一个随机生成输入数据和输出数据的函数，用于生成train data</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span>(<span class="params">batch_size</span>):</span></span><br><span class="line">    <span class="comment"># 生成batch个随机的x</span></span><br><span class="line">    batch_x = t.randn(batch_size)</span><br><span class="line">    feature_x = features(batch_x)</span><br><span class="line">    target_y = target(feature_x)</span><br><span class="line">    <span class="keyword">return</span> feature_x,target_y</span><br></pre></td></tr></table></figure>
+<p>下面创建多项式回归模型，使用torch.nn.Linear模型：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PloynomialRegression</span>(<span class="params">t.nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(PloynomialRegression,self).__init__()</span><br><span class="line">        self.ploy = t.nn.Linear(<span class="number">4</span>,<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 输入维度为4维，输出维度为1维</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.ploy(x)</span><br></pre></td></tr></table></figure>
+<p>模型新建好后开始训练模型，为了动态的显示模型训练结果，在程序中设置每1000个epoch，就对测试数据进行一次预测，并将预测的误差及预测的输出值可视化显示。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 开始训练模型，误差函数使用MSELoss，使用SGD优化参数</span></span><br><span class="line">epochs = <span class="number">1000</span></span><br><span class="line">batch_size = <span class="number">32</span></span><br><span class="line">model = PloynomialRegression()</span><br><span class="line">criterion = t.nn.MSELoss()</span><br><span class="line">optimizer = t.optim.SGD(model.parameters(),<span class="number">0.001</span>)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(epochs):</span><br><span class="line">    batch_x,batch_y = get_data(batch_size)</span><br><span class="line">    out = model(batch_x)</span><br><span class="line">    loss = criterion(out,batch_y)</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">if</span>(epoch%<span class="number">200</span>==<span class="number">0</span>):</span><br><span class="line">        predict = model(features(x))</span><br><span class="line">        plt.plot(x.data.numpy(),predict.squeeze(<span class="number">1</span>).data.numpy(),CB91_Pink)</span><br><span class="line">        loss = criterion(predict,y.unsqueeze(<span class="number">1</span>))</span><br><span class="line">        plt.title(<span class="string">&quot;Loss:&#123;:.4f&#125;&quot;</span>.format(loss.item()))</span><br><span class="line">        plt.xlabel(<span class="string">&quot;X&quot;</span>)</span><br><span class="line">        plt.ylabel(<span class="string">&quot;Y&quot;</span>)</span><br><span class="line">        plt.scatter(x,y)</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151321.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151343.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151403.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151420.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151445.png" alt></p>
+<p>经过大量的迭代后，模型能够很好的拟合测试数据。</p>
+<h3 id="Example-Ⅱ"><a href="#Example-Ⅱ" class="headerlink" title="Example Ⅱ"></a>Example Ⅱ</h3><p>实现更复杂的曲线拟合，这里我们对心形曲线进行拟合，函数表达式如下：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+x=16sin^3(t)\\
+y=13cos(t)-5cos(2t)-2cos(3t)-cos(4t)
+\end{cases}</script><p>首先借助公式随机生成10000个点：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">e = t.linspace(<span class="number">-15</span>,<span class="number">15</span>,<span class="number">10000</span>)  </span><br><span class="line">x1 = <span class="number">16</span>*t.sin(e)**<span class="number">3</span></span><br><span class="line">y1 = <span class="number">13</span>*t.cos(e)<span class="number">-5</span>*t.cos(<span class="number">2</span>*e)<span class="number">-2</span>*t.cos(<span class="number">3</span>*e)-t.cos(<span class="number">4</span>*e)</span><br><span class="line">plt.scatter(x1.data.numpy(),y1.data.numpy())</span><br></pre></td></tr></table></figure>
+<p>可视化如下：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115182453.png" alt></p>
+<p>与Example Ⅰ不同的是，在这里有两个变量，需要对X,Y都要进行预测。</p>
+<p>对X，Y两个变量，分别进行数据处理：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fea_x</span>(<span class="params">e</span>):</span></span><br><span class="line">    e = e.unsqueeze(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> t.sin(e)**<span class="number">3</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fea_y</span>(<span class="params">e</span>):</span></span><br><span class="line">    e = e.unsqueeze(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> t.cat([t.cos(i*e) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">5</span>)],<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>有了这两个方法，便可以批量生成X,Y的训练数据了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">data</span>(<span class="params">size</span>):</span></span><br><span class="line">    r = t.randn(size)</span><br><span class="line">    x_fea = fea_x(r)</span><br><span class="line">    y_fea = fea_y(r)</span><br><span class="line">    x_tg = <span class="number">16</span>*x_fea</span><br><span class="line">    y_tg = tg_y(y_fea)</span><br><span class="line">    <span class="keyword">return</span> x_fea,y_fea,x_tg,y_tg</span><br></pre></td></tr></table></figure>
+<p>接下来就是定义模型，由于有两个变量，需要分别进行预测，故对X,Y定义两个模型：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HeartModel_x</span>(<span class="params">t.nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(HeartModel_x,self).__init__()</span><br><span class="line">        self.heartx = t.nn.Linear(<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.heartx(x)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HeartModel_y</span>(<span class="params">t.nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(HeartModel_y,self).__init__()</span><br><span class="line">        self.hearty = t.nn.Linear(<span class="number">4</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span>  <span class="comment">#self必须是任意函数的首个参数</span></span><br><span class="line">        <span class="keyword">return</span> self.hearty(x)</span><br></pre></td></tr></table></figure>
+<p>最后，进行模型训练，与Example Ⅰ大致相同，不再赘述，不同的是同时对X，Y进行训练：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">epoachs = <span class="number">50000</span></span><br><span class="line">batch_size = <span class="number">10000</span></span><br><span class="line">model_x = HeartModel_x()</span><br><span class="line">model_y = HeartModel_y()</span><br><span class="line">criterion = t.nn.MSELoss()</span><br><span class="line">optimizer1 = t.optim.SGD(model_x.parameters(),<span class="number">0.001</span>)</span><br><span class="line">optimizer2 = t.optim.SGD(model_y.parameters(),<span class="number">0.001</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoach <span class="keyword">in</span> range(epoachs):</span><br><span class="line">    x_train,y_train,x_target,y_target = data(batch_size)</span><br><span class="line">    out_x = model_x(x_train)</span><br><span class="line">    out_y = model_y(y_train)</span><br><span class="line">    </span><br><span class="line">    loss_x = criterion(out_x,x_target)</span><br><span class="line">    loss_y = criterion(out_y,y_target)</span><br><span class="line">    </span><br><span class="line">    optimizer1.zero_grad()</span><br><span class="line">    optimizer2.zero_grad()</span><br><span class="line">    </span><br><span class="line">    loss_x.backward()</span><br><span class="line">    loss_y.backward()</span><br><span class="line">    </span><br><span class="line">    optimizer1.step()</span><br><span class="line">    optimizer2.step()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(epoach%<span class="number">10000</span>==<span class="number">0</span>):</span><br><span class="line">        predict_x = model_x(fea_x(e))</span><br><span class="line">        predict_y = model_y(fea_y(e))</span><br><span class="line">        plt.plot(predict_x.squeeze(<span class="number">1</span>).data.numpy(),predict_y.squeeze(<span class="number">1</span>).data.numpy(),CB91_Pink)</span><br><span class="line">        loss_x = criterion(predict_x,x1.unsqueeze(<span class="number">1</span>))</span><br><span class="line">        loss_y = criterion(predict_y,y1.unsqueeze(<span class="number">1</span>))</span><br><span class="line">        plt.title(<span class="string">&quot;Loss X:&#123;:.4f&#125;,Loss Y:&#123;:.4f&#125;&quot;</span>.format(loss_x,loss_y))</span><br><span class="line">        plt.xlabel(<span class="string">&quot;X&quot;</span>)</span><br><span class="line">        plt.ylabel(<span class="string">&quot;Y&quot;</span>)</span><br><span class="line">        plt.scatter(x1,y1)</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure>
+<p>每10000次迭代打印一次训练结果，并将其可视化如下：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213159.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213309.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213335.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213400.png" alt></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213426.png" alt></p>
+]]></content>
+      <tags>
+        <tag>PyTorch</tag>
       </tags>
   </entry>
   <entry>
@@ -121,6 +356,272 @@ src(x,y) &\ otherwise
 ]]></content>
       <tags>
         <tag>CV</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PyTorch问题记录</title>
+    <url>/2021/03/22/pytorch%20problem/</url>
+    <content><![CDATA[<h1 id="PyTorch-中torch-nn-与torch-nn-function-的区别"><a href="#PyTorch-中torch-nn-与torch-nn-function-的区别" class="headerlink" title="PyTorch 中torch.nn. 与torch.nn.function.的区别"></a>PyTorch 中torch.nn. 与torch.nn.function.的区别</h1><p>今天我在定义一个卷积网络的过程中，发现nn.Conv2d与nn.functional.conv2d看似都是相同的。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DogCat_Net</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(Dog_Cat,self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br><span class="line">        self.conv1 = nn.functional.conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>类似的还有很多，在卷积，激活，池化等操作中，nn.Conv2d与nn.functional.conv2d均很相似。</p>
+<p>通过查看PyTorch的文档发现，例如torch.nn.Conv2d是一个类</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210322202215.png" style="zoom: 50%;"></p>
+<p>torch.nn.functional.conv2d则更像一个函数：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210322202712.png" style="zoom:50%;"></p>
+<p>简而言之：</p>
+<ul>
+<li><strong>nn.Conv2d可以理解为一个Class类，需要继承nn.Module类</strong></li>
+<li><strong>nn.functional.conv2d可以理解为一个纯函数，由def function(input)定义</strong></li>
+</ul>
+<p>对于nn中定义的类，可以提取变化的学习参数。而nn.functional中的是函数，是一个固定的运算公式。</p>
+<p>由于在深度学习中会有很多权重是不断变化的，所以需要采用类的方式，以确保参数改变后，仍能正确进行运算。</p>
+<p><strong>所以一般在建立网络模型时，在__init__函数中，通常使用nn中的类；而在forward函数中，通常使用nn.functional中的函数。</strong></p>
+<p>例如以下网络模型：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog_Cat</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(Dog_Cat,self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">16</span>, <span class="number">32</span> ,kernel_size = <span class="number">5</span>)</span><br><span class="line">        self.dropout = nn.Dropout2d()</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">55696</span>,<span class="number">1000</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">1000</span>,<span class="number">50</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">50</span>,<span class="number">2</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        x = F.relu(F.max_pool2d(self.conv1(x),<span class="number">2</span>))</span><br><span class="line">        x = F.relu(F.max_pool2d(self.dropout(self.conv2(x)),<span class="number">2</span>))</span><br><span class="line">        x = x.view(<span class="number">-1</span>,<span class="number">55696</span>)</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = F.dropout(x)</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = F.dropout(x)</span><br><span class="line">        x = F.log_softmax(self.fc3(x),dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p>当网络模型使用了Dropout层时，其只需要在模型训练的时候进行使用，在模型测试时并不会使用它。</p>
+<p><strong>当Dropout层是使用nn.Dropout定义时，在模型训练时，可以通过model.train()开启它，在模型测试时，可以通过model.eval()关闭它。</strong></p>
+<p><strong>但当Dropout层是用nn.functional.dropout定义的，那么在使用model.eval()后，也没办法关闭Dropout层。</strong></p>
+<p>以上提到了model.train()与model.eval()，那么它们的具体作用是什么呢？为什么要在模型训练与测试的时候加上这两段代码呢？</p>
+<h3 id="model-train"><a href="#model-train" class="headerlink" title="model.train()"></a>model.train()</h3><p>如果模型中有BN层(Batch Normalization）和Dropout，需要在训练时添加model.train()。model.train()是保证BN层能够用到每一批数据的<strong>均值</strong>和<strong>方差</strong>。对于Dropout，<strong>model.train()是随机取一部分网络连接来训练更新参数。</strong></p>
+<h3 id="model-eval"><a href="#model-eval" class="headerlink" title="model.eval()"></a>model.eval()</h3><p>如果模型中有BN层(Batch Normalization）和Dropout，在测试时添加model.eval()。model.eval()是保证BN层能够用全部训练数据的均值和方差，即测试过程中要保证BN层的均值和方差不变。对于Dropout，model.eval()是利用到了所有网络连接，即<strong>不进行随机舍弃神经元。</strong></p>
+<p>训练完train样本后，生成的模型model要用来测试样本。在model(test)之前，需要加上model.eval()，<strong>框架会自动把BN和Dropout固定住，不会取平均，而是用训练好的值</strong>，否则的话，有输入数据，即使不训练，它也会改变权值。这是model中含有BN层和Dropout所带来的的性质。</p>
+<p>而在模型测试中，通常还会看见torch.no_grad()，它有什么作用呢？</p>
+<ul>
+<li>用于停止autograd模块的工作，起到加速和节省显存的作用（具体行为就是停止gradient计算，从而节省了GPU算力和显存）</li>
+<li>不会影响dropout和batchnorm层的行为</li>
+</ul>
+<p>model.eval()与torch.no_grad()同时用，可以更加节省cpu算力，加速计算。</p>
+]]></content>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux学习笔记(ubuntu)</title>
+    <url>/2021/04/01/Linux/</url>
+    <content><![CDATA[<h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><p>对于Linux来说，使用统一的目录树结构：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/bin        二进制文件，系统常规命令</span><br><span class="line">/boot       系统启动分区，系统启动时读取的文件</span><br><span class="line">/dev        设备文件</span><br><span class="line">/etc        大多数配置文件</span><br><span class="line">/home       普通用户的家目录</span><br><span class="line">/lib        32位函数库</span><br><span class="line">/lib64      64位库</span><br><span class="line">/media      手动临时挂载点</span><br><span class="line">/mnt        手动临时挂载点</span><br><span class="line">/opt        第三方软件安装位置</span><br><span class="line">/proc       进程信息及硬件信息</span><br><span class="line">/root       临时设备的默认挂载点</span><br><span class="line">/sbin       系统管理命令</span><br><span class="line">/srv        数据</span><br><span class="line">/var        数据</span><br><span class="line">/sys        内核相关信息</span><br><span class="line">/tmp        临时文件</span><br><span class="line">/usr        用户相关设定</span><br></pre></td></tr></table></figure>
+<p>Linux下没有C：D：这种盘符的概念</p>
+<p>在\home目录下存放着用户目录</p>
+<p>超级用户root，其用户目录为/root</p>
+<h1 id="Linux命令行"><a href="#Linux命令行" class="headerlink" title="Linux命令行"></a>Linux命令行</h1><h2 id="命令行含义"><a href="#命令行含义" class="headerlink" title="命令行含义"></a>命令行含义</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">示例：root@app00:~<span class="comment"># </span></span><br><span class="line">root    //用户名，root为超级用户</span><br><span class="line">@       //分隔符</span><br><span class="line">app00   //主机名称</span><br><span class="line">~       //当前所在目录，默认用户目录为~，会随着目录切换而变化，例如：（root@app00:/bin<span class="comment"># ，当前位置在bin目录下）</span></span><br><span class="line"><span class="comment">#       //表示当前用户是超级用户，普通用户为$，例如：（&quot;yao@app00:/root$&quot; ，表示使用用户&quot;yao&quot;访问/root文件夹）</span></span><br></pre></td></tr></table></figure>
+<h2 id="命令行的组成"><a href="#命令行的组成" class="headerlink" title="命令行的组成"></a>命令行的组成</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">示例: 命令 参数名 参数值</span><br></pre></td></tr></table></figure>
+<h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><h3 id="重启系统"><a href="#重启系统" class="headerlink" title="重启系统"></a>重启系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(1)立刻关机</span><br><span class="line">  shutdown -h now 或者 poweroff</span><br><span class="line">(2)两分钟后关机</span><br><span class="line">  shutdown -h 2</span><br></pre></td></tr></table></figure>
+<h3 id="关闭系统"><a href="#关闭系统" class="headerlink" title="关闭系统"></a>关闭系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(1)立刻重启</span><br><span class="line">  shutdown -r now 或者 reboot</span><br><span class="line">(2)两分钟后重启</span><br><span class="line">  shutdown -r 2 </span><br></pre></td></tr></table></figure>
+<h3 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig --<span class="built_in">help</span>   //查看ifconfig命令的用法</span><br></pre></td></tr></table></figure>
+<h3 id="命令说明书（man"><a href="#命令说明书（man" class="headerlink" title="命令说明书（man)"></a>命令说明书（man)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man shutdown         //打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
+<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Lehrmann Lehrmanncc   //切换为用户<span class="string">&quot;yao&quot;</span>,输入后回车需要输入该用户的密码</span><br><span class="line"><span class="built_in">exit</span>                 //退出当前用户man shutdown         //打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
+<h2 id="目录操作"><a href="#目录操作" class="headerlink" title="目录操作"></a>目录操作</h2><h3 id="切换目录-cd"><a href="#切换目录-cd" class="headerlink" title="切换目录(cd)"></a>切换目录(cd)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /                 //切换到根目录</span><br><span class="line"><span class="built_in">cd</span> /bin              //切换到根目录下的bin目录</span><br><span class="line"><span class="built_in">cd</span> ../               //切换到上一级目录 或者使用命令：<span class="built_in">cd</span> ..</span><br><span class="line"><span class="built_in">cd</span> ~                 //切换到home目录</span><br><span class="line"><span class="built_in">cd</span> -                 //切换到上次访问的目录</span><br><span class="line"><span class="built_in">cd</span> xx(文件夹名)       //切换到本目录下的名为xx的文件目录，如果目录不存在报错</span><br><span class="line"><span class="built_in">cd</span> /xxx/xx/x         //可以输入完整的路径，直接切换到目标目录，输入过程中可以使用tab键快速补全</span><br></pre></td></tr></table></figure>
+<h3 id="查看目录-ls"><a href="#查看目录-ls" class="headerlink" title="查看目录(ls)"></a>查看目录(ls)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls                   //查看当前目录下的所有目录和文件</span><br><span class="line">ls -a                //查看当前目录下的所有目录和文件（包括隐藏的文件）</span><br><span class="line">ls -l                //列表查看当前目录下的所有目录和文件（列表查看，显示更多信息），与命令<span class="string">&quot;ll&quot;</span>效果一样</span><br><span class="line">ls /bin              //查看指定目录下的所有目录和文件 </span><br></pre></td></tr></table></figure>
+<h3 id="创建目录-mkdir"><a href="#创建目录-mkdir" class="headerlink" title="创建目录(mkdir)"></a>创建目录(mkdir)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir tools   			//在当前目录下创建一个名为tools的目录</span><br><span class="line">mkdir /bin/tools		//在指定目录下创建一个名为tools的目录</span><br><span class="line">mkdir -p /abc/123/<span class="built_in">test</span>   //使用-p参数，可以将路径的层次目录全部创建</span><br></pre></td></tr></table></figure>
+<h3 id="删除目录与文件-rm"><a href="#删除目录与文件-rm" class="headerlink" title="删除目录与文件(rm)"></a>删除目录与文件(rm)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rm 文件名              //删除当前目录下的文件</span><br><span class="line">rm -f 文件名           //删除当前目录的的文件（不询问）</span><br><span class="line">rm -r 目录名         	//递归删除当前目录下此名的目录</span><br><span class="line">rm -rf 目录名        	//递归删除当前目录下此名的目录（不询问）</span><br><span class="line">rm -rf *              //将当前目录下的所有目录和文件全部删除</span><br><span class="line">rm -rf /*             //将根目录下的所有文件全部删除【慎用！相当于格式化系统】</span><br></pre></td></tr></table></figure>
+<h3 id="修改目录-mv"><a href="#修改目录-mv" class="headerlink" title="修改目录(mv)"></a>修改目录(mv)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mv 当前目录名 新目录名        //修改目录名，同样适用与文件操作</span><br><span class="line">mv /usr/tmp/tool /opt       //将/usr/tmp目录下的tool目录剪切到 /opt目录下面</span><br><span class="line">mv -r /usr/tmp/tool /opt    //递归剪切目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
+<h3 id="拷贝目录-cp"><a href="#拷贝目录-cp" class="headerlink" title="拷贝目录(cp)"></a>拷贝目录(cp)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cp /usr/tmp/tool /opt       //将/usr/tmp目录下的tool目录复制到 /opt目录下面</span><br><span class="line">cp -rf /usr/tmp/tool /opt    //递归强制复制目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
+<h3 id="搜索目录-find"><a href="#搜索目录-find" class="headerlink" title="搜索目录(find)"></a>搜索目录(find)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find /bin -name <span class="string">&#x27;a*&#x27;</span>  		//查找/bin目录下的所有以a开头的文件或者目录</span><br></pre></td></tr></table></figure>
+<h3 id="查看当前目录（pwd）"><a href="#查看当前目录（pwd）" class="headerlink" title="查看当前目录（pwd）"></a>查看当前目录（pwd）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">pwd</span>                         //显示当前位置路径</span><br></pre></td></tr></table></figure>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><h3 id="新增文件-touch"><a href="#新增文件-touch" class="headerlink" title="新增文件(touch)"></a>新增文件(touch)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">touch example/test.txt    //在example目录下创建test.txt文件</span><br></pre></td></tr></table></figure>
+<h3 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h3><h3 id="文件权限说明"><a href="#文件权限说明" class="headerlink" title="文件权限说明"></a>文件权限说明</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">文件权限简介：<span class="string">&#x27;ower&#x27;</span>代表文件的属主ower，<span class="string">&#x27;r&#x27;</span> 代表可读<span class="built_in">read</span>（4），<span class="string">&#x27;w&#x27;</span> 代表可写write（2），<span class="string">&#x27;x&#x27;</span> 代表执行权限excute（1），括号内代表<span class="string">&quot;8421法&quot;</span></span><br></pre></td></tr></table></figure>
+<p>例如以下用ls-l命令查看example目录下的文件</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403110420.png" style="zoom:67%;"></p>
+<p>第一段就是文件的权限，第二段为文件属主，第三段为属主所在用户组，第四段为文件大小，第五段为创建时间，第六段为创建文件名。</p>
+<p>文件权限的含义如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">文件权限信息示例：-rw-rw-r--</span><br><span class="line">-第一位：<span class="string">&#x27;-&#x27;</span>就代表是文件，<span class="string">&#x27;d&#x27;</span>代表是目录，<span class="string">&#x27;l&#x27;</span>代表软连接</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403111138.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-第一组三位：拥有者的权限</span><br><span class="line">-第二组三位：拥有者所在的组，组员的权限</span><br><span class="line">-第三组三位：代表的是其他用户的权限</span><br></pre></td></tr></table></figure>
+<p>于是-rw-rw-r—即表示：用户自己可以读写，但不能执行；同用户组的成员也可以读写，但无法执行；其他用户仅能读，但无法写、执行。</p>
+<h3 id="修改文件权限"><a href="#修改文件权限" class="headerlink" title="修改文件权限"></a>修改文件权限</h3><p>文件的权限仅能由文件的属主或root用户进行修改。</p>
+<p>chmod，change file mode 修改文件的访问权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">普通授权    chmod o+w a.txt     // o表示other，w表示增加write的权限</span><br><span class="line">		  chmod o-w a.txt	  // 表示other减少write权限</span><br><span class="line">		  chmod a-w a.txt 	  // a表示all，即所有人都不具有write权限</span><br><span class="line">		  chmod u-w a.txt  	  // u表示user，即用户自己减少wirte权限</span><br><span class="line">		  chmod +w a.txt  	  // 省略写法，默认为修改用户与本组的权限</span><br><span class="line">8421法     chmod 777 a.txt     //1+2+4=7，<span class="string">&quot;7&quot;</span>说明授予所有权限</span><br></pre></td></tr></table></figure>
+<p>使用普通授权，可以发现train1.txt文件其他用户组已经增加了write的权限。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403112446.png" style="zoom:67%;"></p>
+<h3 id="修改文件属主"><a href="#修改文件属主" class="headerlink" title="修改文件属主"></a>修改文件属主</h3><p>一般来说，每个用户仅操作自己的用户目录，所以修改文件属主并不常用。</p>
+<p>使用chown命令，change owner修改文件的属主</p>
+<p>只有文件的owner和root用户才有权限修改文件属主</p>
+<h2 id="打包与解压"><a href="#打包与解压" class="headerlink" title="打包与解压"></a>打包与解压</h2><h3 id="压缩文件说明"><a href="#压缩文件说明" class="headerlink" title="压缩文件说明"></a>压缩文件说明</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.zip、.rar        //windows系统中压缩文件的扩展名</span><br><span class="line">.tar              //Linux中打包文件的扩展名</span><br><span class="line">.gz               //Linux中压缩文件的扩展名</span><br><span class="line">.tar.gz           //Linux中打包并压缩文件的扩展名</span><br></pre></td></tr></table></figure>
+<h3 id="打包文件"><a href="#打包文件" class="headerlink" title="打包文件"></a>打包文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -cvf 打包压缩后的文件名 要打包的文件</span><br><span class="line">参数说明： c：打包文件; v：显示运行过程; f：指定文件名;</span><br><span class="line">示例：</span><br><span class="line">tar -cvf a.tar file1 file2,...      //多个文件打包</span><br><span class="line">tar -zcvf a.tar.gz file1            //文件打包并压缩</span><br></pre></td></tr></table></figure>
+<h3 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf a.tar                      //解包至当前目录</span><br><span class="line">tar -zxvf a.tar -C /usr------        //‘C’表示切换目录，指定解压的位置</span><br><span class="line">unzip test.zip             //解压*.zip文件 </span><br><span class="line">unzip -l test.zip          //查看*.zip文件的内容 </span><br></pre></td></tr></table></figure>
+<h2 id="关机与重启"><a href="#关机与重启" class="headerlink" title="关机与重启"></a>关机与重启</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">shutdown -h now   //参数h为halt，即立即关机</span><br><span class="line">shutdown -r now   //参数r为reboot，即为立即重启</span><br><span class="line">shutdown -h 20:30 //即8点半关机</span><br></pre></td></tr></table></figure>
+<p><strong>但如果是远程管理服务器的话，应当注意不能将服务器关机，之能进行重启</strong></p>
+<h2 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用ln命令来创建软连接</span></span><br><span class="line">ln -s example example3    // 其中-s表示soft软连接（默认为硬）</span><br><span class="line"><span class="comment"># example为原始目录或文件名，example2为软连接名</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>删除软连接，对原目录没有任何影响</li>
+<li>删除原目录，则软连接失效</li>
+</ol>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210402165356.png" style="zoom:67%;"></p>
+<p>可以发现根目录下有较多的软连接，例如bin、lib等，bin其实指向目录user/bin。</p>
+<h2 id="用户操作"><a href="#用户操作" class="headerlink" title="用户操作"></a>用户操作</h2><h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo useradd -m test1</span><br></pre></td></tr></table></figure>
+<p>其中，sudo（super use)表示以管理员身份运行；-m参数表示在/home目录下添加用户目录。</p>
+<h3 id="添加密码"><a href="#添加密码" class="headerlink" title="添加密码"></a>添加密码</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo passwd test1</span><br></pre></td></tr></table></figure>
+<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo userdel test1</span><br></pre></td></tr></table></figure>
+<p>但这个时候虽然已经将test1用户删除了，但在\home目录下仍有\test1用户目录，所以需要将其目录删除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /home/test1/</span><br></pre></td></tr></table></figure>
+<ol>
+<li>在登陆系统时，Linux默认不能使用root用户进行登陆</li>
+<li>只有特殊的用户才能执行sudo，例如刚才创建的新用户test1就不能使用sudo。而用户lehrmann便可以。在Linux下，把能执行sudo命令的用户叫sudoer。</li>
+</ol>
+<h2 id="root用户"><a href="#root用户" class="headerlink" title="root用户"></a>root用户</h2><p>首次使用root用户，需要给root用户设置密码(只需要设置一次，需要妥善保管root用户密码)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
+<p>切换root用户，使用su（switch user)命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
+<p>su root仅会切换终端(terminal)用户为root用户，桌面环境并不会切换</p>
+<p>退出root用户，</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h1 id="可执行脚本"><a href="#可执行脚本" class="headerlink" title="可执行脚本"></a>可执行脚本</h1><p>脚本script，一种解释执行的程序</p>
+<p>Linux下有常见的三种脚本程序</p>
+<ol>
+<li>Shell脚本    *.sh</li>
+<li>Perl脚本      *.pl</li>
+<li>Python脚本 *.py</li>
+</ol>
+<p>脚本程序都是由脚本解释器来运行的</p>
+<p>例如：Python脚本解释器：/bin/python3</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403134944.png" style="zoom:67%;"></p>
+<p>执行一个脚本时，可以采用以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/bin/python3 hello.py</span><br></pre></td></tr></table></figure>
+<p>也可以采用以下方式，首先创建python脚本后，在第一行添加python脚本解释器路径</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#！/bin/python3</span></span><br></pre></td></tr></table></figure>
+<p>但这个时候通过以下命令运行hello.py仍会出错</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143205.png" style="zoom:67%;"></p>
+<p>为什么会出现这种情况呢？提示权限不够，于是我用以下命令查看hello.py</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143600.png" style="zoom:67%;"></p>
+<p>会发现hello.py在用户的权限中仅能读写，不能执行，于是我们给用户增加权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod u+x hello.py</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143916.png" style="zoom:67%;"></p>
+<p>现在hello.py便可用过 ./hello.py 成功运行。</p>
+<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><h2 id="用户环境变量"><a href="#用户环境变量" class="headerlink" title="用户环境变量"></a>用户环境变量</h2><p>用户环境变量，定义在 ~/.profile中，在Linux中，以 . 开头的文件为隐藏文件，可以通过以下命令查看</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls -a </span><br></pre></td></tr></table></figure>
+<p>采用gedit可以对.profile文件进行编辑</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit .profile</span><br></pre></td></tr></table></figure>
+<p>用户环境变量仅对当前用户有效，若切换用户后，则之前编辑的用户环境变量无效，因为每个用户都有自己的 .profile文件。</p>
+<h2 id="系统环境变量"><a href="#系统环境变量" class="headerlink" title="系统环境变量"></a>系统环境变量</h2><p>系统环境变量定义在：/etc/profile 中，这里面的环境变量对所有的用户都有效。</p>
+<p><strong>修改系统变量需要root用户权限，因为/etc下的东西都是需要超级用户才能进行修改。但官方建议不要直接修改/etc/profile文件，一般建议在/etc/profile.d/ 目录下创建一个自定义脚本。因为在profile中对profile.d目录下的文件进行嵌套调用。</strong></p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403152245.png" style="zoom:67%;"></p>
+<h2 id="PATH环境变量"><a href="#PATH环境变量" class="headerlink" title="PATH环境变量"></a>PATH环境变量</h2><p>在运行python脚本时，若直接输入脚本名称进行运行，我们发现会出现如下情况</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403161159.png" style="zoom:67%;"></p>
+<p>为什么会找不到命令呢？这就和PATH环境变量有关系。</p>
+<p>PATH是一个最常见的环境变量，用于描述可执行文件的搜索路径。</p>
+<p>使用echo命令将PATH环境变量的值显示出来</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403161550.png" style="zoom:67%;"></p>
+<p>可以发现PATH环境变量的值就是一堆路径，然后用  ：进行分隔开。</p>
+<p>默认系统从以下目录搜索可执行程序</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/usr/bin            //例如tar命令</span><br><span class="line">/usr/sbin		   //例如useradd命令</span><br><span class="line">/usr/<span class="built_in">local</span>/bin</span><br><span class="line">/usr/<span class="built_in">local</span>/sbin</span><br></pre></td></tr></table></figure>
+<ol>
+<li>bin表示普通用户就能执行的程序，其中sbin为超级用户root才能执行的程序</li>
+<li>/usr/为系统自带的程序</li>
+<li>/usr/local/是用户安装的程序</li>
+</ol>
+<p>由于在输入hello.py后，系统会从PATH的路径下搜索命令，而搜索完后会发现没有hello.py这个命令，所以会返回未找到命令。</p>
+<p>所以我们可以在用户环境变量或系统环境变量里，修改PATH的值，然后注销便可生效。</p>
+<p>例如在系统环境变量中</p>
+<ol>
+<li><p>编辑/etc/profile.d/myprofile.sh，myprofile.sh为自定义的shell脚本</p>
+</li>
+<li><p>设定PATH环境变量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/opt/tomcat/bin</span><br></pre></td></tr></table></figure>
+<p>为PATH环境变量新增路径  /opt/tomcat/bin。</p>
+</li>
+</ol>
+<h1 id="SSH服务器"><a href="#SSH服务器" class="headerlink" title="SSH服务器"></a>SSH服务器</h1><p>使用SSH协议，可以实现：</p>
+<ol>
+<li>远程操控Linux终端（Xshell实现）</li>
+<li>进行文件传输至Linux服务器（Xftp实现）</li>
+</ol>
+<h2 id="虚拟机准备工作"><a href="#虚拟机准备工作" class="headerlink" title="虚拟机准备工作"></a>虚拟机准备工作</h2><p>首先需要保证ubuntu防火墙处于关闭状态，查看防火墙状态</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw status</span><br></pre></td></tr></table></figure>
+<p>接着安装ssh</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get installl openssh-server</span><br></pre></td></tr></table></figure>
+<p>进入查看ssh，若安装成功，则如下所示</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403191811.png" style="zoom:67%;"></p>
+<p>接着查看虚拟机的ip地址</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403191941.png" style="zoom:67%;"></p>
+<p>其中，ens33中inet即为ip地址：192.168.233.128。</p>
+<p>最后在本地打开cmd，如过可以ping通虚拟机ip地址，则说明可以连接了</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192436.jpg" style="zoom:67%;"></p>
+<p>如果没有ping通，则可以看一下ubuntu的防火墙有没有关闭。</p>
+<h2 id="Xshell连接"><a href="#Xshell连接" class="headerlink" title="Xshell连接"></a>Xshell连接</h2><p>点击【文件】-&gt;【新建】打开新建会话属性弹框，输入虚拟机的主机ip</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192713.png" style="zoom:67%;"></p>
+<p>切换选项卡【用户身份验证】。输入用户名，密码</p>
+<p>注意用户名可以在命令行中查看</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">who</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192916.png" style="zoom:67%;"></p>
+<p>lehrmann : 0中，lehrmann即为用户名</p>
+<p>设置完属性 点击【确定】按钮就不出意外可以连接上了</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403193313.png" style="zoom:67%;"></p>
+<p>上图即连接成功后的，至此Xshell即可远程对虚拟机进行操作了。</p>
+<h2 id="Xftp传输文件"><a href="#Xftp传输文件" class="headerlink" title="Xftp传输文件"></a>Xftp传输文件</h2><p>安装Xftp后，打开Xshell，连接虚拟机后，如图所示</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403231817.png" style="zoom:67%;"></p>
+<p>右键点击localhost，如图</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403231935.png" style="zoom:67%;"></p>
+<p>点击即可打开Xftp，如图</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403232116.png" style="zoom:67%;"></p>
+<p>即可进行文件传输</p>
+<h1 id="vim编辑器"><a href="#vim编辑器" class="headerlink" title="vim编辑器"></a>vim编辑器</h1><p>vi / vim 是一个基于控制台的文本编辑器，vim为vi的升级版。</p>
+<p>gedit是一个基于GUI的文本编辑器</p>
+<p>由于以后可能没有图形界面，只有一个控制台终端，故无法使用gedit，之能只用vim</p>
+<h2 id="打开文本编辑"><a href="#打开文本编辑" class="headerlink" title="打开文本编辑"></a>打开文本编辑</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim test.txt</span><br></pre></td></tr></table></figure>
+<p>如果目标文件存在，则打开编辑器；如果不存才会创建一个文件</p>
+<p>如果系统上没有vim编辑器，则可以进行安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt install vim</span><br></pre></td></tr></table></figure>
+<h2 id="切换模式"><a href="#切换模式" class="headerlink" title="切换模式"></a>切换模式</h2><ul>
+<li>编辑模式 Insert Mode：按i键</li>
+<li>命令模式 Command Mode：按Esc键</li>
+</ul>
+<h2 id="退出编辑"><a href="#退出编辑" class="headerlink" title="退出编辑"></a>退出编辑</h2><ol>
+<li><p>按Esc键，进入命令模式</p>
+</li>
+<li><p>输入 :wq  保存并退出</p>
+<p>输入 :q     退出</p>
+<p>输入 :q!    强制退出（放弃保存）</p>
+</li>
+</ol>
+<p>例如</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim test.txt</span><br></pre></td></tr></table></figure>
+<p>进入以下页面</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403220728.png" style="zoom:67%;"></p>
+<p>输入响应的文本后，可按Esc键，接着输入:wq，按回车即可退出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat test.txt</span><br></pre></td></tr></table></figure>
+<p>即可得到test.txt的文本内容</p>
+<h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><p>每运行一个可执行程序，其相应的在系统中都会有相应的进程</p>
+<p>在Linux系统中，可以使用如下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -ef</span><br></pre></td></tr></table></figure>
+<p>便可得到如下的进程信息</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403225647.png" style="zoom:67%;"></p>
+<p>其中，各字段的含义：</p>
+<ol>
+<li>UID：执行者</li>
+<li>PID：进程ID</li>
+<li>PPID：父进程ID</li>
+<li>STIME：启动时间</li>
+<li>CMD：启动时调用的命令行</li>
+</ol>
+<p>如果要查特定的进程时，可以使用如下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -ef | grep vi</span><br></pre></td></tr></table></figure>
+<p>将前者输出的信息，重定向给grep命令进行过滤处理</p>
+<h2 id="进程监视"><a href="#进程监视" class="headerlink" title="进程监视"></a>进程监视</h2><p>查看所有进程，并且可以动态的刷新显示进程的状态</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top</span><br></pre></td></tr></table></figure>
+<ol>
+<li>按上下键翻阅</li>
+<li>按 q 或CTRL + C中止退出</li>
+</ol>
+<p>可以查看特定进程，</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top -p NUM</span><br></pre></td></tr></table></figure>
+<p>其中NUM为特定进程的PID，所以我们可以先使用 ps 命令查看进程PID。</p>
+<h2 id="杀死进程"><a href="#杀死进程" class="headerlink" title="杀死进程"></a>杀死进程</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 NUM</span><br></pre></td></tr></table></figure>
+<h2 id="前台进程与后台进程"><a href="#前台进程与后台进程" class="headerlink" title="前台进程与后台进程"></a>前台进程与后台进程</h2><p>前台进程：运行在前台</p>
+<ul>
+<li>有父进程，父进程为当前终端</li>
+<li>当终端关闭时，前台进程被一同关闭</li>
+</ul>
+<p>后台进程：运行在后台</p>
+<ul>
+<li>父进程为系统进程（1号进程）</li>
+<li>当终端关闭时，后台进程不被影响</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -469,507 +970,6 @@ Softmax(z_i)=\frac{e^{z_i}}{\sum_{c=1}^{C}e^{c}}</script><p>那么为什么叫�
 ]]></content>
       <tags>
         <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PyTorch实现回归</title>
-    <url>/2021/01/06/Regression/</url>
-    <content><![CDATA[<h1 id="实现回归"><a href="#实现回归" class="headerlink" title="实现回归"></a>实现回归</h1><h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><p>首先是一些基础包的导入</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> torch <span class="keyword">as</span> t</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line"><span class="comment">#sns.set()可以设置绘图格式</span></span><br><span class="line">sns.set()</span><br><span class="line">sns.set_context(<span class="string">&quot;notebook&quot;</span>, rc=&#123;<span class="string">&quot;font.size&quot;</span>:<span class="number">16</span>,</span><br><span class="line"><span class="string">&quot;axes.titlesize&quot;</span>:<span class="number">20</span>,</span><br><span class="line"><span class="string">&quot;axes.labelsize&quot;</span>:<span class="number">18</span>&#125;)</span><br><span class="line">CB91_Blue = <span class="string">&#x27;#2CBDFE&#x27;</span></span><br><span class="line">CB91_Green = <span class="string">&#x27;#47DBCD&#x27;</span></span><br><span class="line">CB91_Pink = <span class="string">&#x27;#F3A0F2&#x27;</span></span><br><span class="line">CB91_Purple = <span class="string">&#x27;#9D2EC5&#x27;</span></span><br><span class="line">CB91_Violet = <span class="string">&#x27;#661D98&#x27;</span></span><br><span class="line">CB91_Amber = <span class="string">&#x27;#F5B14C&#x27;</span></span><br><span class="line">color_list = [CB91_Blue, CB91_Pink, CB91_Green, CB91_Amber, CB91_Purple, CB91_Violet]</span><br><span class="line">plt.rcParams[<span class="string">&#x27;axes.prop_cycle&#x27;</span>] = plt.cycler(color=color_list)</span><br></pre></td></tr></table></figure>
-<p>产生随机数据</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x=np.arange(<span class="number">20</span>)</span><br><span class="line">y=np.array([<span class="number">5</span>*x[i]+random.randint(<span class="number">1</span>,<span class="number">20</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(len(x))])</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(x)</span><br><span class="line">print(y)</span><br><span class="line"><span class="comment">#输出如下</span></span><br><span class="line">[ <span class="number">0</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">3</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">6</span>  <span class="number">7</span>  <span class="number">8</span>  <span class="number">9</span> <span class="number">10</span> <span class="number">11</span> <span class="number">12</span> <span class="number">13</span> <span class="number">14</span> <span class="number">15</span> <span class="number">16</span> <span class="number">17</span> <span class="number">18</span> <span class="number">19</span>]</span><br><span class="line">[  <span class="number">2</span>  <span class="number">20</span>  <span class="number">24</span>  <span class="number">24</span>  <span class="number">30</span>  <span class="number">43</span>  <span class="number">40</span>  <span class="number">55</span>  <span class="number">45</span>  <span class="number">48</span>  <span class="number">66</span>  <span class="number">73</span>  <span class="number">80</span>  <span class="number">76</span>  <span class="number">75</span>  <span class="number">79</span>  <span class="number">88</span> <span class="number">104</span> <span class="number">100</span> <span class="number">107</span>]</span><br></pre></td></tr></table></figure>
-<p>作图如下</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.scatter(x,y)</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106211206.png" alt="img"></p>
-<p>训练数据，首先要转换为Tensor类型</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x_train = t.from_numpy(x).float() </span><br><span class="line">y_train = t.from_numpy(y).float()</span><br><span class="line"></span><br><span class="line">print(x_train)</span><br><span class="line">print(y_train)</span><br><span class="line"><span class="comment">#打印输出后的结果</span></span><br><span class="line">tensor([ <span class="number">0.</span>,  <span class="number">1.</span>,  <span class="number">2.</span>,  <span class="number">3.</span>,  <span class="number">4.</span>,  <span class="number">5.</span>,  <span class="number">6.</span>,  <span class="number">7.</span>,  <span class="number">8.</span>,  <span class="number">9.</span>, <span class="number">10.</span>, <span class="number">11.</span>, <span class="number">12.</span>, <span class="number">13.</span>,</span><br><span class="line">        <span class="number">14.</span>, <span class="number">15.</span>, <span class="number">16.</span>, <span class="number">17.</span>, <span class="number">18.</span>, <span class="number">19.</span>])</span><br><span class="line">tensor([  <span class="number">2.</span>,  <span class="number">20.</span>,  <span class="number">24.</span>,  <span class="number">24.</span>,  <span class="number">30.</span>,  <span class="number">43.</span>,  <span class="number">40.</span>,  <span class="number">55.</span>,  <span class="number">45.</span>,  <span class="number">48.</span>,  <span class="number">66.</span>,  <span class="number">73.</span>,</span><br><span class="line">         <span class="number">80.</span>,  <span class="number">76.</span>,  <span class="number">75.</span>,  <span class="number">79.</span>,  <span class="number">88.</span>, <span class="number">104.</span>, <span class="number">100.</span>, <span class="number">107.</span>])</span><br></pre></td></tr></table></figure>
-<p>定义训练模型</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LinearRegression</span>(<span class="params">t.nn.Module</span>):</span>  <span class="comment">#继承父类:t.nn.Module</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(LinearRegression,self).__init__() </span><br><span class="line">        self.linear = t.nn.Linear(<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.linear(x)</span><br></pre></td></tr></table></figure>
-<p>super()函数作用：<strong>首先找到父类t.nn.Module,后将类LinearRegression的对象self转换为t.nn.Module的对象,然后“被转换”的类nn.Module对象调用自己的__init__函数.</strong></p>
-<p>进行模型的训练</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model = LinearRegression()</span><br><span class="line">criterion = t.nn.MSELoss()  <span class="comment">#定义损失函数</span></span><br><span class="line">optimizer = t.optim.SGD(model.parameters(),<span class="number">0.001</span>)  <span class="comment">#利用SGD优化算法,首先传入需要优化的参数,与学习率</span></span><br><span class="line"></span><br><span class="line">num_epochs = <span class="number">1000</span>   <span class="comment">#迭代次数</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(num_epochs):</span><br><span class="line">    input_data = x_train.unsqueeze(<span class="number">1</span>)  <span class="comment">#输入数据进行升维:[20]---&gt;[20,1]</span></span><br><span class="line">    target = y_train.unsqueeze(<span class="number">1</span>)  </span><br><span class="line">    out = model(input_data)   <span class="comment">#模型输出</span></span><br><span class="line">    loss = criterion(out,target) <span class="comment">#将模型输出与target进行比较,计算loss</span></span><br><span class="line">    optimizer.zero_grad()  <span class="comment">#梯度信息置为0,作用:将前一个batch的梯度计算结果置为0,因为它没有保留的作用了</span></span><br><span class="line">    loss.backward()   <span class="comment">#利用反向传播计算梯度</span></span><br><span class="line">    optimizer.step()  <span class="comment">#进行单次的优化,参数的更新</span></span><br><span class="line">    <span class="comment">#print(&quot;Epoch:[&#123;&#125;/&#123;&#125;],loss:[&#123;:.4f&#125;]&quot;.format(i+1,num_epochs,loss.item()))  </span></span><br><span class="line">    <span class="comment">#loss.item()可以直接获得loss的值,loss是仅有一个量的张量,故用item()可转换为python标量</span></span><br><span class="line">    <span class="keyword">if</span> ((i+<span class="number">1</span>)%<span class="number">200</span>==<span class="number">0</span>):   </span><br><span class="line">        predict = model(input_data)</span><br><span class="line">        plt.plot(x_train.data.numpy(),predict.squeeze(<span class="number">1</span>).data.numpy())</span><br><span class="line">        loss=criterion(predict,target)</span><br><span class="line">        plt.title(<span class="string">&quot;Loss:&#123;:.4f&#125;&quot;</span>.format(loss.item()))</span><br><span class="line">        plt.xlabel(<span class="string">&quot;X&quot;</span>)</span><br><span class="line">        plt.ylabel(<span class="string">&quot;Y&quot;</span>)</span><br><span class="line">        plt.scatter(x_train,y_train)</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure>
-<p>进行1000次迭代，每两百次打印图片</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213013.png"></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213057.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213121.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213202.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210106213241.png" alt></p>
-<h2 id="多项式回归"><a href="#多项式回归" class="headerlink" title="多项式回归"></a>多项式回归</h2><p>线性回归虽然可以拟合出来一条直线，但精度较低，可以看到上图的线性回归的Loss的值为<strong>43.2122</strong>，是较高的。我们可以通过多项式回归提高模型精度，多项式回归就是提高特征的次数，如前面的线性回归的$x$是1次，实际上可以采用二次、三次的，增加模型的复杂度，可能会带来overfitting。</p>
-<h3 id="Example-Ⅰ"><a href="#Example-Ⅰ" class="headerlink" title="Example Ⅰ"></a>Example Ⅰ</h3><p>下面实现一个简单的多项式回归，用模型拟合一个复杂的多项式方程：</p>
-<script type="math/tex; mode=display">
-f(x)=-1.13x-2.14x^2+3.15x^3-0.01x^4+0.512</script><p>多项式数据准备：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在[-3,3]之间生成50个点,返回一个一维张量</span></span><br><span class="line">x = t.linspace(<span class="number">-3</span>,<span class="number">3</span>,<span class="number">50</span>)  </span><br><span class="line">y = <span class="number">-1.13</span>*x<span class="number">-2.14</span>*t.pow(x,<span class="number">2</span>)+<span class="number">3.15</span>*t.pow(x,<span class="number">3</span>)<span class="number">-0.01</span>*t.pow(x,<span class="number">4</span>)+<span class="number">0.512</span></span><br><span class="line">plt.scatter(x.data.numpy(),y.data.numpy())</span><br></pre></td></tr></table></figure>
-<p>借助公式随机产生50个点，可视化图像如下：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210113232837.png" alt></p>
-<p>由于现在的输入不再是一元函数的一维，而是现在的四维，输入变成一个矩阵的形式：</p>
-<script type="math/tex; mode=display">
-X=\left[\array{x_1^1 & \dots &x_1^4\\
-\vdots & \ddots & \vdots\\
-x_n^1 & \dots & x_n^4}\right]</script><p>其中$x_n^4$代表第n组样本的第四个feature。</p>
-<p>下面将数据拼接成如上所示的矩阵形式：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">features</span>(<span class="params">x</span>):</span></span><br><span class="line">    x = x.unsqueeze(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> t.cat([x**i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">5</span>)],<span class="number">1</span>)   <span class="comment">#将各向量连接在一起,形成矩阵形式</span></span><br></pre></td></tr></table></figure>
-<p>现在得到了标准的输入矩阵$X$，还缺少$y$的值，而$y$是通过函数$f(x)$计算出来的，通过以下函数来计算得到$y$值：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x_weight = t.Tensor([<span class="number">-1.13</span>,<span class="number">-2.14</span>,<span class="number">3.15</span>,<span class="number">-0.01</span>])</span><br><span class="line">x_weight = x_weight.unsqueeze(<span class="number">1</span>)</span><br><span class="line">b = t.Tensor([<span class="number">0.512</span>])</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">target</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="keyword">return</span> x.mm(x_weight)+b.item()   <span class="comment">#矩阵相乘,表示x*x_weight,b,item()获取b标量中的数值</span></span><br></pre></td></tr></table></figure>
-<p>上面的代码用到了Tensor的mm方法，它是表示矩阵相乘（Matrix Multiplication）。现在通过上面两个方法，批量生成用于训练的数据：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 新建一个随机生成输入数据和输出数据的函数，用于生成train data</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span>(<span class="params">batch_size</span>):</span></span><br><span class="line">    <span class="comment"># 生成batch个随机的x</span></span><br><span class="line">    batch_x = t.randn(batch_size)</span><br><span class="line">    feature_x = features(batch_x)</span><br><span class="line">    target_y = target(feature_x)</span><br><span class="line">    <span class="keyword">return</span> feature_x,target_y</span><br></pre></td></tr></table></figure>
-<p>下面创建多项式回归模型，使用torch.nn.Linear模型：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PloynomialRegression</span>(<span class="params">t.nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(PloynomialRegression,self).__init__()</span><br><span class="line">        self.ploy = t.nn.Linear(<span class="number">4</span>,<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 输入维度为4维，输出维度为1维</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.ploy(x)</span><br></pre></td></tr></table></figure>
-<p>模型新建好后开始训练模型，为了动态的显示模型训练结果，在程序中设置每1000个epoch，就对测试数据进行一次预测，并将预测的误差及预测的输出值可视化显示。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 开始训练模型，误差函数使用MSELoss，使用SGD优化参数</span></span><br><span class="line">epochs = <span class="number">1000</span></span><br><span class="line">batch_size = <span class="number">32</span></span><br><span class="line">model = PloynomialRegression()</span><br><span class="line">criterion = t.nn.MSELoss()</span><br><span class="line">optimizer = t.optim.SGD(model.parameters(),<span class="number">0.001</span>)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(epochs):</span><br><span class="line">    batch_x,batch_y = get_data(batch_size)</span><br><span class="line">    out = model(batch_x)</span><br><span class="line">    loss = criterion(out,batch_y)</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">if</span>(epoch%<span class="number">200</span>==<span class="number">0</span>):</span><br><span class="line">        predict = model(features(x))</span><br><span class="line">        plt.plot(x.data.numpy(),predict.squeeze(<span class="number">1</span>).data.numpy(),CB91_Pink)</span><br><span class="line">        loss = criterion(predict,y.unsqueeze(<span class="number">1</span>))</span><br><span class="line">        plt.title(<span class="string">&quot;Loss:&#123;:.4f&#125;&quot;</span>.format(loss.item()))</span><br><span class="line">        plt.xlabel(<span class="string">&quot;X&quot;</span>)</span><br><span class="line">        plt.ylabel(<span class="string">&quot;Y&quot;</span>)</span><br><span class="line">        plt.scatter(x,y)</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151321.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151343.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151403.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151420.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210114151445.png" alt></p>
-<p>经过大量的迭代后，模型能够很好的拟合测试数据。</p>
-<h3 id="Example-Ⅱ"><a href="#Example-Ⅱ" class="headerlink" title="Example Ⅱ"></a>Example Ⅱ</h3><p>实现更复杂的曲线拟合，这里我们对心形曲线进行拟合，函数表达式如下：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-x=16sin^3(t)\\
-y=13cos(t)-5cos(2t)-2cos(3t)-cos(4t)
-\end{cases}</script><p>首先借助公式随机生成10000个点：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">e = t.linspace(<span class="number">-15</span>,<span class="number">15</span>,<span class="number">10000</span>)  </span><br><span class="line">x1 = <span class="number">16</span>*t.sin(e)**<span class="number">3</span></span><br><span class="line">y1 = <span class="number">13</span>*t.cos(e)<span class="number">-5</span>*t.cos(<span class="number">2</span>*e)<span class="number">-2</span>*t.cos(<span class="number">3</span>*e)-t.cos(<span class="number">4</span>*e)</span><br><span class="line">plt.scatter(x1.data.numpy(),y1.data.numpy())</span><br></pre></td></tr></table></figure>
-<p>可视化如下：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115182453.png" alt></p>
-<p>与Example Ⅰ不同的是，在这里有两个变量，需要对X,Y都要进行预测。</p>
-<p>对X，Y两个变量，分别进行数据处理：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fea_x</span>(<span class="params">e</span>):</span></span><br><span class="line">    e = e.unsqueeze(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> t.sin(e)**<span class="number">3</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fea_y</span>(<span class="params">e</span>):</span></span><br><span class="line">    e = e.unsqueeze(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> t.cat([t.cos(i*e) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">5</span>)],<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<p>有了这两个方法，便可以批量生成X,Y的训练数据了：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">data</span>(<span class="params">size</span>):</span></span><br><span class="line">    r = t.randn(size)</span><br><span class="line">    x_fea = fea_x(r)</span><br><span class="line">    y_fea = fea_y(r)</span><br><span class="line">    x_tg = <span class="number">16</span>*x_fea</span><br><span class="line">    y_tg = tg_y(y_fea)</span><br><span class="line">    <span class="keyword">return</span> x_fea,y_fea,x_tg,y_tg</span><br></pre></td></tr></table></figure>
-<p>接下来就是定义模型，由于有两个变量，需要分别进行预测，故对X,Y定义两个模型：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HeartModel_x</span>(<span class="params">t.nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(HeartModel_x,self).__init__()</span><br><span class="line">        self.heartx = t.nn.Linear(<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.heartx(x)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HeartModel_y</span>(<span class="params">t.nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(HeartModel_y,self).__init__()</span><br><span class="line">        self.hearty = t.nn.Linear(<span class="number">4</span>,<span class="number">1</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span>  <span class="comment">#self必须是任意函数的首个参数</span></span><br><span class="line">        <span class="keyword">return</span> self.hearty(x)</span><br></pre></td></tr></table></figure>
-<p>最后，进行模型训练，与Example Ⅰ大致相同，不再赘述，不同的是同时对X，Y进行训练：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">epoachs = <span class="number">50000</span></span><br><span class="line">batch_size = <span class="number">10000</span></span><br><span class="line">model_x = HeartModel_x()</span><br><span class="line">model_y = HeartModel_y()</span><br><span class="line">criterion = t.nn.MSELoss()</span><br><span class="line">optimizer1 = t.optim.SGD(model_x.parameters(),<span class="number">0.001</span>)</span><br><span class="line">optimizer2 = t.optim.SGD(model_y.parameters(),<span class="number">0.001</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoach <span class="keyword">in</span> range(epoachs):</span><br><span class="line">    x_train,y_train,x_target,y_target = data(batch_size)</span><br><span class="line">    out_x = model_x(x_train)</span><br><span class="line">    out_y = model_y(y_train)</span><br><span class="line">    </span><br><span class="line">    loss_x = criterion(out_x,x_target)</span><br><span class="line">    loss_y = criterion(out_y,y_target)</span><br><span class="line">    </span><br><span class="line">    optimizer1.zero_grad()</span><br><span class="line">    optimizer2.zero_grad()</span><br><span class="line">    </span><br><span class="line">    loss_x.backward()</span><br><span class="line">    loss_y.backward()</span><br><span class="line">    </span><br><span class="line">    optimizer1.step()</span><br><span class="line">    optimizer2.step()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(epoach%<span class="number">10000</span>==<span class="number">0</span>):</span><br><span class="line">        predict_x = model_x(fea_x(e))</span><br><span class="line">        predict_y = model_y(fea_y(e))</span><br><span class="line">        plt.plot(predict_x.squeeze(<span class="number">1</span>).data.numpy(),predict_y.squeeze(<span class="number">1</span>).data.numpy(),CB91_Pink)</span><br><span class="line">        loss_x = criterion(predict_x,x1.unsqueeze(<span class="number">1</span>))</span><br><span class="line">        loss_y = criterion(predict_y,y1.unsqueeze(<span class="number">1</span>))</span><br><span class="line">        plt.title(<span class="string">&quot;Loss X:&#123;:.4f&#125;,Loss Y:&#123;:.4f&#125;&quot;</span>.format(loss_x,loss_y))</span><br><span class="line">        plt.xlabel(<span class="string">&quot;X&quot;</span>)</span><br><span class="line">        plt.ylabel(<span class="string">&quot;Y&quot;</span>)</span><br><span class="line">        plt.scatter(x1,y1)</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure>
-<p>每10000次迭代打印一次训练结果，并将其可视化如下：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213159.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213309.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213335.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213400.png" alt></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210115213426.png" alt></p>
-]]></content>
-      <tags>
-        <tag>PyTorch</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PyTorch问题记录</title>
-    <url>/2021/03/22/pytorch%20problem/</url>
-    <content><![CDATA[<h1 id="PyTorch-中torch-nn-与torch-nn-function-的区别"><a href="#PyTorch-中torch-nn-与torch-nn-function-的区别" class="headerlink" title="PyTorch 中torch.nn. 与torch.nn.function.的区别"></a>PyTorch 中torch.nn. 与torch.nn.function.的区别</h1><p>今天我在定义一个卷积网络的过程中，发现nn.Conv2d与nn.functional.conv2d看似都是相同的。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DogCat_Net</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(Dog_Cat,self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br><span class="line">        self.conv1 = nn.functional.conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p>类似的还有很多，在卷积，激活，池化等操作中，nn.Conv2d与nn.functional.conv2d均很相似。</p>
-<p>通过查看PyTorch的文档发现，例如torch.nn.Conv2d是一个类</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210322202215.png" style="zoom: 50%;"></p>
-<p>torch.nn.functional.conv2d则更像一个函数：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210322202712.png" style="zoom:50%;"></p>
-<p>简而言之：</p>
-<ul>
-<li><strong>nn.Conv2d可以理解为一个Class类，需要继承nn.Module类</strong></li>
-<li><strong>nn.functional.conv2d可以理解为一个纯函数，由def function(input)定义</strong></li>
-</ul>
-<p>对于nn中定义的类，可以提取变化的学习参数。而nn.functional中的是函数，是一个固定的运算公式。</p>
-<p>由于在深度学习中会有很多权重是不断变化的，所以需要采用类的方式，以确保参数改变后，仍能正确进行运算。</p>
-<p><strong>所以一般在建立网络模型时，在__init__函数中，通常使用nn中的类；而在forward函数中，通常使用nn.functional中的函数。</strong></p>
-<p>例如以下网络模型：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog_Cat</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        super(Dog_Cat,self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">16</span>, kernel_size = <span class="number">7</span>,dilation = <span class="number">2</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">16</span>, <span class="number">32</span> ,kernel_size = <span class="number">5</span>)</span><br><span class="line">        self.dropout = nn.Dropout2d()</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">55696</span>,<span class="number">1000</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">1000</span>,<span class="number">50</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">50</span>,<span class="number">2</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self,x</span>):</span></span><br><span class="line">        x = F.relu(F.max_pool2d(self.conv1(x),<span class="number">2</span>))</span><br><span class="line">        x = F.relu(F.max_pool2d(self.dropout(self.conv2(x)),<span class="number">2</span>))</span><br><span class="line">        x = x.view(<span class="number">-1</span>,<span class="number">55696</span>)</span><br><span class="line">        x = F.relu(self.fc1(x))</span><br><span class="line">        x = F.dropout(x)</span><br><span class="line">        x = F.relu(self.fc2(x))</span><br><span class="line">        x = F.dropout(x)</span><br><span class="line">        x = F.log_softmax(self.fc3(x),dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
-<p>当网络模型使用了Dropout层时，其只需要在模型训练的时候进行使用，在模型测试时并不会使用它。</p>
-<p><strong>当Dropout层是使用nn.Dropout定义时，在模型训练时，可以通过model.train()开启它，在模型测试时，可以通过model.eval()关闭它。</strong></p>
-<p><strong>但当Dropout层是用nn.functional.dropout定义的，那么在使用model.eval()后，也没办法关闭Dropout层。</strong></p>
-<p>以上提到了model.train()与model.eval()，那么它们的具体作用是什么呢？为什么要在模型训练与测试的时候加上这两段代码呢？</p>
-<h3 id="model-train"><a href="#model-train" class="headerlink" title="model.train()"></a>model.train()</h3><p>如果模型中有BN层(Batch Normalization）和Dropout，需要在训练时添加model.train()。model.train()是保证BN层能够用到每一批数据的<strong>均值</strong>和<strong>方差</strong>。对于Dropout，<strong>model.train()是随机取一部分网络连接来训练更新参数。</strong></p>
-<h3 id="model-eval"><a href="#model-eval" class="headerlink" title="model.eval()"></a>model.eval()</h3><p>如果模型中有BN层(Batch Normalization）和Dropout，在测试时添加model.eval()。model.eval()是保证BN层能够用全部训练数据的均值和方差，即测试过程中要保证BN层的均值和方差不变。对于Dropout，model.eval()是利用到了所有网络连接，即<strong>不进行随机舍弃神经元。</strong></p>
-<p>训练完train样本后，生成的模型model要用来测试样本。在model(test)之前，需要加上model.eval()，<strong>框架会自动把BN和Dropout固定住，不会取平均，而是用训练好的值</strong>，否则的话，有输入数据，即使不训练，它也会改变权值。这是model中含有BN层和Dropout所带来的的性质。</p>
-<p>而在模型测试中，通常还会看见torch.no_grad()，它有什么作用呢？</p>
-<ul>
-<li>用于停止autograd模块的工作，起到加速和节省显存的作用（具体行为就是停止gradient计算，从而节省了GPU算力和显存）</li>
-<li>不会影响dropout和batchnorm层的行为</li>
-</ul>
-<p>model.eval()与torch.no_grad()同时用，可以更加节省cpu算力，加速计算。</p>
-]]></content>
-      <tags>
-        <tag>PyTorch</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux学习笔记(ubuntu)</title>
-    <url>/2021/04/01/Linux/</url>
-    <content><![CDATA[<h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><p>对于Linux来说，使用统一的目录树结构：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/bin        二进制文件，系统常规命令</span><br><span class="line">/boot       系统启动分区，系统启动时读取的文件</span><br><span class="line">/dev        设备文件</span><br><span class="line">/etc        大多数配置文件</span><br><span class="line">/home       普通用户的家目录</span><br><span class="line">/lib        32位函数库</span><br><span class="line">/lib64      64位库</span><br><span class="line">/media      手动临时挂载点</span><br><span class="line">/mnt        手动临时挂载点</span><br><span class="line">/opt        第三方软件安装位置</span><br><span class="line">/proc       进程信息及硬件信息</span><br><span class="line">/root       临时设备的默认挂载点</span><br><span class="line">/sbin       系统管理命令</span><br><span class="line">/srv        数据</span><br><span class="line">/var        数据</span><br><span class="line">/sys        内核相关信息</span><br><span class="line">/tmp        临时文件</span><br><span class="line">/usr        用户相关设定</span><br></pre></td></tr></table></figure>
-<p>Linux下没有C：D：这种盘符的概念</p>
-<p>在\home目录下存放着用户目录</p>
-<p>超级用户root，其用户目录为/root</p>
-<h1 id="Linux命令行"><a href="#Linux命令行" class="headerlink" title="Linux命令行"></a>Linux命令行</h1><h2 id="命令行含义"><a href="#命令行含义" class="headerlink" title="命令行含义"></a>命令行含义</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">示例：root@app00:~<span class="comment"># </span></span><br><span class="line">root    //用户名，root为超级用户</span><br><span class="line">@       //分隔符</span><br><span class="line">app00   //主机名称</span><br><span class="line">~       //当前所在目录，默认用户目录为~，会随着目录切换而变化，例如：（root@app00:/bin<span class="comment"># ，当前位置在bin目录下）</span></span><br><span class="line"><span class="comment">#       //表示当前用户是超级用户，普通用户为$，例如：（&quot;yao@app00:/root$&quot; ，表示使用用户&quot;yao&quot;访问/root文件夹）</span></span><br></pre></td></tr></table></figure>
-<h2 id="命令行的组成"><a href="#命令行的组成" class="headerlink" title="命令行的组成"></a>命令行的组成</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">示例: 命令 参数名 参数值</span><br></pre></td></tr></table></figure>
-<h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><h3 id="重启系统"><a href="#重启系统" class="headerlink" title="重启系统"></a>重启系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(1)立刻关机</span><br><span class="line">  shutdown -h now 或者 poweroff</span><br><span class="line">(2)两分钟后关机</span><br><span class="line">  shutdown -h 2</span><br></pre></td></tr></table></figure>
-<h3 id="关闭系统"><a href="#关闭系统" class="headerlink" title="关闭系统"></a>关闭系统</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(1)立刻重启</span><br><span class="line">  shutdown -r now 或者 reboot</span><br><span class="line">(2)两分钟后重启</span><br><span class="line">  shutdown -r 2 </span><br></pre></td></tr></table></figure>
-<h3 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig --<span class="built_in">help</span>   //查看ifconfig命令的用法</span><br></pre></td></tr></table></figure>
-<h3 id="命令说明书（man"><a href="#命令说明书（man" class="headerlink" title="命令说明书（man)"></a>命令说明书（man)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">man shutdown         //打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
-<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Lehrmann Lehrmanncc   //切换为用户<span class="string">&quot;yao&quot;</span>,输入后回车需要输入该用户的密码</span><br><span class="line"><span class="built_in">exit</span>                 //退出当前用户man shutdown         //打开命令说明后，可按<span class="string">&quot;q&quot;</span>键退出</span><br></pre></td></tr></table></figure>
-<h2 id="目录操作"><a href="#目录操作" class="headerlink" title="目录操作"></a>目录操作</h2><h3 id="切换目录-cd"><a href="#切换目录-cd" class="headerlink" title="切换目录(cd)"></a>切换目录(cd)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /                 //切换到根目录</span><br><span class="line"><span class="built_in">cd</span> /bin              //切换到根目录下的bin目录</span><br><span class="line"><span class="built_in">cd</span> ../               //切换到上一级目录 或者使用命令：<span class="built_in">cd</span> ..</span><br><span class="line"><span class="built_in">cd</span> ~                 //切换到home目录</span><br><span class="line"><span class="built_in">cd</span> -                 //切换到上次访问的目录</span><br><span class="line"><span class="built_in">cd</span> xx(文件夹名)       //切换到本目录下的名为xx的文件目录，如果目录不存在报错</span><br><span class="line"><span class="built_in">cd</span> /xxx/xx/x         //可以输入完整的路径，直接切换到目标目录，输入过程中可以使用tab键快速补全</span><br></pre></td></tr></table></figure>
-<h3 id="查看目录-ls"><a href="#查看目录-ls" class="headerlink" title="查看目录(ls)"></a>查看目录(ls)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls                   //查看当前目录下的所有目录和文件</span><br><span class="line">ls -a                //查看当前目录下的所有目录和文件（包括隐藏的文件）</span><br><span class="line">ls -l                //列表查看当前目录下的所有目录和文件（列表查看，显示更多信息），与命令<span class="string">&quot;ll&quot;</span>效果一样</span><br><span class="line">ls /bin              //查看指定目录下的所有目录和文件 </span><br></pre></td></tr></table></figure>
-<h3 id="创建目录-mkdir"><a href="#创建目录-mkdir" class="headerlink" title="创建目录(mkdir)"></a>创建目录(mkdir)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir tools   			//在当前目录下创建一个名为tools的目录</span><br><span class="line">mkdir /bin/tools		//在指定目录下创建一个名为tools的目录</span><br><span class="line">mkdir -p /abc/123/<span class="built_in">test</span>   //使用-p参数，可以将路径的层次目录全部创建</span><br></pre></td></tr></table></figure>
-<h3 id="删除目录与文件-rm"><a href="#删除目录与文件-rm" class="headerlink" title="删除目录与文件(rm)"></a>删除目录与文件(rm)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rm 文件名              //删除当前目录下的文件</span><br><span class="line">rm -f 文件名           //删除当前目录的的文件（不询问）</span><br><span class="line">rm -r 目录名         	//递归删除当前目录下此名的目录</span><br><span class="line">rm -rf 目录名        	//递归删除当前目录下此名的目录（不询问）</span><br><span class="line">rm -rf *              //将当前目录下的所有目录和文件全部删除</span><br><span class="line">rm -rf /*             //将根目录下的所有文件全部删除【慎用！相当于格式化系统】</span><br></pre></td></tr></table></figure>
-<h3 id="修改目录-mv"><a href="#修改目录-mv" class="headerlink" title="修改目录(mv)"></a>修改目录(mv)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mv 当前目录名 新目录名        //修改目录名，同样适用与文件操作</span><br><span class="line">mv /usr/tmp/tool /opt       //将/usr/tmp目录下的tool目录剪切到 /opt目录下面</span><br><span class="line">mv -r /usr/tmp/tool /opt    //递归剪切目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
-<h3 id="拷贝目录-cp"><a href="#拷贝目录-cp" class="headerlink" title="拷贝目录(cp)"></a>拷贝目录(cp)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cp /usr/tmp/tool /opt       //将/usr/tmp目录下的tool目录复制到 /opt目录下面</span><br><span class="line">cp -rf /usr/tmp/tool /opt    //递归强制复制目录中所有文件和文件夹</span><br></pre></td></tr></table></figure>
-<h3 id="搜索目录-find"><a href="#搜索目录-find" class="headerlink" title="搜索目录(find)"></a>搜索目录(find)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find /bin -name <span class="string">&#x27;a*&#x27;</span>  		//查找/bin目录下的所有以a开头的文件或者目录</span><br></pre></td></tr></table></figure>
-<h3 id="查看当前目录（pwd）"><a href="#查看当前目录（pwd）" class="headerlink" title="查看当前目录（pwd）"></a>查看当前目录（pwd）</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">pwd</span>                         //显示当前位置路径</span><br></pre></td></tr></table></figure>
-<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><h3 id="新增文件-touch"><a href="#新增文件-touch" class="headerlink" title="新增文件(touch)"></a>新增文件(touch)</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">touch example/test.txt    //在example目录下创建test.txt文件</span><br></pre></td></tr></table></figure>
-<h3 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h3><h3 id="文件权限说明"><a href="#文件权限说明" class="headerlink" title="文件权限说明"></a>文件权限说明</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">文件权限简介：<span class="string">&#x27;ower&#x27;</span>代表文件的属主ower，<span class="string">&#x27;r&#x27;</span> 代表可读<span class="built_in">read</span>（4），<span class="string">&#x27;w&#x27;</span> 代表可写write（2），<span class="string">&#x27;x&#x27;</span> 代表执行权限excute（1），括号内代表<span class="string">&quot;8421法&quot;</span></span><br></pre></td></tr></table></figure>
-<p>例如以下用ls-l命令查看example目录下的文件</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403110420.png" style="zoom:67%;"></p>
-<p>第一段就是文件的权限，第二段为文件属主，第三段为属主所在用户组，第四段为文件大小，第五段为创建时间，第六段为创建文件名。</p>
-<p>文件权限的含义如下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">文件权限信息示例：-rw-rw-r--</span><br><span class="line">-第一位：<span class="string">&#x27;-&#x27;</span>就代表是文件，<span class="string">&#x27;d&#x27;</span>代表是目录，<span class="string">&#x27;l&#x27;</span>代表软连接</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403111138.png" style="zoom:50%;"></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-第一组三位：拥有者的权限</span><br><span class="line">-第二组三位：拥有者所在的组，组员的权限</span><br><span class="line">-第三组三位：代表的是其他用户的权限</span><br></pre></td></tr></table></figure>
-<p>于是-rw-rw-r—即表示：用户自己可以读写，但不能执行；同用户组的成员也可以读写，但无法执行；其他用户仅能读，但无法写、执行。</p>
-<h3 id="修改文件权限"><a href="#修改文件权限" class="headerlink" title="修改文件权限"></a>修改文件权限</h3><p>文件的权限仅能由文件的属主或root用户进行修改。</p>
-<p>chmod，change file mode 修改文件的访问权限</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">普通授权    chmod o+w a.txt     // o表示other，w表示增加write的权限</span><br><span class="line">		  chmod o-w a.txt	  // 表示other减少write权限</span><br><span class="line">		  chmod a-w a.txt 	  // a表示all，即所有人都不具有write权限</span><br><span class="line">		  chmod u-w a.txt  	  // u表示user，即用户自己减少wirte权限</span><br><span class="line">		  chmod +w a.txt  	  // 省略写法，默认为修改用户与本组的权限</span><br><span class="line">8421法     chmod 777 a.txt     //1+2+4=7，<span class="string">&quot;7&quot;</span>说明授予所有权限</span><br></pre></td></tr></table></figure>
-<p>使用普通授权，可以发现train1.txt文件其他用户组已经增加了write的权限。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403112446.png" style="zoom:67%;"></p>
-<h3 id="修改文件属主"><a href="#修改文件属主" class="headerlink" title="修改文件属主"></a>修改文件属主</h3><p>一般来说，每个用户仅操作自己的用户目录，所以修改文件属主并不常用。</p>
-<p>使用chown命令，change owner修改文件的属主</p>
-<p>只有文件的owner和root用户才有权限修改文件属主</p>
-<h2 id="打包与解压"><a href="#打包与解压" class="headerlink" title="打包与解压"></a>打包与解压</h2><h3 id="压缩文件说明"><a href="#压缩文件说明" class="headerlink" title="压缩文件说明"></a>压缩文件说明</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.zip、.rar        //windows系统中压缩文件的扩展名</span><br><span class="line">.tar              //Linux中打包文件的扩展名</span><br><span class="line">.gz               //Linux中压缩文件的扩展名</span><br><span class="line">.tar.gz           //Linux中打包并压缩文件的扩展名</span><br></pre></td></tr></table></figure>
-<h3 id="打包文件"><a href="#打包文件" class="headerlink" title="打包文件"></a>打包文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -cvf 打包压缩后的文件名 要打包的文件</span><br><span class="line">参数说明： c：打包文件; v：显示运行过程; f：指定文件名;</span><br><span class="line">示例：</span><br><span class="line">tar -cvf a.tar file1 file2,...      //多个文件打包</span><br><span class="line">tar -zcvf a.tar.gz file1            //文件打包并压缩</span><br></pre></td></tr></table></figure>
-<h3 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf a.tar                      //解包至当前目录</span><br><span class="line">tar -zxvf a.tar -C /usr------        //‘C’表示切换目录，指定解压的位置</span><br><span class="line">unzip test.zip             //解压*.zip文件 </span><br><span class="line">unzip -l test.zip          //查看*.zip文件的内容 </span><br></pre></td></tr></table></figure>
-<h2 id="关机与重启"><a href="#关机与重启" class="headerlink" title="关机与重启"></a>关机与重启</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">shutdown -h now   //参数h为halt，即立即关机</span><br><span class="line">shutdown -r now   //参数r为reboot，即为立即重启</span><br><span class="line">shutdown -h 20:30 //即8点半关机</span><br></pre></td></tr></table></figure>
-<p><strong>但如果是远程管理服务器的话，应当注意不能将服务器关机，之能进行重启</strong></p>
-<h2 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用ln命令来创建软连接</span></span><br><span class="line">ln -s example example3    // 其中-s表示soft软连接（默认为硬）</span><br><span class="line"><span class="comment"># example为原始目录或文件名，example2为软连接名</span></span><br></pre></td></tr></table></figure>
-<ol>
-<li>删除软连接，对原目录没有任何影响</li>
-<li>删除原目录，则软连接失效</li>
-</ol>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210402165356.png" style="zoom:67%;"></p>
-<p>可以发现根目录下有较多的软连接，例如bin、lib等，bin其实指向目录user/bin。</p>
-<h2 id="用户操作"><a href="#用户操作" class="headerlink" title="用户操作"></a>用户操作</h2><h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo useradd -m test1</span><br></pre></td></tr></table></figure>
-<p>其中，sudo（super use)表示以管理员身份运行；-m参数表示在/home目录下添加用户目录。</p>
-<h3 id="添加密码"><a href="#添加密码" class="headerlink" title="添加密码"></a>添加密码</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo passwd test1</span><br></pre></td></tr></table></figure>
-<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo userdel test1</span><br></pre></td></tr></table></figure>
-<p>但这个时候虽然已经将test1用户删除了，但在\home目录下仍有\test1用户目录，所以需要将其目录删除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /home/test1/</span><br></pre></td></tr></table></figure>
-<ol>
-<li>在登陆系统时，Linux默认不能使用root用户进行登陆</li>
-<li>只有特殊的用户才能执行sudo，例如刚才创建的新用户test1就不能使用sudo。而用户lehrmann便可以。在Linux下，把能执行sudo命令的用户叫sudoer。</li>
-</ol>
-<h2 id="root用户"><a href="#root用户" class="headerlink" title="root用户"></a>root用户</h2><p>首次使用root用户，需要给root用户设置密码(只需要设置一次，需要妥善保管root用户密码)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
-<p>切换root用户，使用su（switch user)命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
-<p>su root仅会切换终端(terminal)用户为root用户，桌面环境并不会切换</p>
-<p>退出root用户，</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
-<h1 id="可执行脚本"><a href="#可执行脚本" class="headerlink" title="可执行脚本"></a>可执行脚本</h1><p>脚本script，一种解释执行的程序</p>
-<p>Linux下有常见的三种脚本程序</p>
-<ol>
-<li>Shell脚本    *.sh</li>
-<li>Perl脚本      *.pl</li>
-<li>Python脚本 *.py</li>
-</ol>
-<p>脚本程序都是由脚本解释器来运行的</p>
-<p>例如：Python脚本解释器：/bin/python3</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403134944.png" style="zoom:67%;"></p>
-<p>执行一个脚本时，可以采用以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/bin/python3 hello.py</span><br></pre></td></tr></table></figure>
-<p>也可以采用以下方式，首先创建python脚本后，在第一行添加python脚本解释器路径</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#！/bin/python3</span></span><br></pre></td></tr></table></figure>
-<p>但这个时候通过以下命令运行hello.py仍会出错</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143205.png" style="zoom:67%;"></p>
-<p>为什么会出现这种情况呢？提示权限不够，于是我用以下命令查看hello.py</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143600.png" style="zoom:67%;"></p>
-<p>会发现hello.py在用户的权限中仅能读写，不能执行，于是我们给用户增加权限</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod u+x hello.py</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403143916.png" style="zoom:67%;"></p>
-<p>现在hello.py便可用过 ./hello.py 成功运行。</p>
-<h1 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h1><h2 id="用户环境变量"><a href="#用户环境变量" class="headerlink" title="用户环境变量"></a>用户环境变量</h2><p>用户环境变量，定义在 ~/.profile中，在Linux中，以 . 开头的文件为隐藏文件，可以通过以下命令查看</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls -a </span><br></pre></td></tr></table></figure>
-<p>采用gedit可以对.profile文件进行编辑</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gedit .profile</span><br></pre></td></tr></table></figure>
-<p>用户环境变量仅对当前用户有效，若切换用户后，则之前编辑的用户环境变量无效，因为每个用户都有自己的 .profile文件。</p>
-<h2 id="系统环境变量"><a href="#系统环境变量" class="headerlink" title="系统环境变量"></a>系统环境变量</h2><p>系统环境变量定义在：/etc/profile 中，这里面的环境变量对所有的用户都有效。</p>
-<p><strong>修改系统变量需要root用户权限，因为/etc下的东西都是需要超级用户才能进行修改。但官方建议不要直接修改/etc/profile文件，一般建议在/etc/profile.d/ 目录下创建一个自定义脚本。因为在profile中对profile.d目录下的文件进行嵌套调用。</strong></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403152245.png" style="zoom:67%;"></p>
-<h2 id="PATH环境变量"><a href="#PATH环境变量" class="headerlink" title="PATH环境变量"></a>PATH环境变量</h2><p>在运行python脚本时，若直接输入脚本名称进行运行，我们发现会出现如下情况</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403161159.png" style="zoom:67%;"></p>
-<p>为什么会找不到命令呢？这就和PATH环境变量有关系。</p>
-<p>PATH是一个最常见的环境变量，用于描述可执行文件的搜索路径。</p>
-<p>使用echo命令将PATH环境变量的值显示出来</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403161550.png" style="zoom:67%;"></p>
-<p>可以发现PATH环境变量的值就是一堆路径，然后用  ：进行分隔开。</p>
-<p>默认系统从以下目录搜索可执行程序</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/usr/bin            //例如tar命令</span><br><span class="line">/usr/sbin		   //例如useradd命令</span><br><span class="line">/usr/<span class="built_in">local</span>/bin</span><br><span class="line">/usr/<span class="built_in">local</span>/sbin</span><br></pre></td></tr></table></figure>
-<ol>
-<li>bin表示普通用户就能执行的程序，其中sbin为超级用户root才能执行的程序</li>
-<li>/usr/为系统自带的程序</li>
-<li>/usr/local/是用户安装的程序</li>
-</ol>
-<p>由于在输入hello.py后，系统会从PATH的路径下搜索命令，而搜索完后会发现没有hello.py这个命令，所以会返回未找到命令。</p>
-<p>所以我们可以在用户环境变量或系统环境变量里，修改PATH的值，然后注销便可生效。</p>
-<p>例如在系统环境变量中</p>
-<ol>
-<li><p>编辑/etc/profile.d/myprofile.sh，myprofile.sh为自定义的shell脚本</p>
-</li>
-<li><p>设定PATH环境变量</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/opt/tomcat/bin</span><br></pre></td></tr></table></figure>
-<p>为PATH环境变量新增路径  /opt/tomcat/bin。</p>
-</li>
-</ol>
-<h1 id="SSH服务器"><a href="#SSH服务器" class="headerlink" title="SSH服务器"></a>SSH服务器</h1><p>使用SSH协议，可以实现：</p>
-<ol>
-<li>远程操控Linux终端（Xshell实现）</li>
-<li>进行文件传输至Linux服务器（Xftp实现）</li>
-</ol>
-<h2 id="虚拟机准备工作"><a href="#虚拟机准备工作" class="headerlink" title="虚拟机准备工作"></a>虚拟机准备工作</h2><p>首先需要保证ubuntu防火墙处于关闭状态，查看防火墙状态</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw status</span><br></pre></td></tr></table></figure>
-<p>接着安装ssh</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get installl openssh-server</span><br></pre></td></tr></table></figure>
-<p>进入查看ssh，若安装成功，则如下所示</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403191811.png" style="zoom:67%;"></p>
-<p>接着查看虚拟机的ip地址</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403191941.png" style="zoom:67%;"></p>
-<p>其中，ens33中inet即为ip地址：192.168.233.128。</p>
-<p>最后在本地打开cmd，如过可以ping通虚拟机ip地址，则说明可以连接了</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192436.jpg" style="zoom:67%;"></p>
-<p>如果没有ping通，则可以看一下ubuntu的防火墙有没有关闭。</p>
-<h2 id="Xshell连接"><a href="#Xshell连接" class="headerlink" title="Xshell连接"></a>Xshell连接</h2><p>点击【文件】-&gt;【新建】打开新建会话属性弹框，输入虚拟机的主机ip</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192713.png" style="zoom:67%;"></p>
-<p>切换选项卡【用户身份验证】。输入用户名，密码</p>
-<p>注意用户名可以在命令行中查看</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">who</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403192916.png" style="zoom:67%;"></p>
-<p>lehrmann : 0中，lehrmann即为用户名</p>
-<p>设置完属性 点击【确定】按钮就不出意外可以连接上了</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403193313.png" style="zoom:67%;"></p>
-<p>上图即连接成功后的，至此Xshell即可远程对虚拟机进行操作了。</p>
-<h2 id="Xftp传输文件"><a href="#Xftp传输文件" class="headerlink" title="Xftp传输文件"></a>Xftp传输文件</h2><p>安装Xftp后，打开Xshell，连接虚拟机后，如图所示</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403231817.png" style="zoom:67%;"></p>
-<p>右键点击localhost，如图</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403231935.png" style="zoom:67%;"></p>
-<p>点击即可打开Xftp，如图</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403232116.png" style="zoom:67%;"></p>
-<p>即可进行文件传输</p>
-<h1 id="vim编辑器"><a href="#vim编辑器" class="headerlink" title="vim编辑器"></a>vim编辑器</h1><p>vi / vim 是一个基于控制台的文本编辑器，vim为vi的升级版。</p>
-<p>gedit是一个基于GUI的文本编辑器</p>
-<p>由于以后可能没有图形界面，只有一个控制台终端，故无法使用gedit，之能只用vim</p>
-<h2 id="打开文本编辑"><a href="#打开文本编辑" class="headerlink" title="打开文本编辑"></a>打开文本编辑</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim test.txt</span><br></pre></td></tr></table></figure>
-<p>如果目标文件存在，则打开编辑器；如果不存才会创建一个文件</p>
-<p>如果系统上没有vim编辑器，则可以进行安装</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt install vim</span><br></pre></td></tr></table></figure>
-<h2 id="切换模式"><a href="#切换模式" class="headerlink" title="切换模式"></a>切换模式</h2><ul>
-<li>编辑模式 Insert Mode：按i键</li>
-<li>命令模式 Command Mode：按Esc键</li>
-</ul>
-<h2 id="退出编辑"><a href="#退出编辑" class="headerlink" title="退出编辑"></a>退出编辑</h2><ol>
-<li><p>按Esc键，进入命令模式</p>
-</li>
-<li><p>输入 :wq  保存并退出</p>
-<p>输入 :q     退出</p>
-<p>输入 :q!    强制退出（放弃保存）</p>
-</li>
-</ol>
-<p>例如</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim test.txt</span><br></pre></td></tr></table></figure>
-<p>进入以下页面</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403220728.png" style="zoom:67%;"></p>
-<p>输入响应的文本后，可按Esc键，接着输入:wq，按回车即可退出</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat test.txt</span><br></pre></td></tr></table></figure>
-<p>即可得到test.txt的文本内容</p>
-<h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><p>每运行一个可执行程序，其相应的在系统中都会有相应的进程</p>
-<p>在Linux系统中，可以使用如下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -ef</span><br></pre></td></tr></table></figure>
-<p>便可得到如下的进程信息</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210403225647.png" style="zoom:67%;"></p>
-<p>其中，各字段的含义：</p>
-<ol>
-<li>UID：执行者</li>
-<li>PID：进程ID</li>
-<li>PPID：父进程ID</li>
-<li>STIME：启动时间</li>
-<li>CMD：启动时调用的命令行</li>
-</ol>
-<p>如果要查特定的进程时，可以使用如下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -ef | grep vi</span><br></pre></td></tr></table></figure>
-<p>将前者输出的信息，重定向给grep命令进行过滤处理</p>
-<h2 id="进程监视"><a href="#进程监视" class="headerlink" title="进程监视"></a>进程监视</h2><p>查看所有进程，并且可以动态的刷新显示进程的状态</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top</span><br></pre></td></tr></table></figure>
-<ol>
-<li>按上下键翻阅</li>
-<li>按 q 或CTRL + C中止退出</li>
-</ol>
-<p>可以查看特定进程，</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top -p NUM</span><br></pre></td></tr></table></figure>
-<p>其中NUM为特定进程的PID，所以我们可以先使用 ps 命令查看进程PID。</p>
-<h2 id="杀死进程"><a href="#杀死进程" class="headerlink" title="杀死进程"></a>杀死进程</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 NUM</span><br></pre></td></tr></table></figure>
-<h2 id="前台进程与后台进程"><a href="#前台进程与后台进程" class="headerlink" title="前台进程与后台进程"></a>前台进程与后台进程</h2><p>前台进程：运行在前台</p>
-<ul>
-<li>有父进程，父进程为当前终端</li>
-<li>当终端关闭时，前台进程被一同关闭</li>
-</ul>
-<p>后台进程：运行在后台</p>
-<ul>
-<li>父进程为系统进程（1号进程）</li>
-<li>当终端关闭时，后台进程不被影响</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MySQL(Linux)</title>
-    <url>/2021/04/05/MySQL(Linux)/</url>
-    <content><![CDATA[<h1 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a>MySQL安装</h1><p>通过apt安装MySQL服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 更新源</span></span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="comment"># 安装</span></span><br><span class="line">sudo apt-get install mysql-server</span><br></pre></td></tr></table></figure>
-<p>安装完成后，进行初始化配置</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
-<p>配置项如下：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1</span></span><br><span class="line">VALIDATE PASSWORD PLUGIN can be used to test passwords...</span><br><span class="line">Press y|Y for Yes, any other key for No: N (选择N ,不会进行密码的强校验)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2</span></span><br><span class="line">Please <span class="keyword">set</span> the <span class="keyword">password</span> <span class="keyword">for</span> root here...</span><br><span class="line"><span class="keyword">New</span> <span class="keyword">password</span>: (输入密码)</span><br><span class="line">Re-enter <span class="keyword">new</span> <span class="keyword">password</span>: (重复输入)</span><br><span class="line"></span><br><span class="line"><span class="comment">#3</span></span><br><span class="line"><span class="keyword">By</span> <span class="keyword">default</span>, a MySQL installation has an anonymous <span class="keyword">user</span>,</span><br><span class="line">allowing anyone <span class="keyword">to</span> <span class="keyword">log</span> <span class="keyword">into</span> MySQL <span class="keyword">without</span> <span class="keyword">having</span> <span class="keyword">to</span> have</span><br><span class="line">a <span class="keyword">user</span> <span class="keyword">account</span> created <span class="keyword">for</span> them...</span><br><span class="line">Remove anonymous <span class="keyword">users</span>? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，不删除匿名用户)</span><br><span class="line"></span><br><span class="line"><span class="comment">#4</span></span><br><span class="line">Normally, root should <span class="keyword">only</span> be allowed <span class="keyword">to</span> <span class="keyword">connect</span> <span class="keyword">from</span></span><br><span class="line"><span class="string">&#x27;localhost&#x27;</span>. This ensures that someone cannot guess <span class="keyword">at</span></span><br><span class="line">the root <span class="keyword">password</span> <span class="keyword">from</span> the network...</span><br><span class="line"><span class="keyword">Disallow</span> root login remotely? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，允许root远程连接)</span><br><span class="line"></span><br><span class="line"><span class="comment">#5</span></span><br><span class="line"><span class="keyword">By</span> <span class="keyword">default</span>, MySQL comes <span class="keyword">with</span> a <span class="keyword">database</span> named <span class="string">&#x27;test&#x27;</span> that</span><br><span class="line">anyone can access...</span><br><span class="line">Remove <span class="keyword">test</span> <span class="keyword">database</span> <span class="keyword">and</span> <span class="keyword">access</span> <span class="keyword">to</span> it? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : N (选择N，不删除<span class="keyword">test</span>数据库)</span><br><span class="line"></span><br><span class="line"><span class="comment">#6</span></span><br><span class="line">Reloading the privilege <span class="keyword">tables</span> will ensure that <span class="keyword">all</span> changes</span><br><span class="line">made so <span class="keyword">far</span> will take effect immediately.</span><br><span class="line">Reload privilege <span class="keyword">tables</span> <span class="keyword">now</span>? (Press y|Y <span class="keyword">for</span> Yes, <span class="keyword">any</span> other <span class="keyword">key</span> <span class="keyword">for</span> <span class="keyword">No</span>) : Y (选择Y，修改权限立即生效)</span><br></pre></td></tr></table></figure>
-<h1 id="Mycil安装"><a href="#Mycil安装" class="headerlink" title="Mycil安装"></a>Mycil安装</h1><p>传统的MySQL安装后是没有语法补全的，这当然会令我们比较痛苦，效率也比较低。而Mycil是其MySQL的命令行界面，其具有语法提示和语法高亮。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install mycil</span><br></pre></td></tr></table></figure>
-<p>这样便安装好了mycil。</p>
-<h1 id="MySQL服务"><a href="#MySQL服务" class="headerlink" title="MySQL服务"></a>MySQL服务</h1><h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>Linux下要进入mysql服务器首先要启动mysql服务，其命令如下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service mysql start</span><br></pre></td></tr></table></figure>
-<p>相应的，若要关闭或重启mysql服务，则命令如下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service mysql stop</span><br><span class="line">sudo service mysql restart</span><br></pre></td></tr></table></figure>
-<p>这样后，Linux便启动mysql的服务了，之后我们便可以登陆进mysql</p>
-<h2 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h2><p>在最新版本的mysql8.0中，其为了安全性，默认要进行用户验证，必须使用sudo才能进行登陆</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mysql -u root -p</span><br></pre></td></tr></table></figure>
-<p>之后便是输入root用户的密码，然后便可进入mysql数据库了。</p>
-<p>mycil与mysql登陆基本一致，不过它是将root密码一次性输入，例如</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo mycil -u root -p 123456</span><br></pre></td></tr></table></figure>
-<p>这里的123456即为root密码，这样就可以登陆进mycil了。</p>
-<h1 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h1><h2 id="查看数据库"><a href="#查看数据库" class="headerlink" title="查看数据库"></a>查看数据库</h2><p>进入mysql后，我们可以先查看mysql的版本</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select version();</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410234424.png" style="zoom:67%;"></p>
-<p>可以发现mysql的版本是8.0.23</p>
-<p>当进入mysql数据库后，可以使用show语句进行查看所有数据库</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">show databases;</span><br></pre></td></tr></table></figure>
-<p>不能忘记分号 “;”</p>
-<h2 id="创建新数据库"><a href="#创建新数据库" class="headerlink" title="创建新数据库"></a>创建新数据库</h2><p>新建一个数据库</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create database 数据库名称;</span><br></pre></td></tr></table></figure>
-<p>相应的删除操作即为</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">drop database 数据库名称;</span><br></pre></td></tr></table></figure>
-<h2 id="数据表操作"><a href="#数据表操作" class="headerlink" title="数据表操作"></a>数据表操作</h2><p>对于创建的数据库，如果我们要使用它，便有以下语句</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">use 数据库名称;</span><br></pre></td></tr></table></figure>
-<p>在使用这个数据库后，即进入了该数据库，而数据库是由表构成的，于是我们可以新建一个表：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create table stuinfo(id int,name varchar(10),loaction char(20));</span><br></pre></td></tr></table></figure>
-<p>注意：这里的varchar与char不同，char是固定长度，而varchar为可变长度。故char(20)是固定长度20的字符类型，而varchar(10)则是可变最大长度为10的字符类型。</p>
-<p>现在我们可以使用命令，观察刚才创建表的结构</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">desc stuinfo;</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410213513.png" style="zoom:67%;"></p>
-<h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><p>现在这个表还是空的，那我们要为它插入一些值，命令如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">insert into stuinfo values (1,&#39;xiaoming&#39;,&#39;shanghai&#39;);</span><br><span class="line">insert into stuinfo values (2,&#39;lihan&#39;,&#39;xian&#39;);</span><br><span class="line">insert into stuinfo values (3,&#39;wanggang&#39;,&#39;beijing&#39;);</span><br></pre></td></tr></table></figure>
-<p>现在我们可以查看整个表，命令如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from stuinfo;</span><br></pre></td></tr></table></figure>
-<p>其中 * 代表所有列，而表名后不加where，则代表所有行，因此取出所有行，所有列。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410214441.png" style="zoom:67%;"></p>
-<p><strong>但我们需要知道，这条语句是暴力查询，在平时我们应尽量避免使用，当我们要查特定某些列或行时，应指明列名，避免查询整张表，从而减少系统的负担。</strong></p>
-<h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><p>当我们要替换其中的一个值时，要怎么办呢？</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">update stuinfo set name&#x3D;&#39;liliang&#39; where id&#x3D;2;</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410215805.png" style="zoom:67%;"></p>
-<p>可以发现，原来’lihan’已经被替换成了’liliang’</p>
-<h3 id="删"><a href="#删" class="headerlink" title="删"></a>删</h3><p>删除就是指删除一整行，我们可以使用如下命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">delete from stuinfo where id&#x3D;3;</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210410220406.png" style="zoom:67%;"></p>
-<p>可以发现，第三行已经删除了。</p>
-<p>那如果我们想删除整个表，使用什么命令比较简洁呢？</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">drop table stuinfo;</span><br></pre></td></tr></table></figure>
-<p>便可以直接删除整个stuinfo表。</p>
-<h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><p>如果我们要特定查看某一行的数值是否存在，则可以使用select语句实现</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from student_1 where name&#x3D;&#39;ppp&#39;</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411105320.png" style="zoom:67%;"></p>
-<p>这样name=’ppp’的这一行就能被特定搜索出来了。</p>
-<p>当然我们也可以指定特定的某些列，如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select age,location from student_1 where name&#x3D;&#39;王明&#39;</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411110257.png" style="zoom:67%;"></p>
-<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>单行注释</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#注释文字</span><br><span class="line">-- 注释，注意--后有空格</span><br></pre></td></tr></table></figure>
-<p>多行注释</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* 注释文字 *&#x2F;</span><br></pre></td></tr></table></figure>
-<h2 id="保存文件"><a href="#保存文件" class="headerlink" title="保存文件"></a>保存文件</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tee ~&#x2F;sql&#x2F;</span><br></pre></td></tr></table></figure>
-<p>将sql文件保存在sql文件夹下</p>
-<h1 id="列类型"><a href="#列类型" class="headerlink" title="列类型"></a>列类型</h1><h2 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h2><h3 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h3><ul>
-<li><p>tinyint</p>
-<p>占据空间：1字节(八位)，存储范围：(有符号)：-128~127，(无符号)：0~255。</p>
-</li>
-<li><p>smallint</p>
-<p>占据空间：2字节(16位)，存储范围：-32768~32767，0~65535</p>
-</li>
-<li><p>mediumint</p>
-<p>占据空间：3字节(24位)</p>
-</li>
-<li><p>int</p>
-<p>占据空间：4字节(32位)</p>
-</li>
-<li><p>bigint</p>
-<p>占据空间：8字节(64位)</p>
-<p>$n$字节，其共有$8n$位，则存储范围为：</p>
-<script type="math/tex; mode=display">
-\mbox{无符号：}0\sim2^{8n}-1\\
-\mbox{有符号：}-2^{8n-1}\sim2^{8n-1}-1</script></li>
-</ul>
-<p>但在申明类型时，例如int型，我们该如何选择它是无符号还是有符号的呢？</p>
-<p>首先创建一个表，其中age采用tinyint 型</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411202853.png" style="zoom:67%;"></p>
-<p>向表里插入一个age值为128的人</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411203009.png" style="zoom:67%;"></p>
-<p>可以发现，其报错了，128超过了tinyint的范围，则证明tinyint不加特殊说明时，默认是有符号的，其范围为-128~127。</p>
-<p>为表再加一列，其命令为</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alter table 表名 add 列明 参数</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411204922.png" style="zoom:67%;"></p>
-<p>上述即为创建了一个名为score的列，其tinyint为unsigned，即无符号；不允许为空，默认值为0。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210411205526.png" style="zoom:67%;"></p>
-<p>可以发现，在定义了tinyint 为unsigned后，其范围即变为0~255。</p>
-<p>但如果现在要求我们给班级的每个人添加上学号应该怎么办？学号一般是有固定长度的，例如：000001，000029等，这应该怎么实现呢？</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210412203140.png" style="zoom:67%;"></p>
-<p>在这里我们使用了(6)与zerofill两个参数，可以发现num的默认值变为000000了。同时可以发现num的类型多出来了unsigned（<strong>由于零填充不可能为负值，故zerofill同时也是unsigned类型</strong>）现在插入几个值试试。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210412203524.png" style="zoom:67%;"></p>
-<p>于是我们可以总结一下int型的参数：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\mbox{unsinged：      int型值无符号}\\
-\mbox{(M)，zerofill：两者搭配使用，M为补零长度，单独使用使没有意义的}
-\end{cases}</script><h3 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h3><p><strong>float(M,D)</strong>与<strong>decimal(M,D)</strong></p>
-<p>其中M表示“精度”——代表总位数，而D代表“标度”——小数点右边的位数。</p>
-<p>同时浮点型也可以在其后面定义unsigned，如下所示定义</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413142003.png" style="zoom:67%;"></p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413142107.png" style="zoom:67%;"></p>
-<p>而float的整数部分能存10\^38，小数部分能存10\^-38。</p>
-<p>如果M&lt;24，则其占4个字节，否则占8个字节。</p>
-<p><strong>另一种存储方式叫定点decimal，是把整数部分和小数部分分开存储的，其比float精确。</strong></p>
-<p>我们通过实验可以发现两者差异，首先创建一个表</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413160657.png" style="zoom:67%;"></p>
-<p>后向表中插入值，可以发现</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210413162910.png" style="zoom:67%;"></p>
-<p>acc1中的值与真实值不相符，为1234567.38，而真实值为1234567.36。其中acc1是float型的，acc2是decimal型的。故可以发现float的精度有时会有损精度</p>
-<h3 id="字符型"><a href="#字符型" class="headerlink" title="字符型"></a>字符型</h3><ul>
-<li><p><strong>char</strong>：</p>
-<p>定长，例如char(4)即创建4个长度的字符型，不管内容如何其长度都为4。这会导致浪费空间。<strong>创建n个长度，如果内容不够nn个长度，则会用空格补齐至n个长度。</strong></p>
-<p>但char类型由于其每个是固定长度的，所以其<strong>查找较快</strong>，因为可通过固定长度直接计算得到文件指针位置。</p>
-</li>
-<li><p><strong>varchar</strong>：</p>
-<p>变长，其不用空格补齐。<strong>例如varchar(10)，如果现在存储字符串’小明’，则它的存储长度并不是2，在’小明’的前面会有前缀，来记录内容的长度，在这个例子里该前缀的填入的内容即为2</strong>。</p>
-</li>
-</ul>
-<p>则以上可以发现char的利用率可能得到100%，但varchar的利用率一定&lt;100%。</p>
-<p><strong>注意char(M)，varchar(M)限制的是字符，不是字节。</strong></p>
-<ul>
-<li><p>text：</p>
-<p>文本类型，可以存比较大的文本，但搜索较慢。因此，如果不是特别大的内容，建议用char、varchar来代替。</p>
-<p>注意，<strong>声明text列时，不必给它默认值。</strong></p>
-</li>
-</ul>
-<h2 id="时期时间类型"><a href="#时期时间类型" class="headerlink" title="时期时间类型"></a>时期时间类型</h2><h3 id="date型"><a href="#date型" class="headerlink" title="date型"></a>date型</h3><p>创建一个具有date列类型的表，一般例如一个人的生日会用到时期。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000446.png" style="zoom:67%;"></p>
-<p>插入数值，可以得到</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000645.png" style="zoom:67%;"></p>
-<p><strong>date型的的标准格式为：YYYY-MM-DD，而其范围为1000-01-01~9999-12-31。</strong></p>
-]]></content>
-      <tags>
-        <tag>Mysql</tag>
       </tags>
   </entry>
 </search>
