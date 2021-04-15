@@ -2265,7 +2265,7 @@ blockquote footer cite:before {
   -ms-flex-item-align: start;
   padding: 50px 40px;
   border-radius: 8px;
-  background: var(--card-bg);
+  background: #f5f2f282;
   -webkit-box-shadow: 0 4px 8px 6px rgba(7,17,27,0.06);
   box-shadow: 0 4px 8px 6px rgba(7,17,27,0.06);
   -webkit-transition: all 0.3s;

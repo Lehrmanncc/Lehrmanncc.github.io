@@ -149,6 +149,8 @@
 <p>插入数值，可以得到</p>
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000645.png" style="zoom:67%;"></p>
 <p><strong>date型的的标准格式为：YYYY-MM-DD，而其范围为1000-01-01~9999-12-31。</strong></p>
+<h3 id="time"><a href="#time" class="headerlink" title="time"></a>time</h3><p>time类型与date类型格式较相同，不过其表示的为<strong>HH-MM-SS，即时-分-秒</strong>。</p>
+<h3 id="datetime"><a href="#datetime" class="headerlink" title="datetime"></a>datetime</h3><p>datetime类型是date与time的结合体，就是年-月-日-时-分-秒。</p>
 ]]></content>
       <tags>
         <tag>Mysql</tag>
