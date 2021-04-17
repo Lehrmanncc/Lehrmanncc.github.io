@@ -144,13 +144,78 @@
 <p>注意，<strong>声明text列时，不必给它默认值。</strong></p>
 </li>
 </ul>
-<h2 id="时期时间类型"><a href="#时期时间类型" class="headerlink" title="时期时间类型"></a>时期时间类型</h2><h3 id="date型"><a href="#date型" class="headerlink" title="date型"></a>date型</h3><p>创建一个具有date列类型的表，一般例如一个人的生日会用到时期。</p>
+<h2 id="时期时间类型"><a href="#时期时间类型" class="headerlink" title="时期时间类型"></a>时期时间类型</h2><p>可能我们会有这样的一个疑问？既然已经有了char型与varchar型，那么用它们进行存储时期与时间不就完事了吗？为什么还要用专门的时期时间类型。<strong>从存储空间上来说，时期时间类型对存储的时期与时间进行了优化，其存储空间会小于用char与varchar存储的空间。</strong></p>
+<h3 id="date型"><a href="#date型" class="headerlink" title="date型"></a>date型</h3><p>创建一个具有date列类型的表，一般例如一个人的生日会用到时期。</p>
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000446.png" style="zoom:67%;"></p>
 <p>插入数值，可以得到</p>
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414000645.png" style="zoom:67%;"></p>
 <p><strong>date型的的标准格式为：YYYY-MM-DD，而其范围为1000-01-01~9999-12-31。</strong></p>
 <h3 id="time"><a href="#time" class="headerlink" title="time"></a>time</h3><p>time类型与date类型格式较相同，不过其表示的为<strong>HH-MM-SS，即时-分-秒</strong>。</p>
 <h3 id="datetime"><a href="#datetime" class="headerlink" title="datetime"></a>datetime</h3><p>datetime类型是date与time的结合体，就是年-月-日-时-分-秒。</p>
+<h3 id="timestamp"><a href="#timestamp" class="headerlink" title="timestamp"></a>timestamp</h3><p>timestamp在取默认值时，比较特殊，其可以记录当前的时间。例如新增一列sign，其type：timestamp。其defalut：<strong>CURRENT_TIMESTAMP</strong>，其为<strong>系统常量，时时刻刻指向当前时间</strong>。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210415225223.png" style="zoom:67%;"></p>
+<p>插入值，可得：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210415225323.png" style="zoom:67%;"></p>
+<p>其默认值即为当前的时间。</p>
+<h1 id="建表"><a href="#建表" class="headerlink" title="建表"></a>建表</h1><p>在实际开发中，我们需要创建表时，需要首先分析需求，并进行优化。</p>
+<p>一般来说，优化原则为：<strong>经常使用并查看的信息，可以放在一张表中，并采取定长，可以极大优化搜索效率；不常用的信息，可以放在另外一张表中，可采取变长，可以节省空间。</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>列名称</th>
+<th>列类型</th>
+<th>默认值</th>
+<th>是否主键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Id</td>
+<td>int unsigned</td>
+<td></td>
+<td>PRL</td>
+</tr>
+<tr>
+<td>Username</td>
+<td>char(20)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Gender</td>
+<td>char(1)/tinyint</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>weight</td>
+<td>tinyint unsigned</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Birth</td>
+<td>date</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Salary</td>
+<td>decimal(8,2)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>lastlogin</td>
+<td>int unsigned</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>我们根据上表建立数据表，</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210415235404.png" style="zoom:67%;"></p>
 ]]></content>
       <tags>
         <tag>Mysql</tag>

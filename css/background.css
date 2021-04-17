@@ -8,7 +8,19 @@ img {
         default;
 }
 
+/* 文章标题字体 */
+@font-face {
+    font-family: Kimberley;
+    src: url('./fonts/FZZJ-ZMJXLBXSJW.TTF');
+  }
 
+h1, h2, h3, h4, h5, h6 {
+    position: relative;
+    margin: 1rem 0 0.7rem;
+    color: var(--text-highlight-color);
+    font-weight: bold;
+    font-family: Alita Brush,Kimberley;
+}
 
 /* 博主昵称颜色 */
 .author-info__name {
@@ -23,6 +35,10 @@ img {
 /*文章透明*/
 
 .layout_post>#post {
+    background: rgba(255, 255, 255, .7);
+}
+
+.layout_page>#page {
     background: rgba(255, 255, 255, .7);
 }
 
