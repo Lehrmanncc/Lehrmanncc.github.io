@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GAN理论知识 | THREE BEARS LIVE IN THE SAME HOUSE</title><meta name="keywords" content="GAN"><meta name="author" content="Lehrmanncc"><meta name="copyright" content="Lehrmanncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="GAN网络结构GAN由两部分网络组成：生成网络与判别网络。 通俗的来讲，生成网络可以理解为一个画赝品的人，而判别网络可以理解为一个判别真假的人。两者不断对抗，通过训练，从而达到使生成网络画赝品越来越高超，甚至以假乱真。 下面我们来了解Generator与Discriminator。 GeneratorGenerator也即为一个网络，那么我们希望这个网络达到什么目标呢？ 首先，假如有一些人脸图片，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAN理论知识">
+<meta property="og:url" content="https://lehrmanncc.me/2021/04/20/GAN/index.html">
+<meta property="og:site_name" content="THREE BEARS LIVE IN THE SAME HOUSE">
+<meta property="og:description" content="GAN网络结构GAN由两部分网络组成：生成网络与判别网络。 通俗的来讲，生成网络可以理解为一个画赝品的人，而判别网络可以理解为一个判别真假的人。两者不断对抗，通过训练，从而达到使生成网络画赝品越来越高超，甚至以假乱真。 下面我们来了解Generator与Discriminator。 GeneratorGenerator也即为一个网络，那么我们希望这个网络达到什么目标呢？ 首先，假如有一些人脸图片，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Lehrmann/figure/raw/master/image/20210421123312.png">
+<meta property="article:published_time" content="2021-04-20T13:13:19.536Z">
+<meta property="article:modified_time" content="2021-04-21T10:52:47.567Z">
+<meta property="article:author" content="Lehrmanncc">
+<meta property="article:tag" content="GAN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Lehrmann/figure/raw/master/image/20210421123312.png"><link rel="shortcut icon" href="/img/favicon2.png"><link rel="canonical" href="https://lehrmanncc.me/2021/04/20/GAN/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.2.0',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2021-04-21 18:52:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {
+  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }
+})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414230439.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">10</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#GAN"><span class="toc-number">1.</span> <span class="toc-text">GAN</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">网络结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Generator"><span class="toc-number">1.1.1.</span> <span class="toc-text">Generator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Discriminator"><span class="toc-number">1.1.2.</span> <span class="toc-text">Discriminator</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GAN%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7"><span class="toc-number">1.2.</span> <span class="toc-text">GAN训练技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Wasserstein-distance"><span class="toc-number">1.2.1.</span> <span class="toc-text">Wasserstein distance</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Generator-%E8%AF%84%E4%BC%B0"><span class="toc-number">1.3.</span> <span class="toc-text">Generator 评估</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mode-Collapse"><span class="toc-number">1.3.1.</span> <span class="toc-text">Mode Collapse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mode-Dropping"><span class="toc-number">1.3.2.</span> <span class="toc-text">Mode Dropping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Evaluation-Method"><span class="toc-number">1.3.3.</span> <span class="toc-text">Evaluation  Method</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Condition-Generator"><span class="toc-number">1.4.</span> <span class="toc-text">Condition Generator</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://gitee.com/Lehrmann/figure/raw/master/image/20210421123312.png)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">THREE BEARS LIVE IN THE SAME HOUSE</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">GAN理论知识</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-20T13:13:19.536Z" title="发表于 2021-04-20 21:13:19">2021-04-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-04-21T10:52:47.567Z" title="更新于 2021-04-21 18:52:47">2021-04-21</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h1><h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p>GAN由两部分网络组成：<strong>生成网络与判别网络</strong>。</p>
+<p>通俗的来讲，<strong>生成网络可以理解为一个画赝品的人，而判别网络可以理解为一个判别真假的人。两者不断对抗，通过训练，从而达到使生成网络画赝品越来越高超，甚至以假乱真。</strong></p>
+<p>下面我们来了解Generator与Discriminator。</p>
+<h3 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h3><p>Generator也即为一个网络，那么我们希望这个网络达到什么目标呢？</p>
+<p>首先，假如有一些人脸图片，那么我们希望这个网络可以生产出非常逼真的人脸图片，即这些人脸是原先并不存在的。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420213437.png" style="zoom:50%;"></p>
+<p>如图所示，我们希望向Generator中input一个从正态分布sample出来的vector。然后会输出一个Distribution，即$P_G$。而$P_{data}$为真实的Distribution。我们的目标是：让$P_G$与$P_{data}$越接近越好。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420214728.png" style="zoom:50%;"></p>
+<p>假如现在输入一个一维向量，那么经过Generator可能会input出绿色的一维向量，而真实的一维向量是蓝色的。所以我们的目标函数即为$G^*$，即最小化$Div(P_G,P_{data})$。这个Divergence越小，就代表$P_G$与$P_{data}$越相似。这个Divergence可以表示为两个向量的距离。</p>
+<p>所以Generator的Loss function即为：$Div(P_G,P_{data})$，但由于实际的Divergence式子非常复杂。于是便有这样的问题，如何计算这个Loss function。</p>
+<p>而GAN则可以解决这个问题。我们不需要知道$P_G$和$P_{data}$的formulation是什么样子。只要可以从它们间sample出来东西，便可以计算出Divergence。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420221425.png" style="zoom:50%;"></p>
+<p>而计算Divergence便需要Discriminator了。</p>
+<h3 id="Discriminator"><a href="#Discriminator" class="headerlink" title="Discriminator"></a>Discriminator</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420222322.png" style="zoom:50%;"></p>
+<p>首先，data中含有真实data与机器生成的data，Discriminator就相当于将从所有data中分辨出哪些是真实的data与假data。其中判别出真data后，给其较大的分数，判别出假data后给其较小的分数。</p>
+<p>而我们想让目标函数$V$越大越好，即让$D(y)$越大越好。而目标函数$V$是与cross entropy是有联系的。即$V=-cross \ entropy$，那么现在这个优化问题便可以当成一个分类问题来做。而$V$其实是与$Divergence$有关。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420223629.png" style="zoom:50%;"></p>
+<p>如果$P_G$与$P_{data}$非常相近，那么它们之间的$Divergence$会比较小。那么这便会给$Discriminator$带来困难，其没有办法很好的分辨$P_{G}$与$P_{data}$。那么目标函数$V$的值便不会很大。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420224236.png" style="zoom:50%;"></p>
+<p>于是我们可以将Divergence替换为$max_{D}\ V(D,G)$，于是最初的优化问题便成为min max问题。于是上图训练的算法。尽管如此，GAN的train还是很困难的。</p>
+<h2 id="GAN训练技巧"><a href="#GAN训练技巧" class="headerlink" title="GAN训练技巧"></a>GAN训练技巧</h2><h3 id="Wasserstein-distance"><a href="#Wasserstein-distance" class="headerlink" title="Wasserstein distance"></a>Wasserstein distance</h3><p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210420232334222.png" style="zoom:50%;"></p>
+<p>现在有$P$与$Q$两个distribution，可以想象$P$为一堆土，$Q$为土堆放的地方。有一台推土机，将$P$移动到$Q$的距离即为Wasserstein distace。假设P、Q都集中到一点，则Wasserstein distace=d。</p>
+<p>但如果P、Q是比较复杂的distribution</p>
+<p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210420232949828.png" style="zoom:50%;"></p>
+<p>例如P变成Q这样可以有多种move的方法。于是将Wasserstein distance定义为：穷举所有moving plan，看哪种方法所用的距离虽少，则即为Wasserstein distance。</p>
+<p>求解下图优化问题，即得Wasserstein distance。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421102506.png" style="zoom:50%;"></p>
+<h2 id="Generator-评估"><a href="#Generator-评估" class="headerlink" title="Generator 评估"></a>Generator 评估</h2><p>当我们train一个GAN时，我们怎么判断Generator的output的好坏呢？如果我们的输出是一张人靓图片，我们可能会用肉眼进行直接观察，判断其是否逼真。但这样其实是无法准确的进行量度其质量的。</p>
+<p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210421111223876.png" style="zoom:50%;"></p>
+<p><strong>我们可以将图片输入到一个图像分类系统，它的输出为一个概率分布。如果。如果这个概率分布越集中，就代表现在生成的图片可能会比较好。</strong></p>
+<p>尽管我们不知道这个image是什么东西，可能是狗、猫、人。但如果分类系统输出的分布非常集中，则证明分类系统非常肯定它看见了狗或猫，所以Generator可能产生了比较逼真的图片。</p>
+<p>但这样仍有问题，因为GAN可能会发生Mode Collapse（模式崩溃）。</p>
+<h3 id="Mode-Collapse"><a href="#Mode-Collapse" class="headerlink" title="Mode Collapse"></a>Mode Collapse</h3><p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210421112724484.png" style="zoom:50%;"></p>
+<p>由上图可以发现Generator生成的图片会频繁出现一种动漫人物的脸。这是为什么呢？</p>
+<p><strong>由于Discriminator有盲点。即对于刚才频繁出现的动漫人物，它没有办法进行辨识出它为假图片，于是Generator便会频繁生成这类图片。于是便会发生Mode Collapase现象。</strong>但Mode Collapse问题现在仍没有好的解决方案。</p>
+<h3 id="Mode-Dropping"><a href="#Mode-Dropping" class="headerlink" title="Mode Dropping"></a>Mode Dropping</h3><p>我们在train的时候，也经常会发生一种类似Mode Collapase的现象——<strong>Mode Dropping</strong>。简单的描述就是其结果的多样性有问题，没有办法达到真实数据的多样性。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421124319.png" style="zoom:50%;"></p>
+<p>在第t个iteration时，我们还没发现有什么问题。但在第t+1个iteration时，我们会发现，它的肤色基本是相同的，其多样性是有问题的。这便是出现了Mode Dropping。</p>
+<p>那么如何解决Mode Dropping呢？</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421124808.png" style="zoom:50%;"></p>
+<p>我们的方法就是把<strong>生成的图片都输入进image classify里面，看它被判断成哪一个class。每一张图片都会输出一个distribution。我们将所有distribution取一个平均。如果平均的distribution非常集中，那么多样性便不够。</strong></p>
+<p>而这个评估似乎与评估图片质量的方法是相反的。评估图片质量（quality），要求其产生的分布越集中越好；而评估生成的图片多样性（diversity），要求其产生的分布越平均越好。</p>
+<p>但其实它们的评估的范围是不同的。<strong>quality是要求输入一张图片产生的distribution越集中越好，而diversity要求输入所有的图片，最后平均的distribution越平均越好。</strong>故两者是并不冲突的。</p>
+<h3 id="Evaluation-Method"><a href="#Evaluation-Method" class="headerlink" title="Evaluation  Method"></a>Evaluation  Method</h3><p>使用FID方法。我们不取最后softmax计算得到的类别，而是取在它前面的hidden layer的输出，即incepton network的输出。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421131636.png" style="zoom:50%;"></p>
+<p><strong>我们将这两组高维向量拿出来，假设它们都是Gaussian distribution，然后计算它们的Frechet distance。由于是distance，所以越小越好，即代表两个分布越接近。</strong></p>
+<p>但仍有一些问题，即两个分布可能并不是高斯分布，但我们仍将其假设为高斯分布，会比较奇怪。而如果要准确的得到network的分布，可能需要sample很多次。</p>
+<h2 id="Condition-Generator"><a href="#Condition-Generator" class="headerlink" title="Condition Generator"></a>Condition Generator</h2><p>如果我们想要输入一个描述性的文字，然后得到相应的图片，应该怎么做呢？这便是condition generator的作用。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421133834.png" style="zoom:50%;"></p>
+<p>在原来distribution Z的基础上，我们加入condition X。假如X即为text，我们希望可以输出与text想对应的image。</p>
+<p>那么我们要如何训练呢？</p>
+<p>传统的discriminator只需要输入图片，这显然是对condition gan训练是没有作用的。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421134935.png" style="zoom:50%;"></p>
+<p>因此必须要加入condition X也作为discriminator的输入。<strong>只有图像与文字匹配了才会给高分。如果图像与文字不匹配</strong>，则给低分。所以在训练discriminator时，我们需要有标注的图片。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421135526.png" style="zoom:50%;"></p>
+<p>尽管有positive sample 与negative sample 往往是不够的，我们还需要把<strong>生成的图片故意打乱配上错误的文字</strong>，以此来告诉discriminator遇到这样的情况也要给低分。</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Lehrmanncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://lehrmanncc.me/2021/04/20/GAN/">https://lehrmanncc.me/2021/04/20/GAN/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://lehrmanncc.me" target="_blank">THREE BEARS LIVE IN THE SAME HOUSE</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GAN/">GAN</a></div><div class="post_share"><div class="social-share" data-image="https://gitee.com/Lehrmann/figure/raw/master/image/20210421123312.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/21/SVM/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info"></div></div></a></div><div class="next-post pull-right"><a href="/2021/04/05/MySQL(Linux)/"><img class="next-cover" src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414003015.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MySQL(Linux)</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81MTgyOS8yODMxMA=="></div></div></div></div></article></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Lehrmanncc</div><div class="footer_custom_text">Hi,welcome to my blog!</div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  var script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !false) {
+  if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/js/xkTool.js"></script><script src="/js/fish.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script></div></body></html>

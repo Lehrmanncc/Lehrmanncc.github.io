@@ -1,0 +1,405 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>THREE BEARS LIVE IN THE SAME HOUSE | THREE BEARS LIVE IN THE SAME HOUSE</title><meta name="author" content="Lehrmanncc"><meta name="copyright" content="Lehrmanncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="SVM理论知识拉格朗日对偶性Primal如果有如下优化问题：  \begin{split} &amp;min \quad f(w)\\ &amp;s.t.\begin{cases} g_i(w)\le 0\\ h_i(w)&#x3D;0 \end{cases} \end{split}我们可以相应的构造它的拉格朗日函数：  L(w,\alpha,\beta)&#x3D;f(w)+\sum_{i&#x3D;1}^k\alpha_ig_i(w)+\">
+<meta property="og:type" content="article">
+<meta property="og:title" content="THREE BEARS LIVE IN THE SAME HOUSE">
+<meta property="og:url" content="https://lehrmanncc.me/2021/04/21/SVM/index.html">
+<meta property="og:site_name" content="THREE BEARS LIVE IN THE SAME HOUSE">
+<meta property="og:description" content="SVM理论知识拉格朗日对偶性Primal如果有如下优化问题：  \begin{split} &amp;min \quad f(w)\\ &amp;s.t.\begin{cases} g_i(w)\le 0\\ h_i(w)&#x3D;0 \end{cases} \end{split}我们可以相应的构造它的拉格朗日函数：  L(w,\alpha,\beta)&#x3D;f(w)+\sum_{i&#x3D;1}^k\alpha_ig_i(w)+\">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-04-21T10:52:49.722Z">
+<meta property="article:modified_time" content="2021-07-26T04:07:39.611Z">
+<meta property="article:author" content="Lehrmanncc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon2.png"><link rel="canonical" href="https://lehrmanncc.me/2021/04/21/SVM/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.2.0',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2021-07-26 12:07:39'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {
+  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }
+})()</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 5.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="https://gitee.com/Lehrmann/figure/raw/master/image/20210414230439.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">10</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SVM%E7%90%86%E8%AE%BA%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">SVM理论知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E5%AF%B9%E5%81%B6%E6%80%A7"><span class="toc-number">1.1.</span> <span class="toc-text">拉格朗日对偶性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Primal"><span class="toc-number">1.1.1.</span> <span class="toc-text">Primal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dual"><span class="toc-number">1.1.2.</span> <span class="toc-text">Dual</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Primal%E4%B8%8EDaul%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.1.3.</span> <span class="toc-text">Primal与Daul的关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%8F%AF%E5%88%86%E7%9A%84SVM"><span class="toc-number">1.2.</span> <span class="toc-text">线性可分的SVM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%A6%E6%9D%BE%E5%BC%9B%E5%8F%98%E9%87%8F%E7%9A%84SVM"><span class="toc-number">1.3.</span> <span class="toc-text">带松弛变量的SVM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hinge-Loss-%E5%90%88%E9%A1%B5%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text">Hinge Loss(合页损失函数)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%A6kernel%E7%9A%84SVM"><span class="toc-number">1.4.</span> <span class="toc-text">带kernel的SVM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="toc-number">1.4.1.</span> <span class="toc-text">为什么使用核函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E4%B8%BAkernel%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.4.2.</span> <span class="toc-text">成为kernel的条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84kernel"><span class="toc-number">1.4.3.</span> <span class="toc-text">常用的kernel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E9%A1%B9%E5%BC%8F%E6%A0%B8%EF%BC%88Polynomial-Kernel%EF%BC%89"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">多项式核（Polynomial Kernel）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E6%96%AF%E6%A0%B8%EF%BC%88Gaussian-Kernel%E6%88%96Radial-Basis-Function-RBF-Kernel%EF%BC%89"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">高斯核（Gaussian Kernel或Radial Basis Function-RBF Kernel）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sigmoid-Kernel"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">Sigmoid Kernel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cosine-Similarly-Kernel"><span class="toc-number">1.4.3.4.</span> <span class="toc-text">Cosine Similarly Kernel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Chi-Squared-Kernel"><span class="toc-number">1.4.3.5.</span> <span class="toc-text">Chi Squared Kernel</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMO%E7%AE%97%E6%B3%95"><span class="toc-number">1.5.</span> <span class="toc-text">SMO算法</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">THREE BEARS LIVE IN THE SAME HOUSE</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">无题</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-21T10:52:49.722Z" title="发表于 2021-04-21 18:52:49">2021-04-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-26T04:07:39.611Z" title="更新于 2021-07-26 12:07:39">2021-07-26</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="SVM理论知识"><a href="#SVM理论知识" class="headerlink" title="SVM理论知识"></a>SVM理论知识</h1><h2 id="拉格朗日对偶性"><a href="#拉格朗日对偶性" class="headerlink" title="拉格朗日对偶性"></a>拉格朗日对偶性</h2><h3 id="Primal"><a href="#Primal" class="headerlink" title="Primal"></a>Primal</h3><p>如果有如下优化问题：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&min \quad f(w)\\
+&s.t.\begin{cases}
+g_i(w)\le 0\\
+h_i(w)=0
+\end{cases}
+\end{split}</script><p>我们可以相应的构造它的<strong>拉格朗日函数</strong>：</p>
+<script type="math/tex; mode=display">
+L(w,\alpha,\beta)=f(w)+\sum_{i=1}^k\alpha_ig_i(w)+\sum_{i=1}^l\beta_ih_i(w)</script><p>定义</p>
+<script type="math/tex; mode=display">
+\theta_p(w)=max_{\alpha,\beta} \quad L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><ul>
+<li>注意$\theta_p(w)$是对$L(w,\alpha,\beta)中\alpha与\beta$的优化。</li>
+<li>如果存在$w$使得其不满足约束条件，则$\theta_p(w)$的值即为$+\infty$（因为如果存在某个$g_i(w)&gt;0或h_i(w)\neq0$，则令$\alpha_i\rightarrow\infty或\beta_i\rightarrow\infty $，即可得到$L的最大值$）。</li>
+<li>如果$w$都符合约束条件，则$\theta_p(w)$的值即为$f(w)$（后两项为负值，若$\alpha_i=0且\beta_i=0 $，即为$f(w)$）。</li>
+</ul>
+<p>所以我们原先求取的目标函数即可变为：</p>
+<script type="math/tex; mode=display">
+min_{w} \quad\theta_p(w)=min_{w} \quad max \ L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><p>定义原始问题（Primal）的最优值为：</p>
+<script type="math/tex; mode=display">
+P^*=min_{w} \quad\theta_p(w)</script><h3 id="Dual"><a href="#Dual" class="headerlink" title="Dual"></a>Dual</h3><p>定义</p>
+<script type="math/tex; mode=display">
+\theta_D(\alpha,\beta)=min_{w} \quad L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><ul>
+<li>注意$\theta_D(\alpha,\beta)$是对$L(w,\alpha,\beta)中w$的优化。</li>
+</ul>
+<p>而极大化$\theta_D(\alpha,\beta)$，即为：</p>
+<script type="math/tex; mode=display">
+max_{\alpha,\beta}\quad\theta_D(\alpha,\beta)=max_{\alpha,\beta} \quad min \ L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><p>定义对偶问题（Dual）的最优值为：</p>
+<script type="math/tex; mode=display">
+D^*=max_{\alpha,\beta} \quad\theta_D(\alpha,\beta)</script><h3 id="Primal与Daul的关系"><a href="#Primal与Daul的关系" class="headerlink" title="Primal与Daul的关系"></a>Primal与Daul的关系</h3><p>对于原始问题与对偶问题求解得到的最优值$P^<em>,D^</em>$，它们有如下关系：</p>
+<script type="math/tex; mode=display">
+P^*=min_{w} \quad\theta_p(w)\le max_{\alpha,\beta} \quad\theta_D(\alpha,\beta)=D^*</script><p>而它们只有<strong>KKT条件</strong>下是相等的，即$P^<em>=D^</em>$。那么我们便可以通过求解Dual问题来求解Primal问题。</p>
+<p>同时满足原问题与对偶问题的最优解$w^<em>,\alpha^</em>,\beta^<em>$满足的<em>*KKT条件</em></em>如下：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&\nabla_wL(w^*,\alpha^*,\beta^*)=0\\
+&\alpha_i^*g_i(w^*)=0\\
+&g_i(w^*)\le0\\
+&\alpha^*\ge0
+\end{split}</script><p>通过KKT条件，我们可以求解最优解。其第二个条件需着重观察，可以发现，若数据带入$g_i(w)$中，若其不为0，则说明$\alpha_i=0$。</p>
+<h2 id="线性可分的SVM"><a href="#线性可分的SVM" class="headerlink" title="线性可分的SVM"></a>线性可分的SVM</h2><p>在一个二维平面上，有两种类型的数据，如下图所示</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421185958.png" style="zoom:50%;"></p>
+<p>我们可以很容易找到一条线将它们分开，并且这种线是有很多的。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421185849.png" style="zoom: 25%;"></p>
+<p>而支持向量（support vector）的定义即是：<strong>存在一条线到a数据边界的distance与到b数据边界的distance是相同的，这条线便是支持向量决策线。</strong></p>
+<p>找到的支持向量便是SVM算法得到的最优解。</p>
+<p>将两条边界上的线的距离定义为margin，而SVM则希望找一个最大的margin，所以SVM还有另外一个名字：max margin classifier。</p>
+<p>假设现在有两个support vector，如图所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421192000.png" style="zoom: 33%;"></p>
+<p>我们将用数学公式，对两个支持向量的距离进行推导</p>
+<p>设边界上的两条线分别为：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+w^Tx_1+b=1\\
+w^Tx_2+b=-1
+\end{cases}</script><p>将两式相减便可得到：</p>
+<script type="math/tex; mode=display">
+w^T(x_1-x_2)=2</script><p>而$w^T$与$(x_1-x_2)$都为向量，故它们相乘实际上是做内积</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421192629.png" style="zoom:33%;"></p>
+<p>故可得：</p>
+<script type="math/tex; mode=display">
+\Vert w\Vert_2\Vert x_1-x_2\Vert_2\cos\theta=2</script><p>则便可得：</p>
+<script type="math/tex; mode=display">
+d_1+d_2=\Vert x_1-x_2\Vert_2\cos\theta=\frac{2}{\Vert w\Vert_2}\\
+d_1=d_2=\frac{1}{2}\Vert x_1-x_2\Vert_2\cos\theta=\frac{1}{\Vert w\Vert_2}</script><p>上面提到SVM的目标就是max-margin，而$margin=\frac{2}{\Vert w\Vert_2}$，故可以得到SVM的数学模型：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&min \quad \frac{1}{2}\Vert w\Vert^2\\
+&s.t. \quad y^{(i)}(wx^{i}+b)\geqslant1
+\end{split}</script><p>上面的目标函数并不难理解，对原距离求其分母的最小值，便是求远距离的最大值。</p>
+<p>而约束条件的意思即：有这样的一个vector $w$与bias $b$，对空间中任意一点$x^i$，带入$wx+b$中，再乘以$y^{i}$（数据的标签，可为1或-1），都是大于等于1的。我理解的意思便是：<strong>数据都被较好的分类，即1类数据都在1类的平面里，-1类的数据都在-1类的平面里。</strong></p>
+<p>我们可以将上式改写为如下形式：</p>
+<script type="math/tex; mode=display">
+g_i(w,b)=-y^{(i)}(wx^{i}+b)+1\leqslant0</script><p>将其拉格朗日化可得：</p>
+<script type="math/tex; mode=display">
+L(w,b,\alpha)=\frac{1}{2}\Vert w\Vert^2-\sum_{i=1}^n\alpha_i[y^{(i)}(wx^{i}+b)-1]</script><p>则由KKT条件可得：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\nabla_wL=w-\sum_{i=1}^n\alpha_iy^{(i)}x^i=0\\
+\nabla_bL=-\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}</script><p>带入原式可得：</p>
+<script type="math/tex; mode=display">
+L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j(x^{(i)})^Tx^{(j)}</script><p>上述经过KKT条件的带入，已对$w,b$进行了优化，得到的$L(\alpha)$即上文Dual问题中的$\theta_D$。而现在便可将其转换为Dual问题：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j(x^{(i)})^Tx^{(j)}\\
+&s.t.\begin{cases}
+\alpha_i\geq0\\
+\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}
+\end{split}</script><p>通过构造Dual问题，进行求解得到$\alpha$的值。</p>
+<p>而SVM的决策子如下：</p>
+<script type="math/tex; mode=display">
+w^Tx+b=(\sum_{i=1}^n\alpha_iy^{(i)}x^i)^Tx+b=\sum_{i=1}^n\alpha_iy^{(i)}\lang x^i,x\rang+b</script><p>因为$\alpha_iy^{(i)}$为常数，故$(x^i)^Tx=\lang x^i,x\rang$做内积。</p>
+<p>但这样可以发现，当输入值$x$时，需要与所有的训练数据进行内积并求和。如果数据过大，则每次输入$x$时，太过花费时间与内存。</p>
+<p>但为什么SVM会很流行呢？因为根据KKT条件，我们会发现这个规则：</p>
+<script type="math/tex; mode=display">
+\alpha_i^*g_i(w^*)=0</script><p>而在这里$g_i(w,b)=-y^{(i)}(wx^{i}+b)+1\leqslant0$</p>
+<p><strong>也就是说，如果$g_i(w)$带入的数据$(x^i,y^{(i)})$并不等于0，那么其对应的$\alpha_i=0$。而事实上较多的训练数据带入约束函数中并不等0，故其相应的$\alpha_i$等于0，于是SVM决策子便会大大简单。当输入$x$后，也并不会与以往所有的数据做一次内积求和。事实上真正保留下来的$\alpha_i$为数据正好为支持向量，其所对应的$\alpha_i$。</strong></p>
+<h2 id="带松弛变量的SVM"><a href="#带松弛变量的SVM" class="headerlink" title="带松弛变量的SVM"></a>带松弛变量的SVM</h2><p>上文为标准的支持向量机模型。但在实际情况中，其往往会出现一些问题。</p>
+<p>当我们的数据有一些异常值的时候，如下所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430172633.png" style="zoom:33%;"></p>
+<p>如果按照SVM标准模型，则支持向量决策线为图中的虚线，但我们可以看出，蓝色点有一个异常值，如果不管那个异常值，则支持向量决策线应为上图中的蓝色线。</p>
+<p>而对于这种情况，我们可以通过放松限制来解决：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430173124.png" style="zoom:33%;"></p>
+<p>以下为带松弛变量的SVM模型：</p>
+<script type="math/tex; mode=display">
+\mbox{Primal问题:}\begin{split}
+&min \quad \frac{1}{2}\Vert w\Vert^2+C\sum_{i=1}^n\zeta_i\\
+&s.t. \begin{cases}
+y^{(i)}(wx^{i}+b)\geqslant1-\zeta_i, \ i=1,2,\dots,n\\
+\zeta_i\ge0
+\end{cases}
+\end{split}</script><p>可以发现，引入的$\zeta_i$即为松弛变量，这样我们可以使异常值也可以满足限制条件。但我们不能使$\zeta_i$过大，因为这样的话限制条件便没有作用了，于是我们在目标函数中加入$C\sum_{i=1}^n\zeta_i$，以使它放松并不能太大。而参数$C$是需要我们自己进行调参的，通过调节$C$，可以控制$\zeta_i$的大小。</p>
+<p>而其Dual问题为：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j\lang x^{(i)},x^{(j)}\rang\\
+&s.t.\begin{cases}
+0\leq\alpha_i\leq C\\
+\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}
+\end{split}</script><p><strong>在这里$y^{(i)}y^{(j)}$为不同数据的标签，可以发现如果类别相同，则其为正数，而类别不同，则其为负数。所以类别相同，其值增加；类别不同，其值减少。而对于$\lang x^{(i)},x^{(j)}\rang$，则是两个数据作内积，其衡量两个数据之间的相似性。</strong></p>
+<p>对于$\sum_{i=1}^n\alpha_iy^{(i)}=0$而言，其表示不同数据点的权重是不相同的，即每个数据的看重程度是不同的。<strong>由于$y^{(i)}$的取值为-1或1，则为使其和为0，则不同类别的数据其权重应该是相同的。</strong></p>
+<p>而KKT条件也发生了一些变化：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430175353.png" alt></p>
+<p>而除了用上述最小化问题或Dual问题来理解，我们也可以用<strong>Hinge Loss</strong>来理解。</p>
+<h3 id="Hinge-Loss-合页损失函数"><a href="#Hinge-Loss-合页损失函数" class="headerlink" title="Hinge Loss(合页损失函数)"></a>Hinge Loss(合页损失函数)</h3><p>根据上述最小化问题的约束，</p>
+<script type="math/tex; mode=display">
+y^{(i)}(wx^{i}+b)\geqslant1-\zeta_i, \ i=1,2,\dots,n\\
+\zeta_i\ge0</script><p>可以得到：</p>
+<script type="math/tex; mode=display">
+\zeta_i\geqslant1-y^{(i)}(wx^{i}+b)\\
+\zeta_i\geq0</script><p>则以上两个式子即为：</p>
+<script type="math/tex; mode=display">
+\zeta_i= max(0,1-y^{(i)}(wx^i+b))</script><p>而化成这样的好处是，它是一个可求导的函数，这样我们便可使用SGD进行优化，利用PyTorch的Auto grading进行自动求梯度。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430185638.png" alt></p>
+<h2 id="带kernel的SVM"><a href="#带kernel的SVM" class="headerlink" title="带kernel的SVM"></a>带kernel的SVM</h2><p>使用核函数：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_jk(x^{(i)},x^{(j)})\\
+&s.t.\begin{cases}
+0\leq\alpha_i\leq C\\
+\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}
+\end{split}</script><p>对于上节的SVM模型，其改变的地方仅从目标函数由$\lang x^{(i)},x^{(j)}\rang$变为$k(x^{(i)},x^{(j)})$，其中$k(x^{(i)},x^{(j)})$即称为<strong>核函数</strong>。</p>
+<p>核函数定义如下：</p>
+<script type="math/tex; mode=display">
+K(x^i,x^j)=\lang \varPhi(x^i),\varPhi(x^j)\rang</script><p>其做了两步操作：</p>
+<ul>
+<li>首先使用$\varPhi(x)$函数对数据进行高维投影</li>
+<li>然后对其求内积</li>
+</ul>
+<p>这里要说明的是，使用kernel函数与只内积，它们所求得的$\alpha$都是相同的。也是因为这样，使用kernel trick才是有意义的。</p>
+<p>而使用核函数后，其预测公式为：</p>
+<script type="math/tex; mode=display">
+w^T\varPhi(x)+b=\sum_{i=1}^n\alpha_iy^{(i)}k(x^i,x)+b</script><p>只有当$x_i$为支持向量的时候，$\alpha_i&gt;0$。</p>
+<h3 id="为什么使用核函数"><a href="#为什么使用核函数" class="headerlink" title="为什么使用核函数"></a>为什么使用核函数</h3><p>那么我们为什么要使用核函数呢?观察下图</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430201924.png" style="zoom:33%;"></p>
+<p>对于上图中的数据，其使用传统的SVM模型是无法进行分类的。而使用核函数的原因就是<strong>处理线性不可分</strong>。</p>
+<p>那么kernel为什么可以处理线性不可分呢?</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430213812.png" alt></p>
+<p>当一维数据$x$经过函数$\varPhi(x)$处理后，数据升维。之前线性不可分的数据经过升维后就可以线性可分了。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430215033.png" alt></p>
+<p>例如输入数据有两个feature$[x_{i1},x_{i2}]$，经过升维后，它就变为$[x_{i1},x_{i2},x_{i1}x_{i2},x_{i1}^2,x_{i2}^2]$，可以发现其feature是变多了。</p>
+<p>那么既然通过升维可以使线性不可分变为线性可分，那所有的数据我们都来升维？<strong>但如果当一条数据的feature特别多时，升维后，其feature将变得非常多，可能不利于我们计算。（计算量与数据量和每一条数据的维度呈正相关）</strong></p>
+<h3 id="成为kernel的条件"><a href="#成为kernel的条件" class="headerlink" title="成为kernel的条件"></a>成为kernel的条件</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430220126.png" alt></p>
+<p>即由kernel形成的矩阵$G_{ij}$，其需要满足两个条件：</p>
+<ul>
+<li>为<strong>对称矩阵</strong></li>
+<li>为<strong>半正定矩阵</strong>，$z^TGz\geq 0,z\in R^n$。</li>
+</ul>
+<h3 id="常用的kernel"><a href="#常用的kernel" class="headerlink" title="常用的kernel"></a>常用的kernel</h3><h4 id="多项式核（Polynomial-Kernel）"><a href="#多项式核（Polynomial-Kernel）" class="headerlink" title="多项式核（Polynomial Kernel）"></a>多项式核（Polynomial Kernel）</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=(\lang x_i,x_j\rang+c)^d</script><ul>
+<li>$c\ge0$控制低阶项的强度</li>
+<li>特殊情况，当$c=0,d=1$成为线性核（Linear kernel），相当于无核SVM一样。</li>
+</ul>
+<p>下面可以通过一个例子来理解：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430225019.png" alt></p>
+<p>这里的polynomial kernel中$c=0,d=2$。</p>
+<h4 id="高斯核（Gaussian-Kernel或Radial-Basis-Function-RBF-Kernel）"><a href="#高斯核（Gaussian-Kernel或Radial-Basis-Function-RBF-Kernel）" class="headerlink" title="高斯核（Gaussian Kernel或Radial Basis Function-RBF Kernel）"></a>高斯核（Gaussian Kernel或Radial Basis Function-RBF Kernel）</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=exp(-\frac{\| x_i-x_j\|_2^2}{2\sigma^2})</script><p>当$x_i$=$x_j$时，其值为1。当$x_i$与$x_j$的距离增加，其值倾向于0。<strong>但当使用高斯核之前需要将其特征做标准化。</strong>因为<strong>不同特征之间其值变化范围可能不一样。</strong></p>
+<p>下面是随着$\sigma^2$值的变化，高斯核的变化。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430231527.png" alt></p>
+<p>下面看一个高斯核的例子：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430232438.png" alt></p>
+<h4 id="Sigmoid-Kernel"><a href="#Sigmoid-Kernel" class="headerlink" title="Sigmoid Kernel"></a>Sigmoid Kernel</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=\tanh (\beta x_i^Tx_j+c)</script><p>tanh为双曲正切函数，由$\sinh=\frac{e^x-e^{-x}}{2}$与$\cosh=\frac{e^x+e^{-x}}{2}$得到，即为$\frac{e^x-e^{-x}}{e^x+e^{-x}}$。</p>
+<h4 id="Cosine-Similarly-Kernel"><a href="#Cosine-Similarly-Kernel" class="headerlink" title="Cosine Similarly Kernel"></a>Cosine Similarly Kernel</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=\frac{x_i^Tx_j}{\|x_i\|_2\|x_j\|_2}</script><ul>
+<li>常用于衡量两段文字的相似性。</li>
+<li>相当于衡量两个向量的余弦相似度（向量夹角的余弦值）</li>
+</ul>
+<h4 id="Chi-Squared-Kernel"><a href="#Chi-Squared-Kernel" class="headerlink" title="Chi Squared Kernel"></a>Chi Squared Kernel</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=\frac{x_i^Tx_j}{\|x_i+x_j\|_{L1}}</script><ul>
+<li><p>常用于计算机视觉</p>
+</li>
+<li><p>衡量两个概率分布的相似性</p>
+</li>
+<li><p>输入数据必须是非负的，且必须使用L1归一化。</p>
+<p>其中L1归一化公式为：</p>
+<script type="math/tex; mode=display">
+y_i=\frac{x_i}{\sum_{i=1}^nx_i}</script><p>L2归一化公式为：</p>
+<script type="math/tex; mode=display">
+y_i=\frac{x_i}{\sqrt{\sum_{i=1}^nx_i^2}}</script></li>
+</ul>
+<h2 id="SMO算法"><a href="#SMO算法" class="headerlink" title="SMO算法"></a>SMO算法</h2><p>对于已经建立好的SVM数学模型：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_jk(x^{(i)},x^{(j)})\\
+&s.t.\begin{cases}
+0\leq\alpha_i\leq C\\
+\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}
+\end{split}</script><p>我们一般采用SMO算法对其求解，SMO算法一般有下面两个步骤：</p>
+<ul>
+<li><p>重复直到收敛：</p>
+<ol>
+<li>选择下一步需要优化的$\alpha_i$与$\alpha_j$，使用启发式的方式优化$\alpha_i$与$\alpha_j$，使目标函数向着最大值的进发最快。</li>
+<li>保持其他的$\alpha$值不变，仅仅通过一次改变一组$\alpha_i$与$\alpha_j$来优化$L(\alpha)$。（为什么SMO一次需要选择两个参数进行优化？因为如果每次只选择一个参数进行优化，固定其他参数。那么它会不满足数学模型的第二条约束条件。</li>
+</ol>
+</li>
+<li><p>使用KKT条件判断是否收敛。</p>
+</li>
+</ul>
+<p>我们可以通过以下例子来理解：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210501214227.png" alt></p>
+<p>而现在我们的目的就是通过变化$\alpha_1$与$\alpha_2$来使得$L(\alpha)$达到最大。</p>
+<p>我们可以将上式变换得到：</p>
+<script type="math/tex; mode=display">
+\alpha_1=(\zeta-\alpha_2y^{(2)})\frac{1}{y^{(1)}}</script><p>可以将上式带入$L(\alpha)$中，便得到：</p>
+<script type="math/tex; mode=display">
+L(\alpha_1,\alpha_2,\dots,\alpha_n)=L((\zeta-\alpha_2y^{(2)})\frac{1}{y^{(1)}},\alpha_2,\dots,\alpha_n)</script><p>由于$\alpha_3,\alpha_4\dots,\alpha_n$为常数，则目标函数就变为了关于$\alpha_2$的函数。通过求导，便可得到该函数的最值。</p>
+<p>下面为SMO具体的算法：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210501221431.png" alt></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Lehrmanncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://lehrmanncc.me/2021/04/21/SVM/">https://lehrmanncc.me/2021/04/21/SVM/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://lehrmanncc.me" target="_blank">THREE BEARS LIVE IN THE SAME HOUSE</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/22/PyTorch%E6%95%B0%E6%8D%AE%E7%BB%B4%E5%BA%A6/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info"></div></div></a></div><div class="next-post pull-right"><a href="/2021/04/20/GAN/"><img class="next-cover" src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421123312.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">GAN理论知识</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81MTgyOS8yODMxMA=="></div></div></div></div></article></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Lehrmanncc</div><div class="footer_custom_text">Hi,welcome to my blog!</div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !false) {
+  if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/js/xkTool.js"></script><script src="/js/fish.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script></div></body></html>
