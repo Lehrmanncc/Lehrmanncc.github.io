@@ -1040,19 +1040,6 @@ Softmax(z_i)=\frac{e^{z_i}}{\sum_{c=1}^{C}e^{c}}</script><p>那么为什么叫�
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2021/04/22/PyTorch%E6%95%B0%E6%8D%AE%E7%BB%B4%E5%BA%A6/</url>
-    <content><![CDATA[<h1 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h1><p>在机器学习中，我们一直在和数据打交道。于是总免不了对数据进行处理。本篇博文将记录一些常见数据处理的函数用法。</p>
-<h2 id="tensor-view"><a href="#tensor-view" class="headerlink" title="tensor.view()"></a>tensor.view()</h2><p>我们经常会遇到需要对数据进行维度、形状变换的问题。在pytorch中，tensor.view()可直接改变数据维度。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210422151608.png" style="zoom: 67%;"></p>
-<p>这里有较为特殊的即为tensor.view(-1)，-1所在的维度是根据其他维度而计算得到的。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210422151843.png" style="zoom: 50%;"></p>
-<p>-1所在的维度是通过：64/8而计算得到的，为8。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210422152036.png" style="zoom:67%;"></p>
-<p>上图也是如此。</p>
-]]></content>
-  </entry>
-  <entry>
     <title>GAN理论知识</title>
     <url>/2021/04/20/GAN/</url>
     <content><![CDATA[<h1 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h1><h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p>GAN由两部分网络组成：<strong>生成网络与判别网络</strong>。</p>
@@ -1117,7 +1104,7 @@ Softmax(z_i)=\frac{e^{z_i}}{\sum_{c=1}^{C}e^{c}}</script><p>那么为什么叫�
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>SVM模型推导</title>
     <url>/2021/04/21/SVM/</url>
     <content><![CDATA[<h1 id="SVM理论知识"><a href="#SVM理论知识" class="headerlink" title="SVM理论知识"></a>SVM理论知识</h1><h2 id="拉格朗日对偶性"><a href="#拉格朗日对偶性" class="headerlink" title="拉格朗日对偶性"></a>拉格朗日对偶性</h2><h3 id="Primal"><a href="#Primal" class="headerlink" title="Primal"></a>Primal</h3><p>如果有如下优化问题：</p>
 <script type="math/tex; mode=display">
@@ -1356,5 +1343,33 @@ L(\alpha_1,\alpha_2,\dots,\alpha_n)=L((\zeta-\alpha_2y^{(2)})\frac{1}{y^{(1)}},\
 <p>下面为SMO具体的算法：</p>
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210501221431.png" alt></p>
 ]]></content>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>论文插入高清位图</title>
+    <url>/2021/09/16/%E8%AE%BA%E6%96%87%E5%BC%95%E5%85%A5%E9%AB%98%E6%B8%85%E5%9B%BE/</url>
+    <content><![CDATA[<h1 id="绘图软件"><a href="#绘图软件" class="headerlink" title="绘图软件"></a>绘图软件</h1><p>在写作论文中，我们可能会经常遇到画示意图，来帮助更好的分析问题。但论文里插入的图片若不是高清图，会导致pdf放大后图片出现模糊的情况。一定程度上会影响论文的整体美观。</p>
+<p>在过去，我主要使用过的绘图软件有：Edraw、PowerPoint、Visio与LaTeX自带的宏包TIKZ。</p>
+<p>在这四种工具中，TIKZ是最复杂的，上手难度也比较高，画一些简单的示意图是比较好用的，但是画复杂的示意图就绘画者的要求就比较高了，需要很好的掌握TIKZ宏包以及其代码用法。</p>
+<p>PowerPoint应该是四种里面比较容易掌握的，但由于其对单独生成图片并不友好，即另存为图片并不算是高清图片，一般我很少用它来单独生成图片。</p>
+<p>我的主力工具主要有：Edraw与Visio，Edraw算是我用过绘图工具里比较强大的了，它的模板也非常丰富，配色也挺好看，也可以直接导出pdf、eps等形式，无奈的是以上都是会员才能享有的功能。于是最后我选择使用Visio。</p>
+<p>Visio也是微软公司的，但它不会在赠送的Office家庭版里，需要进行单独购买，不过这个东西在淘宝上一搜很多激活码。</p>
+<h1 id="Visio绘图"><a href="#Visio绘图" class="headerlink" title="Visio绘图"></a>Visio绘图</h1><p>Visio的具体绘制这里不再赘述，当画好图后，如下所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916225807.png" style="zoom: 33%;"></p>
+<p>点击[设计]-[大小]-[适应绘图]，如图所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916225950.png" style="zoom: 33%;"></p>
+<p>随后画布便会根据所画图形的大小，自动调整到合适的边距：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916230051.png" style="zoom: 33%;"></p>
+<h1 id="输出PDF格式"><a href="#输出PDF格式" class="headerlink" title="输出PDF格式"></a>输出PDF格式</h1><p>依次点击Visio的[文件]-[另存为]，选择保存地址，选择保存类型为pdf：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916230728.png" style="zoom:33%;"></p>
+<p>注意：点击选项，将<strong>辅助功能文档结构标记</strong>取消。这个可以让生成的pdf没有黑边。如下所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916234559.png" style="zoom:33%;"></p>
+<p>将图像转成pdf格式，可以使用LaTeX进行引用，并且可以无损显示。</p>
+]]></content>
+      <tags>
+        <tag>paper</tag>
+      </tags>
   </entry>
 </search>
