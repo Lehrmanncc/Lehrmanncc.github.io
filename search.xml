@@ -1372,4 +1372,92 @@ L(\alpha_1,\alpha_2,\dots,\alpha_n)=L((\zeta-\alpha_2y^{(2)})\frac{1}{y^{(1)}},\
         <tag>paper</tag>
       </tags>
   </entry>
+  <entry>
+    <title>初识GOLANG</title>
+    <url>/2021/10/25/GO%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="语法基础"><a href="#语法基础" class="headerlink" title="语法基础"></a>语法基础</h1><h2 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h2><p>go语言的变量使用<strong>var</strong>关键字，其需要定义变量的类型，采用如下格式：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span></span><br><span class="line"><span class="keyword">var</span> pi <span class="keyword">float64</span></span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+<p>已定义的变量可以使用“=”来赋值：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span></span><br><span class="line"><span class="keyword">var</span> pi <span class="keyword">float64</span></span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br><span class="line"></span><br><span class="line">a = <span class="number">32</span></span><br><span class="line">pi = <span class="number">3.14</span></span><br><span class="line">str = <span class="string">&quot;hello&quot;</span></span><br></pre></td></tr></table></figure>
+<p>也可以定义变量类型时进行赋值：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span> = <span class="number">50</span></span><br></pre></td></tr></table></figure>
+<p>也可以进行类型推导，并且支持对多个变量进行赋值</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b, c, d = <span class="number">32</span>, <span class="number">3.34</span>, <span class="string">&quot;left&quot;</span></span><br></pre></td></tr></table></figure>
+<p>var关键字也可以省略，如下：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">a, b, c := <span class="number">3</span>, <span class="number">45</span>, <span class="number">9.1</span></span><br></pre></td></tr></table></figure>
+<p>但这样写的前提是，至少保证<strong>:=</strong>左侧的变量名有一个是在代码段中是第一次出现，否则会报错。<strong>:=</strong>的语句必须出现在函数内部，全局变量中不允许使用<strong>:=</strong>定义。</p>
+<p><strong>go语言中，变量一旦定义了就必须使用，否则编译器会认为存在错误。</strong></p>
+<h2 id="定义常量"><a href="#定义常量" class="headerlink" title="定义常量"></a>定义常量</h2><p>常量和变量的区别就是常量一旦定义便不可以改变，其关键字为：<strong>const</strong>。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> pi <span class="keyword">float32</span></span><br><span class="line">pi = <span class="number">3.14</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pi = <span class="number">32</span></span><br></pre></td></tr></table></figure>
+<p>下面是一个计算圆周率的例子：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 在go语言中，定义了变量必须使用</span></span><br><span class="line">	<span class="keyword">var</span> r = <span class="number">3.0</span></span><br><span class="line">	<span class="keyword">const</span> pi = <span class="number">3.14</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;area:&quot;</span>, r*r*pi)</span><br><span class="line">	r = <span class="number">4.0</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;area:&quot;</span>, r*r*pi)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>与print相关的函数在<strong>fmt</strong>这个包中，用“import”导入fmt包后，就可以使用该包的函数了。Println打印输出后会自动换行，这是它与Printf的区别。</p>
+]]></content>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ipynb转换py文件</title>
+    <url>/2021/11/05/ipynb%E8%BD%ACpy%E6%96%87%E4%BB%B6(PyCharm%E6%93%8D%E4%BD%9C)/</url>
+    <content><![CDATA[<p><strong>前情提要：本博客仅针对在PyCharm中使用jupyter的重度用户。</strong></p>
+<p>由于我本身喜欢jupyter的这种独立运行结构，可以很好的进行代码的调试，互相并不影响。故初期我是使用jupyter notebook的，但jupyter notebook的代码提示说实话并不是很好，也不够流畅。故后面我转战了Pycharm，现在的感觉就是Pycharm真香。</p>
+<p>在PyCharm中使用建立ipynb文件，使用体验还算不错。逐渐我也基本使用ipynb来代替py文件。但近期我也发现了一个问题，就是在实现一个稍大一点的项目文件时，需要将其封装为一个模块，来供之后的文件调用。而ipynb文件不能当作包来调用，故需先将其转换为py文件。</p>
+<p>重点来了，起初我都是人工转换😂，每个cell全选幅值粘贴，但这样一旦ipynb文件的cell多了起来，就比较麻烦。于是下面将介绍如何利用PyCharm终端，实现对ipynb文件的转换。</p>
+<h2 id="PyCharm终端替换为Git-Bash"><a href="#PyCharm终端替换为Git-Bash" class="headerlink" title="PyCharm终端替换为Git Bash"></a>PyCharm终端替换为Git Bash</h2><p>打开PyCharm，打开setting(设置)-&gt;tool(工具)-&gt;terminal(终端)，如下图：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105215857.png" alt></p>
+<p>在Shell路径中，默认一般是CMD，只要将其替换成<strong>“D:\Git\bit\sh.exe” —login</strong>，便可以将终端换为bash。这个是bash安装的文件路径，替换成自己便可以了。注意不要漏掉login，否则不会在终端中集成，而是会弹出窗口。</p>
+<h2 id="ipynb转换为py文件"><a href="#ipynb转换为py文件" class="headerlink" title="ipynb转换为py文件"></a>ipynb转换为py文件</h2><p>这一步较为简单，只需要运行一条命令，但注意首先需要进入该ipynb文件的文件目录，然后再运行命令，否则可能找不到文件。命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter nbconvert --to script myprogram.ipynb</span><br></pre></td></tr></table></figure>
+<p>执行成功后，会在该文件目录发现与ipynb文件同名的py文件，例如上述命令就会产生一个myprogram.py文件。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105221046.png" alt></p>
+<p>执行成功后，如上图所示。</p>
+<p>很多博客到这里就结束了，但奈何本人是个强迫症，这样转换后的py文件有一个小问题，就是它仍存在ipynb里面cell的In[1]，就和下面一样：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105221401.png" alt></p>
+<p>强迫症的我这能忍的了？但奈何网上也没有针对这个的特效方法，于是我便想能否读取py文件，对这几个字符进行匹配，将其换为空字符或者空格。</p>
+<h2 id="批量替换In-1"><a href="#批量替换In-1" class="headerlink" title="批量替换In[1]"></a>批量替换In[1]</h2><p>在这里我使用linux中的sed命令。sed全名叫stream editor，流编辑器，用程序的方式来编辑文本。sed基本上就是玩正则模式匹配，由于我也是临时发现有这么一个东西，所以也还并不熟练使用它，在这里就不详细介绍了，google有很多更详细的教程。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed [option] <span class="string">&#x27;command&#x27;</span> input_file</span><br></pre></td></tr></table></figure>
+<p>在这里由于我们是要替换掉这些多余的字符，故使用sed s替换脚本命令。其基本用法如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed <span class="string">&#x27;s/原字符串/替换字符串/&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>现在我们只需要将原字符串表达出来，将替换字符串为空，便可以实现删除。</p>
+<p>现在我们看看要删除的字符，它的形式是这样的：<strong>“# In[num]:”</strong>，中括号中间为一个数字。</p>
+<p>那么可以写出一个正则表达式来匹配它，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;# In\[[1-9].*\]&quot;</span></span><br></pre></td></tr></table></figure>
+<p>其中\可以实现对[]的转义，[1-9]表示可以匹配1到9中任意一个数字，而 . 可以代表任意一个字符（除换行符），m<em> 表示可以匹配出现任意次m的字符串。故 [1-9].</em>表示可以匹配一个以1-9中数字开头，以出现任意次的任意字符的字符串。</p>
+<p>执行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed <span class="string">&#x27;s/# In\[[1-9].*\]/ /&#x27;</span> model.py</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105224037.png" alt></p>
+<p>在终端上会打印出model.py的内容，可以发现“# In[num]:”字符串已经没有了。但看model.py文件，可以发现它并没有修改。</p>
+<p>这是因为sed命令若没有指定模式，其输出的只是位于缓存区的内容，并不会直接修改源文件。而修改源文件只需要加上-i。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/# In\[[1-9].*\]/ /&#x27;</span> model.py</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105224525.png" alt></p>
+<p>在源文件已经删除了该字符串。</p>
+]]></content>
+      <tags>
+        <tag>ipynb</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>实用机器学习</title>
+    <url>/2021/10/20/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<p>这次课是李沐老师在斯坦福大学进行讲授的，华人之光了属于是。李沐老师在b站也进行了中文讲授。这篇博客是课堂的一些笔记，更新可能较慢，因为最近作业好多😢。</p>
+<h1 id="数据探索性分析"><a href="#数据探索性分析" class="headerlink" title="数据探索性分析"></a>数据探索性分析</h1><p>采用pandas进行数据的读取，查看</p>
+<ol>
+<li>若数据集每一列中， 有超过30%的数据是没有的，则将其丢弃。（data.drop())</li>
+<li>查看数据类型是否正确，若不正确，将其类型进行转换。 (data.dtypes)</li>
+<li>查看特征的某一些数学特性，例如：均值、标准差、最小值、最大值。（data,describe())</li>
+<li>对不正常的数据进行过滤，例如某些数据过小或者过大。</li>
+<li>查看特征的直方图，从而可以了解该特征的数据分布情况（sns.histplot())</li>
+</ol>
+<h1 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h1><h2 id="types-of-error"><a href="#types-of-error" class="headerlink" title="types of error"></a>types of error</h2><ol>
+<li>Outliers</li>
+<li>Rule violations</li>
+<li>Pattern violations</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
 </search>
