@@ -1,6 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>GAN理论知识</title>
+    <url>/2021/04/20/GAN/</url>
+    <content><![CDATA[<h1 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h1><h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p>GAN由两部分网络组成：<strong>生成网络与判别网络</strong>。</p>
+<p>通俗的来讲，<strong>生成网络可以理解为一个画赝品的人，而判别网络可以理解为一个判别真假的人。两者不断对抗，通过训练，从而达到使生成网络画赝品越来越高超，甚至以假乱真。</strong></p>
+<p>下面我们来了解Generator与Discriminator。</p>
+<h3 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h3><p>Generator也即为一个网络，那么我们希望这个网络达到什么目标呢？</p>
+<p>首先，假如有一些人脸图片，那么我们希望这个网络可以生产出非常逼真的人脸图片，即这些人脸是原先并不存在的。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420213437.png" style="zoom:50%;"></p>
+<p>如图所示，我们希望向Generator中input一个从正态分布sample出来的vector。然后会输出一个Distribution，即$P_G$。而$P_{data}$为真实的Distribution。我们的目标是：让$P_G$与$P_{data}$越接近越好。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420214728.png" style="zoom:50%;"></p>
+<p>假如现在输入一个一维向量，那么经过Generator可能会input出绿色的一维向量，而真实的一维向量是蓝色的。所以我们的目标函数即为$G^*$，即最小化$Div(P_G,P_{data})$。这个Divergence越小，就代表$P_G$与$P_{data}$越相似。这个Divergence可以表示为两个向量的距离。</p>
+<p>所以Generator的Loss function即为：$Div(P_G,P_{data})$，但由于实际的Divergence式子非常复杂。于是便有这样的问题，如何计算这个Loss function。</p>
+<p>而GAN则可以解决这个问题。我们不需要知道$P_G$和$P_{data}$的formulation是什么样子。只要可以从它们间sample出来东西，便可以计算出Divergence。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420221425.png" style="zoom:50%;"></p>
+<p>而计算Divergence便需要Discriminator了。</p>
+<h3 id="Discriminator"><a href="#Discriminator" class="headerlink" title="Discriminator"></a>Discriminator</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420222322.png" style="zoom:50%;"></p>
+<p>首先，data中含有真实data与机器生成的data，Discriminator就相当于将从所有data中分辨出哪些是真实的data与假data。其中判别出真data后，给其较大的分数，判别出假data后给其较小的分数。</p>
+<p>而我们想让目标函数$V$越大越好，即让$D(y)$越大越好。而目标函数$V$是与cross entropy是有联系的。即$V=-cross \ entropy$，那么现在这个优化问题便可以当成一个分类问题来做。而$V$其实是与$Divergence$有关。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420223629.png" style="zoom:50%;"></p>
+<p>如果$P_G$与$P_{data}$非常相近，那么它们之间的$Divergence$会比较小。那么这便会给$Discriminator$带来困难，其没有办法很好的分辨$P_{G}$与$P_{data}$。那么目标函数$V$的值便不会很大。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420224236.png" style="zoom:50%;"></p>
+<p>于是我们可以将Divergence替换为$max_{D}\ V(D,G)$，于是最初的优化问题便成为min max问题。于是上图训练的算法。尽管如此，GAN的train还是很困难的。</p>
+<h2 id="GAN训练技巧"><a href="#GAN训练技巧" class="headerlink" title="GAN训练技巧"></a>GAN训练技巧</h2><h3 id="Wasserstein-distance"><a href="#Wasserstein-distance" class="headerlink" title="Wasserstein distance"></a>Wasserstein distance</h3><p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210420232334222.png" style="zoom:50%;"></p>
+<p>现在有$P$与$Q$两个distribution，可以想象$P$为一堆土，$Q$为土堆放的地方。有一台推土机，将$P$移动到$Q$的距离即为Wasserstein distace。假设P、Q都集中到一点，则Wasserstein distace=d。</p>
+<p>但如果P、Q是比较复杂的distribution</p>
+<p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210420232949828.png" style="zoom:50%;"></p>
+<p>例如P变成Q这样可以有多种move的方法。于是将Wasserstein distance定义为：穷举所有moving plan，看哪种方法所用的距离虽少，则即为Wasserstein distance。</p>
+<p>求解下图优化问题，即得Wasserstein distance。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421102506.png" style="zoom:50%;"></p>
+<h2 id="Generator-评估"><a href="#Generator-评估" class="headerlink" title="Generator 评估"></a>Generator 评估</h2><p>当我们train一个GAN时，我们怎么判断Generator的output的好坏呢？如果我们的输出是一张人靓图片，我们可能会用肉眼进行直接观察，判断其是否逼真。但这样其实是无法准确的进行量度其质量的。</p>
+<p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210421111223876.png" style="zoom:50%;"></p>
+<p><strong>我们可以将图片输入到一个图像分类系统，它的输出为一个概率分布。如果。如果这个概率分布越集中，就代表现在生成的图片可能会比较好。</strong></p>
+<p>尽管我们不知道这个image是什么东西，可能是狗、猫、人。但如果分类系统输出的分布非常集中，则证明分类系统非常肯定它看见了狗或猫，所以Generator可能产生了比较逼真的图片。</p>
+<p>但这样仍有问题，因为GAN可能会发生Mode Collapse（模式崩溃）。</p>
+<h3 id="Mode-Collapse"><a href="#Mode-Collapse" class="headerlink" title="Mode Collapse"></a>Mode Collapse</h3><p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210421112724484.png" style="zoom:50%;"></p>
+<p>由上图可以发现Generator生成的图片会频繁出现一种动漫人物的脸。这是为什么呢？</p>
+<p><strong>由于Discriminator有盲点。即对于刚才频繁出现的动漫人物，它没有办法进行辨识出它为假图片，于是Generator便会频繁生成这类图片。于是便会发生Mode Collapase现象。</strong>但Mode Collapse问题现在仍没有好的解决方案。</p>
+<h3 id="Mode-Dropping"><a href="#Mode-Dropping" class="headerlink" title="Mode Dropping"></a>Mode Dropping</h3><p>我们在train的时候，也经常会发生一种类似Mode Collapase的现象——<strong>Mode Dropping</strong>。简单的描述就是其结果的多样性有问题，没有办法达到真实数据的多样性。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421124319.png" style="zoom:50%;"></p>
+<p>在第t个iteration时，我们还没发现有什么问题。但在第t+1个iteration时，我们会发现，它的肤色基本是相同的，其多样性是有问题的。这便是出现了Mode Dropping。</p>
+<p>那么如何解决Mode Dropping呢？</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421124808.png" style="zoom:50%;"></p>
+<p>我们的方法就是把<strong>生成的图片都输入进image classify里面，看它被判断成哪一个class。每一张图片都会输出一个distribution。我们将所有distribution取一个平均。如果平均的distribution非常集中，那么多样性便不够。</strong></p>
+<p>而这个评估似乎与评估图片质量的方法是相反的。评估图片质量（quality），要求其产生的分布越集中越好；而评估生成的图片多样性（diversity），要求其产生的分布越平均越好。</p>
+<p>但其实它们的评估的范围是不同的。<strong>quality是要求输入一张图片产生的distribution越集中越好，而diversity要求输入所有的图片，最后平均的distribution越平均越好。</strong>故两者是并不冲突的。</p>
+<h3 id="Evaluation-Method"><a href="#Evaluation-Method" class="headerlink" title="Evaluation  Method"></a>Evaluation  Method</h3><p>使用FID方法。我们不取最后softmax计算得到的类别，而是取在它前面的hidden layer的输出，即incepton network的输出。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421131636.png" style="zoom:50%;"></p>
+<p><strong>我们将这两组高维向量拿出来，假设它们都是Gaussian distribution，然后计算它们的Frechet distance。由于是distance，所以越小越好，即代表两个分布越接近。</strong></p>
+<p>但仍有一些问题，即两个分布可能并不是高斯分布，但我们仍将其假设为高斯分布，会比较奇怪。而如果要准确的得到network的分布，可能需要sample很多次。</p>
+<h2 id="Condition-Generator"><a href="#Condition-Generator" class="headerlink" title="Condition Generator"></a>Condition Generator</h2><p>如果我们想要输入一个描述性的文字，然后得到相应的图片，应该怎么做呢？这便是condition generator的作用。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421133834.png" style="zoom:50%;"></p>
+<p>在原来distribution Z的基础上，我们加入condition X。假如X即为text，我们希望可以输出与text想对应的image。</p>
+<p>那么我们要如何训练呢？</p>
+<p>传统的discriminator只需要输入图片，这显然是对condition gan训练是没有作用的。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421134935.png" style="zoom:50%;"></p>
+<p>因此必须要加入condition X也作为discriminator的输入。<strong>只有图像与文字匹配了才会给高分。如果图像与文字不匹配</strong>，则给低分。所以在训练discriminator时，我们需要有标注的图片。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421135526.png" style="zoom:50%;"></p>
+<p>尽管有positive sample 与negative sample 往往是不够的，我们还需要把<strong>生成的图片故意打乱配上错误的文字</strong>，以此来告诉discriminator遇到这样的情况也要给低分。</p>
+]]></content>
+      <tags>
+        <tag>GAN</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>初识GOLANG</title>
+    <url>/2021/10/25/GO%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="语法基础"><a href="#语法基础" class="headerlink" title="语法基础"></a>语法基础</h1><h2 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h2><p>go语言的变量使用<strong>var</strong>关键字，其需要定义变量的类型，采用如下格式：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span></span><br><span class="line"><span class="keyword">var</span> pi <span class="keyword">float64</span></span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+<p>已定义的变量可以使用“=”来赋值：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span></span><br><span class="line"><span class="keyword">var</span> pi <span class="keyword">float64</span></span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br><span class="line"></span><br><span class="line">a = <span class="number">32</span></span><br><span class="line">pi = <span class="number">3.14</span></span><br><span class="line">str = <span class="string">&quot;hello&quot;</span></span><br></pre></td></tr></table></figure>
+<p>也可以定义变量类型时进行赋值：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span> = <span class="number">50</span></span><br></pre></td></tr></table></figure>
+<p>也可以进行类型推导，并且支持对多个变量进行赋值</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b, c, d = <span class="number">32</span>, <span class="number">3.34</span>, <span class="string">&quot;left&quot;</span></span><br></pre></td></tr></table></figure>
+<p>var关键字也可以省略，如下：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">a, b, c := <span class="number">3</span>, <span class="number">45</span>, <span class="number">9.1</span></span><br></pre></td></tr></table></figure>
+<p>但这样写的前提是，至少保证<strong>:=</strong>左侧的变量名有一个是在代码段中是第一次出现，否则会报错。<strong>:=</strong>的语句必须出现在函数内部，全局变量中不允许使用<strong>:=</strong>定义。</p>
+<p><strong>go语言中，变量一旦定义了就必须使用，否则编译器会认为存在错误。</strong></p>
+<h2 id="定义常量"><a href="#定义常量" class="headerlink" title="定义常量"></a>定义常量</h2><p>常量和变量的区别就是常量一旦定义便不可以改变，其关键字为：<strong>const</strong>。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> pi <span class="keyword">float32</span></span><br><span class="line">pi = <span class="number">3.14</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pi = <span class="number">32</span></span><br></pre></td></tr></table></figure>
+<p>下面是一个计算圆周率的例子：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 在go语言中，定义了变量必须使用</span></span><br><span class="line">	<span class="keyword">var</span> r = <span class="number">3.0</span></span><br><span class="line">	<span class="keyword">const</span> pi = <span class="number">3.14</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;area:&quot;</span>, r*r*pi)</span><br><span class="line">	r = <span class="number">4.0</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;area:&quot;</span>, r*r*pi)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>与print相关的函数在<strong>fmt</strong>这个包中，用“import”导入fmt包后，就可以使用该包的函数了。Println打印输出后会自动换行，这是它与Printf的区别。</p>
+]]></content>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL(Linux)</title>
     <url>/2021/04/05/MySQL(Linux)/</url>
     <content><![CDATA[<h1 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a>MySQL安装</h1><p>通过apt安装MySQL服务</p>
@@ -319,6 +408,291 @@ y=13cos(t)-5cos(2t)-2cos(3t)-cos(4t)
       </tags>
   </entry>
   <entry>
+    <title>ipynb转换py文件</title>
+    <url>/2021/11/05/ipynb%E8%BD%ACpy%E6%96%87%E4%BB%B6(PyCharm%E6%93%8D%E4%BD%9C)/</url>
+    <content><![CDATA[<p><strong>前情提要：本博客仅针对在PyCharm中使用jupyter的重度用户。</strong></p>
+<p>由于我本身喜欢jupyter的这种独立运行结构，可以很好的进行代码的调试，互相并不影响。故初期我是使用jupyter notebook的，但jupyter notebook的代码提示说实话并不是很好，也不够流畅。故后面我转战了Pycharm，现在的感觉就是Pycharm真香。</p>
+<p>在PyCharm中使用建立ipynb文件，使用体验还算不错。逐渐我也基本使用ipynb来代替py文件。但近期我也发现了一个问题，就是在实现一个稍大一点的项目文件时，需要将其封装为一个模块，来供之后的文件调用。而ipynb文件不能当作包来调用，故需先将其转换为py文件。</p>
+<p>重点来了，起初我都是人工转换😂，每个cell全选幅值粘贴，但这样一旦ipynb文件的cell多了起来，就比较麻烦。于是下面将介绍如何利用PyCharm终端，实现对ipynb文件的转换。</p>
+<h2 id="PyCharm终端替换为Git-Bash"><a href="#PyCharm终端替换为Git-Bash" class="headerlink" title="PyCharm终端替换为Git Bash"></a>PyCharm终端替换为Git Bash</h2><p>打开PyCharm，打开setting(设置)-&gt;tool(工具)-&gt;terminal(终端)，如下图：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105215857.png" alt></p>
+<p>在Shell路径中，默认一般是CMD，只要将其替换成<strong>“D:\Git\bit\sh.exe” —login</strong>，便可以将终端换为bash。这个是bash安装的文件路径，替换成自己便可以了。注意不要漏掉login，否则不会在终端中集成，而是会弹出窗口。</p>
+<h2 id="ipynb转换为py文件"><a href="#ipynb转换为py文件" class="headerlink" title="ipynb转换为py文件"></a>ipynb转换为py文件</h2><p>这一步较为简单，只需要运行一条命令，但注意首先需要进入该ipynb文件的文件目录，然后再运行命令，否则可能找不到文件。命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter nbconvert --to script myprogram.ipynb</span><br></pre></td></tr></table></figure>
+<p>执行成功后，会在该文件目录发现与ipynb文件同名的py文件，例如上述命令就会产生一个myprogram.py文件。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105221046.png" alt></p>
+<p>执行成功后，如上图所示。</p>
+<p>很多博客到这里就结束了，但奈何本人是个强迫症，这样转换后的py文件有一个小问题，就是它仍存在ipynb里面cell的In[1]，就和下面一样：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105221401.png" alt></p>
+<p>强迫症的我这能忍的了？但奈何网上也没有针对这个的特效方法，于是我便想能否读取py文件，对这几个字符进行匹配，将其换为空字符或者空格。</p>
+<h2 id="批量替换In-1"><a href="#批量替换In-1" class="headerlink" title="批量替换In[1]"></a>批量替换In[1]</h2><p>在这里我使用linux中的sed命令。sed全名叫stream editor，流编辑器，用程序的方式来编辑文本。sed基本上就是玩正则模式匹配，由于我也是临时发现有这么一个东西，所以也还并不熟练使用它，在这里就不详细介绍了，google有很多更详细的教程。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed [option] <span class="string">&#x27;command&#x27;</span> input_file</span><br></pre></td></tr></table></figure>
+<p>在这里由于我们是要替换掉这些多余的字符，故使用sed s替换脚本命令。其基本用法如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed <span class="string">&#x27;s/原字符串/替换字符串/&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>现在我们只需要将原字符串表达出来，将替换字符串为空，便可以实现删除。</p>
+<p>现在我们看看要删除的字符，它的形式是这样的：<strong>“# In[num]:”</strong>，中括号中间为一个数字。</p>
+<p>那么可以写出一个正则表达式来匹配它，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;# In\[[1-9].*\]&quot;</span></span><br></pre></td></tr></table></figure>
+<p>其中\可以实现对[]的转义，[1-9]表示可以匹配1到9中任意一个数字，而 . 可以代表任意一个字符（除换行符），m<em> 表示可以匹配出现任意次m的字符串。故 [1-9].</em>表示可以匹配一个以1-9中数字开头，以出现任意次的任意字符的字符串。</p>
+<p>执行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed <span class="string">&#x27;s/# In\[[1-9].*\]/ /&#x27;</span> model.py</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105224037.png" alt></p>
+<p>在终端上会打印出model.py的内容，可以发现“# In[num]:”字符串已经没有了。但看model.py文件，可以发现它并没有修改。</p>
+<p>这是因为sed命令若没有指定模式，其输出的只是位于缓存区的内容，并不会直接修改源文件。而修改源文件只需要加上-i。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/# In\[[1-9].*\]/ /&#x27;</span> model.py</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105224525.png" alt></p>
+<p>在源文件已经删除了该字符串。</p>
+]]></content>
+      <tags>
+        <tag>ipynb</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SVM模型推导</title>
+    <url>/2021/04/21/SVM/</url>
+    <content><![CDATA[<h1 id="SVM理论知识"><a href="#SVM理论知识" class="headerlink" title="SVM理论知识"></a>SVM理论知识</h1><h2 id="拉格朗日对偶性"><a href="#拉格朗日对偶性" class="headerlink" title="拉格朗日对偶性"></a>拉格朗日对偶性</h2><h3 id="Primal"><a href="#Primal" class="headerlink" title="Primal"></a>Primal</h3><p>如果有如下优化问题：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&min \quad f(w)\\
+&s.t.\begin{cases}
+g_i(w)\le 0\\
+h_i(w)=0
+\end{cases}
+\end{split}</script><p>我们可以相应的构造它的<strong>拉格朗日函数</strong>：</p>
+<script type="math/tex; mode=display">
+L(w,\alpha,\beta)=f(w)+\sum_{i=1}^k\alpha_ig_i(w)+\sum_{i=1}^l\beta_ih_i(w)</script><p>定义</p>
+<script type="math/tex; mode=display">
+\theta_p(w)=max_{\alpha,\beta} \quad L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><ul>
+<li>注意$\theta_p(w)$是对$L(w,\alpha,\beta)中\alpha与\beta$的优化。</li>
+<li>如果存在$w$使得其不满足约束条件，则$\theta_p(w)$的值即为$+\infty$（因为如果存在某个$g_i(w)&gt;0或h_i(w)\neq0$，则令$\alpha_i\rightarrow\infty或\beta_i\rightarrow\infty $，即可得到$L的最大值$）。</li>
+<li>如果$w$都符合约束条件，则$\theta_p(w)$的值即为$f(w)$（后两项为负值，若$\alpha_i=0且\beta_i=0 $，即为$f(w)$）。</li>
+</ul>
+<p>所以我们原先求取的目标函数即可变为：</p>
+<script type="math/tex; mode=display">
+min_{w} \quad\theta_p(w)=min_{w} \quad max \ L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><p>定义原始问题（Primal）的最优值为：</p>
+<script type="math/tex; mode=display">
+P^*=min_{w} \quad\theta_p(w)</script><h3 id="Dual"><a href="#Dual" class="headerlink" title="Dual"></a>Dual</h3><p>定义</p>
+<script type="math/tex; mode=display">
+\theta_D(\alpha,\beta)=min_{w} \quad L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><ul>
+<li>注意$\theta_D(\alpha,\beta)$是对$L(w,\alpha,\beta)中w$的优化。</li>
+</ul>
+<p>而极大化$\theta_D(\alpha,\beta)$，即为：</p>
+<script type="math/tex; mode=display">
+max_{\alpha,\beta}\quad\theta_D(\alpha,\beta)=max_{\alpha,\beta} \quad min \ L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><p>定义对偶问题（Dual）的最优值为：</p>
+<script type="math/tex; mode=display">
+D^*=max_{\alpha,\beta} \quad\theta_D(\alpha,\beta)</script><h3 id="Primal与Daul的关系"><a href="#Primal与Daul的关系" class="headerlink" title="Primal与Daul的关系"></a>Primal与Daul的关系</h3><p>对于原始问题与对偶问题求解得到的最优值$P^<em>,D^</em>$，它们有如下关系：</p>
+<script type="math/tex; mode=display">
+P^*=min_{w} \quad\theta_p(w)\le max_{\alpha,\beta} \quad\theta_D(\alpha,\beta)=D^*</script><p>而它们只有<strong>KKT条件</strong>下是相等的，即$P^<em>=D^</em>$。那么我们便可以通过求解Dual问题来求解Primal问题。</p>
+<p>同时满足原问题与对偶问题的最优解$w^<em>,\alpha^</em>,\beta^<em>$满足的<em>*KKT条件</em></em>如下：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&\nabla_wL(w^*,\alpha^*,\beta^*)=0\\
+&\alpha_i^*g_i(w^*)=0\\
+&g_i(w^*)\le0\\
+&\alpha^*\ge0
+\end{split}</script><p>通过KKT条件，我们可以求解最优解。其第二个条件需着重观察，可以发现，若数据带入$g_i(w)$中，若其不为0，则说明$\alpha_i=0$。</p>
+<h2 id="线性可分的SVM"><a href="#线性可分的SVM" class="headerlink" title="线性可分的SVM"></a>线性可分的SVM</h2><p>在一个二维平面上，有两种类型的数据，如下图所示</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421185958.png" style="zoom:50%;"></p>
+<p>我们可以很容易找到一条线将它们分开，并且这种线是有很多的。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421185849.png" style="zoom: 25%;"></p>
+<p>而支持向量（support vector）的定义即是：<strong>存在一条线到a数据边界的distance与到b数据边界的distance是相同的，这条线便是支持向量决策线。</strong></p>
+<p>找到的支持向量便是SVM算法得到的最优解。</p>
+<p>将两条边界上的线的距离定义为margin，而SVM则希望找一个最大的margin，所以SVM还有另外一个名字：max margin classifier。</p>
+<p>假设现在有两个support vector，如图所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421192000.png" style="zoom: 33%;"></p>
+<p>我们将用数学公式，对两个支持向量的距离进行推导</p>
+<p>设边界上的两条线分别为：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+w^Tx_1+b=1\\
+w^Tx_2+b=-1
+\end{cases}</script><p>将两式相减便可得到：</p>
+<script type="math/tex; mode=display">
+w^T(x_1-x_2)=2</script><p>而$w^T$与$(x_1-x_2)$都为向量，故它们相乘实际上是做内积</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421192629.png" style="zoom:33%;"></p>
+<p>故可得：</p>
+<script type="math/tex; mode=display">
+\Vert w\Vert_2\Vert x_1-x_2\Vert_2\cos\theta=2</script><p>则便可得：</p>
+<script type="math/tex; mode=display">
+d_1+d_2=\Vert x_1-x_2\Vert_2\cos\theta=\frac{2}{\Vert w\Vert_2}\\
+d_1=d_2=\frac{1}{2}\Vert x_1-x_2\Vert_2\cos\theta=\frac{1}{\Vert w\Vert_2}</script><p>上面提到SVM的目标就是max-margin，而$margin=\frac{2}{\Vert w\Vert_2}$，故可以得到SVM的数学模型：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&min \quad \frac{1}{2}\Vert w\Vert^2\\
+&s.t. \quad y^{(i)}(wx^{i}+b)\geqslant1
+\end{split}</script><p>上面的目标函数并不难理解，对原距离求其分母的最小值，便是求远距离的最大值。</p>
+<p>而约束条件的意思即：有这样的一个vector $w$与bias $b$，对空间中任意一点$x^i$，带入$wx+b$中，再乘以$y^{i}$（数据的标签，可为1或-1），都是大于等于1的。我理解的意思便是：<strong>数据都被较好的分类，即1类数据都在1类的平面里，-1类的数据都在-1类的平面里。</strong></p>
+<p>我们可以将上式改写为如下形式：</p>
+<script type="math/tex; mode=display">
+g_i(w,b)=-y^{(i)}(wx^{i}+b)+1\leqslant0</script><p>将其拉格朗日化可得：</p>
+<script type="math/tex; mode=display">
+L(w,b,\alpha)=\frac{1}{2}\Vert w\Vert^2-\sum_{i=1}^n\alpha_i[y^{(i)}(wx^{i}+b)-1]</script><p>则由KKT条件可得：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\nabla_wL=w-\sum_{i=1}^n\alpha_iy^{(i)}x^i=0\\
+\nabla_bL=-\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}</script><p>带入原式可得：</p>
+<script type="math/tex; mode=display">
+L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j(x^{(i)})^Tx^{(j)}</script><p>上述经过KKT条件的带入，已对$w,b$进行了优化，得到的$L(\alpha)$即上文Dual问题中的$\theta_D$。而现在便可将其转换为Dual问题：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j(x^{(i)})^Tx^{(j)}\\
+&s.t.\begin{cases}
+\alpha_i\geq0\\
+\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}
+\end{split}</script><p>通过构造Dual问题，进行求解得到$\alpha$的值。</p>
+<p>而SVM的决策子如下：</p>
+<script type="math/tex; mode=display">
+w^Tx+b=(\sum_{i=1}^n\alpha_iy^{(i)}x^i)^Tx+b=\sum_{i=1}^n\alpha_iy^{(i)}\lang x^i,x\rang+b</script><p>因为$\alpha_iy^{(i)}$为常数，故$(x^i)^Tx=\lang x^i,x\rang$做内积。</p>
+<p>但这样可以发现，当输入值$x$时，需要与所有的训练数据进行内积并求和。如果数据过大，则每次输入$x$时，太过花费时间与内存。</p>
+<p>但为什么SVM会很流行呢？因为根据KKT条件，我们会发现这个规则：</p>
+<script type="math/tex; mode=display">
+\alpha_i^*g_i(w^*)=0</script><p>而在这里$g_i(w,b)=-y^{(i)}(wx^{i}+b)+1\leqslant0$</p>
+<p><strong>也就是说，如果$g_i(w)$带入的数据$(x^i,y^{(i)})$并不等于0，那么其对应的$\alpha_i=0$。而事实上较多的训练数据带入约束函数中并不等0，故其相应的$\alpha_i$等于0，于是SVM决策子便会大大简单。当输入$x$后，也并不会与以往所有的数据做一次内积求和。事实上真正保留下来的$\alpha_i$为数据正好为支持向量，其所对应的$\alpha_i$。</strong></p>
+<h2 id="带松弛变量的SVM"><a href="#带松弛变量的SVM" class="headerlink" title="带松弛变量的SVM"></a>带松弛变量的SVM</h2><p>上文为标准的支持向量机模型。但在实际情况中，其往往会出现一些问题。</p>
+<p>当我们的数据有一些异常值的时候，如下所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430172633.png" style="zoom:33%;"></p>
+<p>如果按照SVM标准模型，则支持向量决策线为图中的虚线，但我们可以看出，蓝色点有一个异常值，如果不管那个异常值，则支持向量决策线应为上图中的蓝色线。</p>
+<p>而对于这种情况，我们可以通过放松限制来解决：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430173124.png" style="zoom:33%;"></p>
+<p>以下为带松弛变量的SVM模型：</p>
+<script type="math/tex; mode=display">
+\mbox{Primal问题:}\begin{split}
+&min \quad \frac{1}{2}\Vert w\Vert^2+C\sum_{i=1}^n\zeta_i\\
+&s.t. \begin{cases}
+y^{(i)}(wx^{i}+b)\geqslant1-\zeta_i, \ i=1,2,\dots,n\\
+\zeta_i\ge0
+\end{cases}
+\end{split}</script><p>可以发现，引入的$\zeta_i$即为松弛变量，这样我们可以使异常值也可以满足限制条件。但我们不能使$\zeta_i$过大，因为这样的话限制条件便没有作用了，于是我们在目标函数中加入$C\sum_{i=1}^n\zeta_i$，以使它放松并不能太大。而参数$C$是需要我们自己进行调参的，通过调节$C$，可以控制$\zeta_i$的大小。</p>
+<p>而其Dual问题为：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j\lang x^{(i)},x^{(j)}\rang\\
+&s.t.\begin{cases}
+0\leq\alpha_i\leq C\\
+\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}
+\end{split}</script><p><strong>在这里$y^{(i)}y^{(j)}$为不同数据的标签，可以发现如果类别相同，则其为正数，而类别不同，则其为负数。所以类别相同，其值增加；类别不同，其值减少。而对于$\lang x^{(i)},x^{(j)}\rang$，则是两个数据作内积，其衡量两个数据之间的相似性。</strong></p>
+<p>对于$\sum_{i=1}^n\alpha_iy^{(i)}=0$而言，其表示不同数据点的权重是不相同的，即每个数据的看重程度是不同的。<strong>由于$y^{(i)}$的取值为-1或1，则为使其和为0，则不同类别的数据其权重应该是相同的。</strong></p>
+<p>而KKT条件也发生了一些变化：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430175353.png" alt></p>
+<p>而除了用上述最小化问题或Dual问题来理解，我们也可以用<strong>Hinge Loss</strong>来理解。</p>
+<h3 id="Hinge-Loss-合页损失函数"><a href="#Hinge-Loss-合页损失函数" class="headerlink" title="Hinge Loss(合页损失函数)"></a>Hinge Loss(合页损失函数)</h3><p>根据上述最小化问题的约束，</p>
+<script type="math/tex; mode=display">
+y^{(i)}(wx^{i}+b)\geqslant1-\zeta_i, \ i=1,2,\dots,n\\
+\zeta_i\ge0</script><p>可以得到：</p>
+<script type="math/tex; mode=display">
+\zeta_i\geqslant1-y^{(i)}(wx^{i}+b)\\
+\zeta_i\geq0</script><p>则以上两个式子即为：</p>
+<script type="math/tex; mode=display">
+\zeta_i= max(0,1-y^{(i)}(wx^i+b))</script><p>而化成这样的好处是，它是一个可求导的函数，这样我们便可使用SGD进行优化，利用PyTorch的Auto grading进行自动求梯度。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430185638.png" alt></p>
+<h2 id="带kernel的SVM"><a href="#带kernel的SVM" class="headerlink" title="带kernel的SVM"></a>带kernel的SVM</h2><p>使用核函数：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_jk(x^{(i)},x^{(j)})\\
+&s.t.\begin{cases}
+0\leq\alpha_i\leq C\\
+\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}
+\end{split}</script><p>对于上节的SVM模型，其改变的地方仅从目标函数由$\lang x^{(i)},x^{(j)}\rang$变为$k(x^{(i)},x^{(j)})$，其中$k(x^{(i)},x^{(j)})$即称为<strong>核函数</strong>。</p>
+<p>核函数定义如下：</p>
+<script type="math/tex; mode=display">
+K(x^i,x^j)=\lang \varPhi(x^i),\varPhi(x^j)\rang</script><p>其做了两步操作：</p>
+<ul>
+<li>首先使用$\varPhi(x)$函数对数据进行高维投影</li>
+<li>然后对其求内积</li>
+</ul>
+<p>这里要说明的是，使用kernel函数与只内积，它们所求得的$\alpha$都是相同的。也是因为这样，使用kernel trick才是有意义的。</p>
+<p>而使用核函数后，其预测公式为：</p>
+<script type="math/tex; mode=display">
+w^T\varPhi(x)+b=\sum_{i=1}^n\alpha_iy^{(i)}k(x^i,x)+b</script><p>只有当$x_i$为支持向量的时候，$\alpha_i&gt;0$。</p>
+<h3 id="为什么使用核函数"><a href="#为什么使用核函数" class="headerlink" title="为什么使用核函数"></a>为什么使用核函数</h3><p>那么我们为什么要使用核函数呢?观察下图</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430201924.png" style="zoom:33%;"></p>
+<p>对于上图中的数据，其使用传统的SVM模型是无法进行分类的。而使用核函数的原因就是<strong>处理线性不可分</strong>。</p>
+<p>那么kernel为什么可以处理线性不可分呢?</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430213812.png" alt></p>
+<p>当一维数据$x$经过函数$\varPhi(x)$处理后，数据升维。之前线性不可分的数据经过升维后就可以线性可分了。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430215033.png" alt></p>
+<p>例如输入数据有两个feature$[x_{i1},x_{i2}]$，经过升维后，它就变为$[x_{i1},x_{i2},x_{i1}x_{i2},x_{i1}^2,x_{i2}^2]$，可以发现其feature是变多了。</p>
+<p>那么既然通过升维可以使线性不可分变为线性可分，那所有的数据我们都来升维？<strong>但如果当一条数据的feature特别多时，升维后，其feature将变得非常多，可能不利于我们计算。（计算量与数据量和每一条数据的维度呈正相关）</strong></p>
+<h3 id="成为kernel的条件"><a href="#成为kernel的条件" class="headerlink" title="成为kernel的条件"></a>成为kernel的条件</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430220126.png" alt></p>
+<p>即由kernel形成的矩阵$G_{ij}$，其需要满足两个条件：</p>
+<ul>
+<li>为<strong>对称矩阵</strong></li>
+<li>为<strong>半正定矩阵</strong>，$z^TGz\geq 0,z\in R^n$。</li>
+</ul>
+<h3 id="常用的kernel"><a href="#常用的kernel" class="headerlink" title="常用的kernel"></a>常用的kernel</h3><h4 id="多项式核（Polynomial-Kernel）"><a href="#多项式核（Polynomial-Kernel）" class="headerlink" title="多项式核（Polynomial Kernel）"></a>多项式核（Polynomial Kernel）</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=(\lang x_i,x_j\rang+c)^d</script><ul>
+<li>$c\ge0$控制低阶项的强度</li>
+<li>特殊情况，当$c=0,d=1$成为线性核（Linear kernel），相当于无核SVM一样。</li>
+</ul>
+<p>下面可以通过一个例子来理解：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430225019.png" alt></p>
+<p>这里的polynomial kernel中$c=0,d=2$。</p>
+<h4 id="高斯核（Gaussian-Kernel或Radial-Basis-Function-RBF-Kernel）"><a href="#高斯核（Gaussian-Kernel或Radial-Basis-Function-RBF-Kernel）" class="headerlink" title="高斯核（Gaussian Kernel或Radial Basis Function-RBF Kernel）"></a>高斯核（Gaussian Kernel或Radial Basis Function-RBF Kernel）</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=exp(-\frac{\| x_i-x_j\|_2^2}{2\sigma^2})</script><p>当$x_i$=$x_j$时，其值为1。当$x_i$与$x_j$的距离增加，其值倾向于0。<strong>但当使用高斯核之前需要将其特征做标准化。</strong>因为<strong>不同特征之间其值变化范围可能不一样。</strong></p>
+<p>下面是随着$\sigma^2$值的变化，高斯核的变化。</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430231527.png" alt></p>
+<p>下面看一个高斯核的例子：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430232438.png" alt></p>
+<h4 id="Sigmoid-Kernel"><a href="#Sigmoid-Kernel" class="headerlink" title="Sigmoid Kernel"></a>Sigmoid Kernel</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=\tanh (\beta x_i^Tx_j+c)</script><p>tanh为双曲正切函数，由$\sinh=\frac{e^x-e^{-x}}{2}$与$\cosh=\frac{e^x+e^{-x}}{2}$得到，即为$\frac{e^x-e^{-x}}{e^x+e^{-x}}$。</p>
+<h4 id="Cosine-Similarly-Kernel"><a href="#Cosine-Similarly-Kernel" class="headerlink" title="Cosine Similarly Kernel"></a>Cosine Similarly Kernel</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=\frac{x_i^Tx_j}{\|x_i\|_2\|x_j\|_2}</script><ul>
+<li>常用于衡量两段文字的相似性。</li>
+<li>相当于衡量两个向量的余弦相似度（向量夹角的余弦值）</li>
+</ul>
+<h4 id="Chi-Squared-Kernel"><a href="#Chi-Squared-Kernel" class="headerlink" title="Chi Squared Kernel"></a>Chi Squared Kernel</h4><script type="math/tex; mode=display">
+K(x_i,x_j)=\frac{x_i^Tx_j}{\|x_i+x_j\|_{L1}}</script><ul>
+<li><p>常用于计算机视觉</p>
+</li>
+<li><p>衡量两个概率分布的相似性</p>
+</li>
+<li><p>输入数据必须是非负的，且必须使用L1归一化。</p>
+<p>其中L1归一化公式为：</p>
+<script type="math/tex; mode=display">
+y_i=\frac{x_i}{\sum_{i=1}^nx_i}</script><p>L2归一化公式为：</p>
+<script type="math/tex; mode=display">
+y_i=\frac{x_i}{\sqrt{\sum_{i=1}^nx_i^2}}</script></li>
+</ul>
+<h2 id="SMO算法"><a href="#SMO算法" class="headerlink" title="SMO算法"></a>SMO算法</h2><p>对于已经建立好的SVM数学模型：</p>
+<script type="math/tex; mode=display">
+\begin{split}
+&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_jk(x^{(i)},x^{(j)})\\
+&s.t.\begin{cases}
+0\leq\alpha_i\leq C\\
+\sum_{i=1}^n\alpha_iy^{(i)}=0
+\end{cases}
+\end{split}</script><p>我们一般采用SMO算法对其求解，SMO算法一般有下面两个步骤：</p>
+<ul>
+<li><p>重复直到收敛：</p>
+<ol>
+<li>选择下一步需要优化的$\alpha_i$与$\alpha_j$，使用启发式的方式优化$\alpha_i$与$\alpha_j$，使目标函数向着最大值的进发最快。</li>
+<li>保持其他的$\alpha$值不变，仅仅通过一次改变一组$\alpha_i$与$\alpha_j$来优化$L(\alpha)$。（为什么SMO一次需要选择两个参数进行优化？因为如果每次只选择一个参数进行优化，固定其他参数。那么它会不满足数学模型的第二条约束条件。</li>
+</ol>
+</li>
+<li><p>使用KKT条件判断是否收敛。</p>
+</li>
+</ul>
+<p>我们可以通过以下例子来理解：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210501214227.png" alt></p>
+<p>而现在我们的目的就是通过变化$\alpha_1$与$\alpha_2$来使得$L(\alpha)$达到最大。</p>
+<p>我们可以将上式变换得到：</p>
+<script type="math/tex; mode=display">
+\alpha_1=(\zeta-\alpha_2y^{(2)})\frac{1}{y^{(1)}}</script><p>可以将上式带入$L(\alpha)$中，便得到：</p>
+<script type="math/tex; mode=display">
+L(\alpha_1,\alpha_2,\dots,\alpha_n)=L((\zeta-\alpha_2y^{(2)})\frac{1}{y^{(1)}},\alpha_2,\dots,\alpha_n)</script><p>由于$\alpha_3,\alpha_4\dots,\alpha_n$为常数，则目标函数就变为了关于$\alpha_2$的函数。通过求导，便可得到该函数的最值。</p>
+<p>下面为SMO具体的算法：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210501221431.png" alt></p>
+]]></content>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>OpenCV 基础操作</title>
     <url>/2020/10/14/opencv/</url>
     <content><![CDATA[<h2 id="图像上的算术运算"><a href="#图像上的算术运算" class="headerlink" title="图像上的算术运算"></a>图像上的算术运算</h2><h3 id="图像融合"><a href="#图像融合" class="headerlink" title="图像融合"></a>图像融合</h3><ul>
@@ -462,6 +836,99 @@ src(x,y) &\ otherwise
       <tags>
         <tag>PyTorch</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2022/01/15/%E7%BE%8E%E8%B5%9B%E4%BC%98%E7%A7%80%E8%AE%BA%E6%96%87/</url>
+    <content><![CDATA[<h1 id="美赛B题——2102199"><a href="#美赛B题——2102199" class="headerlink" title="美赛B题——2102199"></a>美赛B题——2102199</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>文章开头对问题背景做了简要描述，最后一句话描述建立了……模型，为了……。从而引出下文。</p>
+<p>第二段简要描述了文章建立了哪些模型。</p>
+<p>第三段对建模前的基础工作进行了简要说明。</p>
+<p>接着采用每个模型1，2，3的方式分段介绍。</p>
+<p>第七段说明了因为……原因，所以模型具有较强的适应性。</p>
+<p>第八段说明了灵敏性分析与鲁棒性分析，从这两个方面证明了模型不敏感，应用广泛和稳定。</p>
+<p>学习点：</p>
+<p><strong>该篇摘要中，由于结果数量较多，并没有展示结果，而是说明了结果在哪个表中或者哪一节中，需要注意的是需要具体说明是哪个表或哪一节。</strong></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>该文章的前言中主要包含四个方面：问题背景，问题重述，文献回顾，我们的工作。</p>
+<p>其中文献回顾主要对问题涉及的研究领域的主要文献进行了整理描述。并附上了该节的框架图。该节是否为优点（存疑）？</p>
+<p>我们的工作主要对之后的工作进行了一个大概描述。<strong>在最后附上了工作的整体框架图</strong>（必要点）。</p>
+<h2 id="假设和解释"><a href="#假设和解释" class="headerlink" title="假设和解释"></a>假设和解释</h2><p>该节对后续的模型建立做了相应的假设条件，并在每个假设后写了对应的解释。该点可以学习。</p>
+<h2 id="符号"><a href="#符号" class="headerlink" title="符号"></a>符号</h2><p>该节主要对文章的符号进行了说明。这里一般采用三线表，在表下面可附上一句话：“<strong>注意:这里没有列出一些变量，将在每一节中详细讨论。</strong>”</p>
+<h2 id="模型准备"><a href="#模型准备" class="headerlink" title="模型准备"></a>模型准备</h2><h1 id="美赛D题——2106028"><a href="#美赛D题——2106028" class="headerlink" title="美赛D题——2106028"></a>美赛D题——2106028</h1><h2 id="摘要-1"><a href="#摘要-1" class="headerlink" title="摘要"></a>摘要</h2><p>文章标题直接表明了文章所使用的方法——社会网络分析与统计方法。这一点在文章题目的命名上值得学习。</p>
+<p>这篇文章的摘要采用每个问题分点进行阐述。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>论文插入高清位图</title>
+    <url>/2021/09/16/%E8%AE%BA%E6%96%87%E5%BC%95%E5%85%A5%E9%AB%98%E6%B8%85%E5%9B%BE/</url>
+    <content><![CDATA[<h1 id="绘图软件"><a href="#绘图软件" class="headerlink" title="绘图软件"></a>绘图软件</h1><p>在写作论文中，我们可能会经常遇到画示意图，来帮助更好的分析问题。但论文里插入的图片若不是高清图，会导致pdf放大后图片出现模糊的情况。一定程度上会影响论文的整体美观。</p>
+<p>在过去，我主要使用过的绘图软件有：Edraw、PowerPoint、Visio与LaTeX自带的宏包TIKZ。</p>
+<p>在这四种工具中，TIKZ是最复杂的，上手难度也比较高，画一些简单的示意图是比较好用的，但是画复杂的示意图就绘画者的要求就比较高了，需要很好的掌握TIKZ宏包以及其代码用法。</p>
+<p>PowerPoint应该是四种里面比较容易掌握的，但由于其对单独生成图片并不友好，即另存为图片并不算是高清图片，一般我很少用它来单独生成图片。</p>
+<p>我的主力工具主要有：Edraw与Visio，Edraw算是我用过绘图工具里比较强大的了，它的模板也非常丰富，配色也挺好看，也可以直接导出pdf、eps等形式，无奈的是以上都是会员才能享有的功能。于是最后我选择使用Visio。</p>
+<p>Visio也是微软公司的，但它不会在赠送的Office家庭版里，需要进行单独购买，不过这个东西在淘宝上一搜很多激活码。</p>
+<h1 id="Visio绘图"><a href="#Visio绘图" class="headerlink" title="Visio绘图"></a>Visio绘图</h1><p>Visio的具体绘制这里不再赘述，当画好图后，如下所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916225807.png" style="zoom: 33%;"></p>
+<p>点击[设计]-[大小]-[适应绘图]，如图所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916225950.png" style="zoom: 33%;"></p>
+<p>随后画布便会根据所画图形的大小，自动调整到合适的边距：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916230051.png" style="zoom: 33%;"></p>
+<h1 id="输出PDF格式"><a href="#输出PDF格式" class="headerlink" title="输出PDF格式"></a>输出PDF格式</h1><p>依次点击Visio的[文件]-[另存为]，选择保存地址，选择保存类型为pdf：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916230728.png" style="zoom:33%;"></p>
+<p>注意：点击选项，将<strong>辅助功能文档结构标记</strong>取消。这个可以让生成的pdf没有黑边。如下所示：</p>
+<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916234559.png" style="zoom:33%;"></p>
+<p>将图像转成pdf格式，可以使用LaTeX进行引用，并且可以无损显示。</p>
+]]></content>
+      <tags>
+        <tag>paper</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>实用机器学习</title>
+    <url>/2021/10/20/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<p>这次课是李沐老师在斯坦福大学进行讲授的，华人之光了属于是。李沐老师在b站也进行了中文讲授。这篇博客是课堂的一些笔记，更新可能较慢，因为最近作业好多😢。</p>
+<h1 id="数据探索性分析"><a href="#数据探索性分析" class="headerlink" title="数据探索性分析"></a>数据探索性分析</h1><p>采用pandas进行数据的读取，查看</p>
+<ol>
+<li>若数据集每一列中， 有超过30%的数据是没有的，则将其丢弃。（data.drop())</li>
+<li>查看数据类型是否正确，若不正确，将其类型进行转换。 (data.dtypes)</li>
+<li>查看特征的某一些数学特性，例如：均值、标准差、最小值、最大值。（data,describe())</li>
+<li>对不正常的数据进行过滤，例如某些数据过小或者过大。</li>
+<li>查看特征的直方图，从而可以了解该特征的数据分布情况（sns.histplot())</li>
+</ol>
+<h1 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h1><h2 id="types-of-error"><a href="#types-of-error" class="headerlink" title="types of error"></a>types of error</h2><ol>
+<li>Outliers</li>
+<li>Rule violations</li>
+<li>Pattern violations</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>ML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2022/01/19/%E7%BE%8E%E8%B5%9B%E5%B8%B8%E7%94%A8%E8%AF%8D%E6%B1%87/</url>
+    <content><![CDATA[<ul>
+<li>建立：<strong>establish</strong> 。需注意模型一般为被建立</li>
+<li>栅格化；点阵化：<strong>rasterize</strong>。一般用于描述将地图进行网格化</li>
+<li>直观：<strong>intuitive</strong>。一般描述结果直观</li>
+<li>分布：<strong>distribution of</strong> 。用于描述某种形式的分布</li>
+<li>基于：<strong>based on </strong>。一般用于描述建立模型，基于……</li>
+<li>制定：<strong>draw up </strong>。</li>
+<li>受……启发：<strong>Inspired by</strong>。</li>
+<li>对……补充：<strong>supplement to </strong>。一般用于描述模型2是对模型1的一个补充</li>
+<li>得到：<strong>obtain</strong>。一般用于代替get</li>
+<li>处理：<strong>deal with</strong>。一般用于某个问题或事件</li>
+<li>利用：<strong>utilize</strong>。一般用来代替use</li>
+<li>解决：<strong>tackle</strong>。一般用于解决某个问题</li>
+<li>合理：<strong>reasonable</strong>。一般用于描述某个方案合理</li>
+<li>适应性：<strong>adaptability</strong>。一般用于描述模型具有较强的适应能力</li>
+<li>时光流逝：<strong>as time goes by</strong>。</li>
+<li>构造：<strong>construct</strong>。一般用于图的描述，构造有向图。</li>
+<li>提出：<strong>propose</strong>。</li>
+<li>指标，度量：<strong>metrics</strong>。可用于代替index</li>
+<li>见解：<strong>insight</strong>。</li>
+</ul>
+]]></content>
   </entry>
   <entry>
     <title>Linux学习笔记(ubuntu)</title>
@@ -1034,427 +1501,6 @@ Softmax(z_i)=\frac{e^{z_i}}{\sum_{c=1}^{C}e^{c}}</script><p>那么为什么叫�
 <p>至此我们可以引入一个新的概念！</p>
 <p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20201201163205.png" style="zoom:67%;"></p>
 <p>由以上可知，<strong>一个逻辑回归的输入可以来源于其他逻辑回归的输出，这个逻辑回归的输出也可以是其他逻辑回归的输入，将每一个逻辑回归称为Neuron（神经元），把这些神经元连接起来的网络叫做Neuron Network（神经网络）！</strong></p>
-]]></content>
-      <tags>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GAN理论知识</title>
-    <url>/2021/04/20/GAN/</url>
-    <content><![CDATA[<h1 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h1><h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p>GAN由两部分网络组成：<strong>生成网络与判别网络</strong>。</p>
-<p>通俗的来讲，<strong>生成网络可以理解为一个画赝品的人，而判别网络可以理解为一个判别真假的人。两者不断对抗，通过训练，从而达到使生成网络画赝品越来越高超，甚至以假乱真。</strong></p>
-<p>下面我们来了解Generator与Discriminator。</p>
-<h3 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h3><p>Generator也即为一个网络，那么我们希望这个网络达到什么目标呢？</p>
-<p>首先，假如有一些人脸图片，那么我们希望这个网络可以生产出非常逼真的人脸图片，即这些人脸是原先并不存在的。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420213437.png" style="zoom:50%;"></p>
-<p>如图所示，我们希望向Generator中input一个从正态分布sample出来的vector。然后会输出一个Distribution，即$P_G$。而$P_{data}$为真实的Distribution。我们的目标是：让$P_G$与$P_{data}$越接近越好。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420214728.png" style="zoom:50%;"></p>
-<p>假如现在输入一个一维向量，那么经过Generator可能会input出绿色的一维向量，而真实的一维向量是蓝色的。所以我们的目标函数即为$G^*$，即最小化$Div(P_G,P_{data})$。这个Divergence越小，就代表$P_G$与$P_{data}$越相似。这个Divergence可以表示为两个向量的距离。</p>
-<p>所以Generator的Loss function即为：$Div(P_G,P_{data})$，但由于实际的Divergence式子非常复杂。于是便有这样的问题，如何计算这个Loss function。</p>
-<p>而GAN则可以解决这个问题。我们不需要知道$P_G$和$P_{data}$的formulation是什么样子。只要可以从它们间sample出来东西，便可以计算出Divergence。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420221425.png" style="zoom:50%;"></p>
-<p>而计算Divergence便需要Discriminator了。</p>
-<h3 id="Discriminator"><a href="#Discriminator" class="headerlink" title="Discriminator"></a>Discriminator</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420222322.png" style="zoom:50%;"></p>
-<p>首先，data中含有真实data与机器生成的data，Discriminator就相当于将从所有data中分辨出哪些是真实的data与假data。其中判别出真data后，给其较大的分数，判别出假data后给其较小的分数。</p>
-<p>而我们想让目标函数$V$越大越好，即让$D(y)$越大越好。而目标函数$V$是与cross entropy是有联系的。即$V=-cross \ entropy$，那么现在这个优化问题便可以当成一个分类问题来做。而$V$其实是与$Divergence$有关。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420223629.png" style="zoom:50%;"></p>
-<p>如果$P_G$与$P_{data}$非常相近，那么它们之间的$Divergence$会比较小。那么这便会给$Discriminator$带来困难，其没有办法很好的分辨$P_{G}$与$P_{data}$。那么目标函数$V$的值便不会很大。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210420224236.png" style="zoom:50%;"></p>
-<p>于是我们可以将Divergence替换为$max_{D}\ V(D,G)$，于是最初的优化问题便成为min max问题。于是上图训练的算法。尽管如此，GAN的train还是很困难的。</p>
-<h2 id="GAN训练技巧"><a href="#GAN训练技巧" class="headerlink" title="GAN训练技巧"></a>GAN训练技巧</h2><h3 id="Wasserstein-distance"><a href="#Wasserstein-distance" class="headerlink" title="Wasserstein distance"></a>Wasserstein distance</h3><p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210420232334222.png" style="zoom:50%;"></p>
-<p>现在有$P$与$Q$两个distribution，可以想象$P$为一堆土，$Q$为土堆放的地方。有一台推土机，将$P$移动到$Q$的距离即为Wasserstein distace。假设P、Q都集中到一点，则Wasserstein distace=d。</p>
-<p>但如果P、Q是比较复杂的distribution</p>
-<p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210420232949828.png" style="zoom:50%;"></p>
-<p>例如P变成Q这样可以有多种move的方法。于是将Wasserstein distance定义为：穷举所有moving plan，看哪种方法所用的距离虽少，则即为Wasserstein distance。</p>
-<p>求解下图优化问题，即得Wasserstein distance。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421102506.png" style="zoom:50%;"></p>
-<h2 id="Generator-评估"><a href="#Generator-评估" class="headerlink" title="Generator 评估"></a>Generator 评估</h2><p>当我们train一个GAN时，我们怎么判断Generator的output的好坏呢？如果我们的输出是一张人靓图片，我们可能会用肉眼进行直接观察，判断其是否逼真。但这样其实是无法准确的进行量度其质量的。</p>
-<p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210421111223876.png" style="zoom:50%;"></p>
-<p><strong>我们可以将图片输入到一个图像分类系统，它的输出为一个概率分布。如果。如果这个概率分布越集中，就代表现在生成的图片可能会比较好。</strong></p>
-<p>尽管我们不知道这个image是什么东西，可能是狗、猫、人。但如果分类系统输出的分布非常集中，则证明分类系统非常肯定它看见了狗或猫，所以Generator可能产生了比较逼真的图片。</p>
-<p>但这样仍有问题，因为GAN可能会发生Mode Collapse（模式崩溃）。</p>
-<h3 id="Mode-Collapse"><a href="#Mode-Collapse" class="headerlink" title="Mode Collapse"></a>Mode Collapse</h3><p><img src="C:/Users/79347/AppData/Roaming/Typora/typora-user-images/image-20210421112724484.png" style="zoom:50%;"></p>
-<p>由上图可以发现Generator生成的图片会频繁出现一种动漫人物的脸。这是为什么呢？</p>
-<p><strong>由于Discriminator有盲点。即对于刚才频繁出现的动漫人物，它没有办法进行辨识出它为假图片，于是Generator便会频繁生成这类图片。于是便会发生Mode Collapase现象。</strong>但Mode Collapse问题现在仍没有好的解决方案。</p>
-<h3 id="Mode-Dropping"><a href="#Mode-Dropping" class="headerlink" title="Mode Dropping"></a>Mode Dropping</h3><p>我们在train的时候，也经常会发生一种类似Mode Collapase的现象——<strong>Mode Dropping</strong>。简单的描述就是其结果的多样性有问题，没有办法达到真实数据的多样性。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421124319.png" style="zoom:50%;"></p>
-<p>在第t个iteration时，我们还没发现有什么问题。但在第t+1个iteration时，我们会发现，它的肤色基本是相同的，其多样性是有问题的。这便是出现了Mode Dropping。</p>
-<p>那么如何解决Mode Dropping呢？</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421124808.png" style="zoom:50%;"></p>
-<p>我们的方法就是把<strong>生成的图片都输入进image classify里面，看它被判断成哪一个class。每一张图片都会输出一个distribution。我们将所有distribution取一个平均。如果平均的distribution非常集中，那么多样性便不够。</strong></p>
-<p>而这个评估似乎与评估图片质量的方法是相反的。评估图片质量（quality），要求其产生的分布越集中越好；而评估生成的图片多样性（diversity），要求其产生的分布越平均越好。</p>
-<p>但其实它们的评估的范围是不同的。<strong>quality是要求输入一张图片产生的distribution越集中越好，而diversity要求输入所有的图片，最后平均的distribution越平均越好。</strong>故两者是并不冲突的。</p>
-<h3 id="Evaluation-Method"><a href="#Evaluation-Method" class="headerlink" title="Evaluation  Method"></a>Evaluation  Method</h3><p>使用FID方法。我们不取最后softmax计算得到的类别，而是取在它前面的hidden layer的输出，即incepton network的输出。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421131636.png" style="zoom:50%;"></p>
-<p><strong>我们将这两组高维向量拿出来，假设它们都是Gaussian distribution，然后计算它们的Frechet distance。由于是distance，所以越小越好，即代表两个分布越接近。</strong></p>
-<p>但仍有一些问题，即两个分布可能并不是高斯分布，但我们仍将其假设为高斯分布，会比较奇怪。而如果要准确的得到network的分布，可能需要sample很多次。</p>
-<h2 id="Condition-Generator"><a href="#Condition-Generator" class="headerlink" title="Condition Generator"></a>Condition Generator</h2><p>如果我们想要输入一个描述性的文字，然后得到相应的图片，应该怎么做呢？这便是condition generator的作用。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421133834.png" style="zoom:50%;"></p>
-<p>在原来distribution Z的基础上，我们加入condition X。假如X即为text，我们希望可以输出与text想对应的image。</p>
-<p>那么我们要如何训练呢？</p>
-<p>传统的discriminator只需要输入图片，这显然是对condition gan训练是没有作用的。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421134935.png" style="zoom:50%;"></p>
-<p>因此必须要加入condition X也作为discriminator的输入。<strong>只有图像与文字匹配了才会给高分。如果图像与文字不匹配</strong>，则给低分。所以在训练discriminator时，我们需要有标注的图片。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421135526.png" style="zoom:50%;"></p>
-<p>尽管有positive sample 与negative sample 往往是不够的，我们还需要把<strong>生成的图片故意打乱配上错误的文字</strong>，以此来告诉discriminator遇到这样的情况也要给低分。</p>
-]]></content>
-      <tags>
-        <tag>GAN</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SVM模型推导</title>
-    <url>/2021/04/21/SVM/</url>
-    <content><![CDATA[<h1 id="SVM理论知识"><a href="#SVM理论知识" class="headerlink" title="SVM理论知识"></a>SVM理论知识</h1><h2 id="拉格朗日对偶性"><a href="#拉格朗日对偶性" class="headerlink" title="拉格朗日对偶性"></a>拉格朗日对偶性</h2><h3 id="Primal"><a href="#Primal" class="headerlink" title="Primal"></a>Primal</h3><p>如果有如下优化问题：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-&min \quad f(w)\\
-&s.t.\begin{cases}
-g_i(w)\le 0\\
-h_i(w)=0
-\end{cases}
-\end{split}</script><p>我们可以相应的构造它的<strong>拉格朗日函数</strong>：</p>
-<script type="math/tex; mode=display">
-L(w,\alpha,\beta)=f(w)+\sum_{i=1}^k\alpha_ig_i(w)+\sum_{i=1}^l\beta_ih_i(w)</script><p>定义</p>
-<script type="math/tex; mode=display">
-\theta_p(w)=max_{\alpha,\beta} \quad L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><ul>
-<li>注意$\theta_p(w)$是对$L(w,\alpha,\beta)中\alpha与\beta$的优化。</li>
-<li>如果存在$w$使得其不满足约束条件，则$\theta_p(w)$的值即为$+\infty$（因为如果存在某个$g_i(w)&gt;0或h_i(w)\neq0$，则令$\alpha_i\rightarrow\infty或\beta_i\rightarrow\infty $，即可得到$L的最大值$）。</li>
-<li>如果$w$都符合约束条件，则$\theta_p(w)$的值即为$f(w)$（后两项为负值，若$\alpha_i=0且\beta_i=0 $，即为$f(w)$）。</li>
-</ul>
-<p>所以我们原先求取的目标函数即可变为：</p>
-<script type="math/tex; mode=display">
-min_{w} \quad\theta_p(w)=min_{w} \quad max \ L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><p>定义原始问题（Primal）的最优值为：</p>
-<script type="math/tex; mode=display">
-P^*=min_{w} \quad\theta_p(w)</script><h3 id="Dual"><a href="#Dual" class="headerlink" title="Dual"></a>Dual</h3><p>定义</p>
-<script type="math/tex; mode=display">
-\theta_D(\alpha,\beta)=min_{w} \quad L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><ul>
-<li>注意$\theta_D(\alpha,\beta)$是对$L(w,\alpha,\beta)中w$的优化。</li>
-</ul>
-<p>而极大化$\theta_D(\alpha,\beta)$，即为：</p>
-<script type="math/tex; mode=display">
-max_{\alpha,\beta}\quad\theta_D(\alpha,\beta)=max_{\alpha,\beta} \quad min \ L(w,\alpha,\beta),\quad \alpha_i,\beta_i\ge0</script><p>定义对偶问题（Dual）的最优值为：</p>
-<script type="math/tex; mode=display">
-D^*=max_{\alpha,\beta} \quad\theta_D(\alpha,\beta)</script><h3 id="Primal与Daul的关系"><a href="#Primal与Daul的关系" class="headerlink" title="Primal与Daul的关系"></a>Primal与Daul的关系</h3><p>对于原始问题与对偶问题求解得到的最优值$P^<em>,D^</em>$，它们有如下关系：</p>
-<script type="math/tex; mode=display">
-P^*=min_{w} \quad\theta_p(w)\le max_{\alpha,\beta} \quad\theta_D(\alpha,\beta)=D^*</script><p>而它们只有<strong>KKT条件</strong>下是相等的，即$P^<em>=D^</em>$。那么我们便可以通过求解Dual问题来求解Primal问题。</p>
-<p>同时满足原问题与对偶问题的最优解$w^<em>,\alpha^</em>,\beta^<em>$满足的<em>*KKT条件</em></em>如下：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-&\nabla_wL(w^*,\alpha^*,\beta^*)=0\\
-&\alpha_i^*g_i(w^*)=0\\
-&g_i(w^*)\le0\\
-&\alpha^*\ge0
-\end{split}</script><p>通过KKT条件，我们可以求解最优解。其第二个条件需着重观察，可以发现，若数据带入$g_i(w)$中，若其不为0，则说明$\alpha_i=0$。</p>
-<h2 id="线性可分的SVM"><a href="#线性可分的SVM" class="headerlink" title="线性可分的SVM"></a>线性可分的SVM</h2><p>在一个二维平面上，有两种类型的数据，如下图所示</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421185958.png" style="zoom:50%;"></p>
-<p>我们可以很容易找到一条线将它们分开，并且这种线是有很多的。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421185849.png" style="zoom: 25%;"></p>
-<p>而支持向量（support vector）的定义即是：<strong>存在一条线到a数据边界的distance与到b数据边界的distance是相同的，这条线便是支持向量决策线。</strong></p>
-<p>找到的支持向量便是SVM算法得到的最优解。</p>
-<p>将两条边界上的线的距离定义为margin，而SVM则希望找一个最大的margin，所以SVM还有另外一个名字：max margin classifier。</p>
-<p>假设现在有两个support vector，如图所示：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421192000.png" style="zoom: 33%;"></p>
-<p>我们将用数学公式，对两个支持向量的距离进行推导</p>
-<p>设边界上的两条线分别为：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-w^Tx_1+b=1\\
-w^Tx_2+b=-1
-\end{cases}</script><p>将两式相减便可得到：</p>
-<script type="math/tex; mode=display">
-w^T(x_1-x_2)=2</script><p>而$w^T$与$(x_1-x_2)$都为向量，故它们相乘实际上是做内积</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210421192629.png" style="zoom:33%;"></p>
-<p>故可得：</p>
-<script type="math/tex; mode=display">
-\Vert w\Vert_2\Vert x_1-x_2\Vert_2\cos\theta=2</script><p>则便可得：</p>
-<script type="math/tex; mode=display">
-d_1+d_2=\Vert x_1-x_2\Vert_2\cos\theta=\frac{2}{\Vert w\Vert_2}\\
-d_1=d_2=\frac{1}{2}\Vert x_1-x_2\Vert_2\cos\theta=\frac{1}{\Vert w\Vert_2}</script><p>上面提到SVM的目标就是max-margin，而$margin=\frac{2}{\Vert w\Vert_2}$，故可以得到SVM的数学模型：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-&min \quad \frac{1}{2}\Vert w\Vert^2\\
-&s.t. \quad y^{(i)}(wx^{i}+b)\geqslant1
-\end{split}</script><p>上面的目标函数并不难理解，对原距离求其分母的最小值，便是求远距离的最大值。</p>
-<p>而约束条件的意思即：有这样的一个vector $w$与bias $b$，对空间中任意一点$x^i$，带入$wx+b$中，再乘以$y^{i}$（数据的标签，可为1或-1），都是大于等于1的。我理解的意思便是：<strong>数据都被较好的分类，即1类数据都在1类的平面里，-1类的数据都在-1类的平面里。</strong></p>
-<p>我们可以将上式改写为如下形式：</p>
-<script type="math/tex; mode=display">
-g_i(w,b)=-y^{(i)}(wx^{i}+b)+1\leqslant0</script><p>将其拉格朗日化可得：</p>
-<script type="math/tex; mode=display">
-L(w,b,\alpha)=\frac{1}{2}\Vert w\Vert^2-\sum_{i=1}^n\alpha_i[y^{(i)}(wx^{i}+b)-1]</script><p>则由KKT条件可得：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\nabla_wL=w-\sum_{i=1}^n\alpha_iy^{(i)}x^i=0\\
-\nabla_bL=-\sum_{i=1}^n\alpha_iy^{(i)}=0
-\end{cases}</script><p>带入原式可得：</p>
-<script type="math/tex; mode=display">
-L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j(x^{(i)})^Tx^{(j)}</script><p>上述经过KKT条件的带入，已对$w,b$进行了优化，得到的$L(\alpha)$即上文Dual问题中的$\theta_D$。而现在便可将其转换为Dual问题：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j(x^{(i)})^Tx^{(j)}\\
-&s.t.\begin{cases}
-\alpha_i\geq0\\
-\sum_{i=1}^n\alpha_iy^{(i)}=0
-\end{cases}
-\end{split}</script><p>通过构造Dual问题，进行求解得到$\alpha$的值。</p>
-<p>而SVM的决策子如下：</p>
-<script type="math/tex; mode=display">
-w^Tx+b=(\sum_{i=1}^n\alpha_iy^{(i)}x^i)^Tx+b=\sum_{i=1}^n\alpha_iy^{(i)}\lang x^i,x\rang+b</script><p>因为$\alpha_iy^{(i)}$为常数，故$(x^i)^Tx=\lang x^i,x\rang$做内积。</p>
-<p>但这样可以发现，当输入值$x$时，需要与所有的训练数据进行内积并求和。如果数据过大，则每次输入$x$时，太过花费时间与内存。</p>
-<p>但为什么SVM会很流行呢？因为根据KKT条件，我们会发现这个规则：</p>
-<script type="math/tex; mode=display">
-\alpha_i^*g_i(w^*)=0</script><p>而在这里$g_i(w,b)=-y^{(i)}(wx^{i}+b)+1\leqslant0$</p>
-<p><strong>也就是说，如果$g_i(w)$带入的数据$(x^i,y^{(i)})$并不等于0，那么其对应的$\alpha_i=0$。而事实上较多的训练数据带入约束函数中并不等0，故其相应的$\alpha_i$等于0，于是SVM决策子便会大大简单。当输入$x$后，也并不会与以往所有的数据做一次内积求和。事实上真正保留下来的$\alpha_i$为数据正好为支持向量，其所对应的$\alpha_i$。</strong></p>
-<h2 id="带松弛变量的SVM"><a href="#带松弛变量的SVM" class="headerlink" title="带松弛变量的SVM"></a>带松弛变量的SVM</h2><p>上文为标准的支持向量机模型。但在实际情况中，其往往会出现一些问题。</p>
-<p>当我们的数据有一些异常值的时候，如下所示：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430172633.png" style="zoom:33%;"></p>
-<p>如果按照SVM标准模型，则支持向量决策线为图中的虚线，但我们可以看出，蓝色点有一个异常值，如果不管那个异常值，则支持向量决策线应为上图中的蓝色线。</p>
-<p>而对于这种情况，我们可以通过放松限制来解决：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430173124.png" style="zoom:33%;"></p>
-<p>以下为带松弛变量的SVM模型：</p>
-<script type="math/tex; mode=display">
-\mbox{Primal问题:}\begin{split}
-&min \quad \frac{1}{2}\Vert w\Vert^2+C\sum_{i=1}^n\zeta_i\\
-&s.t. \begin{cases}
-y^{(i)}(wx^{i}+b)\geqslant1-\zeta_i, \ i=1,2,\dots,n\\
-\zeta_i\ge0
-\end{cases}
-\end{split}</script><p>可以发现，引入的$\zeta_i$即为松弛变量，这样我们可以使异常值也可以满足限制条件。但我们不能使$\zeta_i$过大，因为这样的话限制条件便没有作用了，于是我们在目标函数中加入$C\sum_{i=1}^n\zeta_i$，以使它放松并不能太大。而参数$C$是需要我们自己进行调参的，通过调节$C$，可以控制$\zeta_i$的大小。</p>
-<p>而其Dual问题为：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_j\lang x^{(i)},x^{(j)}\rang\\
-&s.t.\begin{cases}
-0\leq\alpha_i\leq C\\
-\sum_{i=1}^n\alpha_iy^{(i)}=0
-\end{cases}
-\end{split}</script><p><strong>在这里$y^{(i)}y^{(j)}$为不同数据的标签，可以发现如果类别相同，则其为正数，而类别不同，则其为负数。所以类别相同，其值增加；类别不同，其值减少。而对于$\lang x^{(i)},x^{(j)}\rang$，则是两个数据作内积，其衡量两个数据之间的相似性。</strong></p>
-<p>对于$\sum_{i=1}^n\alpha_iy^{(i)}=0$而言，其表示不同数据点的权重是不相同的，即每个数据的看重程度是不同的。<strong>由于$y^{(i)}$的取值为-1或1，则为使其和为0，则不同类别的数据其权重应该是相同的。</strong></p>
-<p>而KKT条件也发生了一些变化：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430175353.png" alt></p>
-<p>而除了用上述最小化问题或Dual问题来理解，我们也可以用<strong>Hinge Loss</strong>来理解。</p>
-<h3 id="Hinge-Loss-合页损失函数"><a href="#Hinge-Loss-合页损失函数" class="headerlink" title="Hinge Loss(合页损失函数)"></a>Hinge Loss(合页损失函数)</h3><p>根据上述最小化问题的约束，</p>
-<script type="math/tex; mode=display">
-y^{(i)}(wx^{i}+b)\geqslant1-\zeta_i, \ i=1,2,\dots,n\\
-\zeta_i\ge0</script><p>可以得到：</p>
-<script type="math/tex; mode=display">
-\zeta_i\geqslant1-y^{(i)}(wx^{i}+b)\\
-\zeta_i\geq0</script><p>则以上两个式子即为：</p>
-<script type="math/tex; mode=display">
-\zeta_i= max(0,1-y^{(i)}(wx^i+b))</script><p>而化成这样的好处是，它是一个可求导的函数，这样我们便可使用SGD进行优化，利用PyTorch的Auto grading进行自动求梯度。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430185638.png" alt></p>
-<h2 id="带kernel的SVM"><a href="#带kernel的SVM" class="headerlink" title="带kernel的SVM"></a>带kernel的SVM</h2><p>使用核函数：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_jk(x^{(i)},x^{(j)})\\
-&s.t.\begin{cases}
-0\leq\alpha_i\leq C\\
-\sum_{i=1}^n\alpha_iy^{(i)}=0
-\end{cases}
-\end{split}</script><p>对于上节的SVM模型，其改变的地方仅从目标函数由$\lang x^{(i)},x^{(j)}\rang$变为$k(x^{(i)},x^{(j)})$，其中$k(x^{(i)},x^{(j)})$即称为<strong>核函数</strong>。</p>
-<p>核函数定义如下：</p>
-<script type="math/tex; mode=display">
-K(x^i,x^j)=\lang \varPhi(x^i),\varPhi(x^j)\rang</script><p>其做了两步操作：</p>
-<ul>
-<li>首先使用$\varPhi(x)$函数对数据进行高维投影</li>
-<li>然后对其求内积</li>
-</ul>
-<p>这里要说明的是，使用kernel函数与只内积，它们所求得的$\alpha$都是相同的。也是因为这样，使用kernel trick才是有意义的。</p>
-<p>而使用核函数后，其预测公式为：</p>
-<script type="math/tex; mode=display">
-w^T\varPhi(x)+b=\sum_{i=1}^n\alpha_iy^{(i)}k(x^i,x)+b</script><p>只有当$x_i$为支持向量的时候，$\alpha_i&gt;0$。</p>
-<h3 id="为什么使用核函数"><a href="#为什么使用核函数" class="headerlink" title="为什么使用核函数"></a>为什么使用核函数</h3><p>那么我们为什么要使用核函数呢?观察下图</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430201924.png" style="zoom:33%;"></p>
-<p>对于上图中的数据，其使用传统的SVM模型是无法进行分类的。而使用核函数的原因就是<strong>处理线性不可分</strong>。</p>
-<p>那么kernel为什么可以处理线性不可分呢?</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430213812.png" alt></p>
-<p>当一维数据$x$经过函数$\varPhi(x)$处理后，数据升维。之前线性不可分的数据经过升维后就可以线性可分了。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430215033.png" alt></p>
-<p>例如输入数据有两个feature$[x_{i1},x_{i2}]$，经过升维后，它就变为$[x_{i1},x_{i2},x_{i1}x_{i2},x_{i1}^2,x_{i2}^2]$，可以发现其feature是变多了。</p>
-<p>那么既然通过升维可以使线性不可分变为线性可分，那所有的数据我们都来升维？<strong>但如果当一条数据的feature特别多时，升维后，其feature将变得非常多，可能不利于我们计算。（计算量与数据量和每一条数据的维度呈正相关）</strong></p>
-<h3 id="成为kernel的条件"><a href="#成为kernel的条件" class="headerlink" title="成为kernel的条件"></a>成为kernel的条件</h3><p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430220126.png" alt></p>
-<p>即由kernel形成的矩阵$G_{ij}$，其需要满足两个条件：</p>
-<ul>
-<li>为<strong>对称矩阵</strong></li>
-<li>为<strong>半正定矩阵</strong>，$z^TGz\geq 0,z\in R^n$。</li>
-</ul>
-<h3 id="常用的kernel"><a href="#常用的kernel" class="headerlink" title="常用的kernel"></a>常用的kernel</h3><h4 id="多项式核（Polynomial-Kernel）"><a href="#多项式核（Polynomial-Kernel）" class="headerlink" title="多项式核（Polynomial Kernel）"></a>多项式核（Polynomial Kernel）</h4><script type="math/tex; mode=display">
-K(x_i,x_j)=(\lang x_i,x_j\rang+c)^d</script><ul>
-<li>$c\ge0$控制低阶项的强度</li>
-<li>特殊情况，当$c=0,d=1$成为线性核（Linear kernel），相当于无核SVM一样。</li>
-</ul>
-<p>下面可以通过一个例子来理解：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430225019.png" alt></p>
-<p>这里的polynomial kernel中$c=0,d=2$。</p>
-<h4 id="高斯核（Gaussian-Kernel或Radial-Basis-Function-RBF-Kernel）"><a href="#高斯核（Gaussian-Kernel或Radial-Basis-Function-RBF-Kernel）" class="headerlink" title="高斯核（Gaussian Kernel或Radial Basis Function-RBF Kernel）"></a>高斯核（Gaussian Kernel或Radial Basis Function-RBF Kernel）</h4><script type="math/tex; mode=display">
-K(x_i,x_j)=exp(-\frac{\| x_i-x_j\|_2^2}{2\sigma^2})</script><p>当$x_i$=$x_j$时，其值为1。当$x_i$与$x_j$的距离增加，其值倾向于0。<strong>但当使用高斯核之前需要将其特征做标准化。</strong>因为<strong>不同特征之间其值变化范围可能不一样。</strong></p>
-<p>下面是随着$\sigma^2$值的变化，高斯核的变化。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430231527.png" alt></p>
-<p>下面看一个高斯核的例子：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210430232438.png" alt></p>
-<h4 id="Sigmoid-Kernel"><a href="#Sigmoid-Kernel" class="headerlink" title="Sigmoid Kernel"></a>Sigmoid Kernel</h4><script type="math/tex; mode=display">
-K(x_i,x_j)=\tanh (\beta x_i^Tx_j+c)</script><p>tanh为双曲正切函数，由$\sinh=\frac{e^x-e^{-x}}{2}$与$\cosh=\frac{e^x+e^{-x}}{2}$得到，即为$\frac{e^x-e^{-x}}{e^x+e^{-x}}$。</p>
-<h4 id="Cosine-Similarly-Kernel"><a href="#Cosine-Similarly-Kernel" class="headerlink" title="Cosine Similarly Kernel"></a>Cosine Similarly Kernel</h4><script type="math/tex; mode=display">
-K(x_i,x_j)=\frac{x_i^Tx_j}{\|x_i\|_2\|x_j\|_2}</script><ul>
-<li>常用于衡量两段文字的相似性。</li>
-<li>相当于衡量两个向量的余弦相似度（向量夹角的余弦值）</li>
-</ul>
-<h4 id="Chi-Squared-Kernel"><a href="#Chi-Squared-Kernel" class="headerlink" title="Chi Squared Kernel"></a>Chi Squared Kernel</h4><script type="math/tex; mode=display">
-K(x_i,x_j)=\frac{x_i^Tx_j}{\|x_i+x_j\|_{L1}}</script><ul>
-<li><p>常用于计算机视觉</p>
-</li>
-<li><p>衡量两个概率分布的相似性</p>
-</li>
-<li><p>输入数据必须是非负的，且必须使用L1归一化。</p>
-<p>其中L1归一化公式为：</p>
-<script type="math/tex; mode=display">
-y_i=\frac{x_i}{\sum_{i=1}^nx_i}</script><p>L2归一化公式为：</p>
-<script type="math/tex; mode=display">
-y_i=\frac{x_i}{\sqrt{\sum_{i=1}^nx_i^2}}</script></li>
-</ul>
-<h2 id="SMO算法"><a href="#SMO算法" class="headerlink" title="SMO算法"></a>SMO算法</h2><p>对于已经建立好的SVM数学模型：</p>
-<script type="math/tex; mode=display">
-\begin{split}
-&max \quad L(\alpha)=\sum_i^n\alpha_i-\frac{1}{2}\sum_{i,j=1}^ny^{(i)}y^{(j)}\alpha_i\alpha_jk(x^{(i)},x^{(j)})\\
-&s.t.\begin{cases}
-0\leq\alpha_i\leq C\\
-\sum_{i=1}^n\alpha_iy^{(i)}=0
-\end{cases}
-\end{split}</script><p>我们一般采用SMO算法对其求解，SMO算法一般有下面两个步骤：</p>
-<ul>
-<li><p>重复直到收敛：</p>
-<ol>
-<li>选择下一步需要优化的$\alpha_i$与$\alpha_j$，使用启发式的方式优化$\alpha_i$与$\alpha_j$，使目标函数向着最大值的进发最快。</li>
-<li>保持其他的$\alpha$值不变，仅仅通过一次改变一组$\alpha_i$与$\alpha_j$来优化$L(\alpha)$。（为什么SMO一次需要选择两个参数进行优化？因为如果每次只选择一个参数进行优化，固定其他参数。那么它会不满足数学模型的第二条约束条件。</li>
-</ol>
-</li>
-<li><p>使用KKT条件判断是否收敛。</p>
-</li>
-</ul>
-<p>我们可以通过以下例子来理解：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210501214227.png" alt></p>
-<p>而现在我们的目的就是通过变化$\alpha_1$与$\alpha_2$来使得$L(\alpha)$达到最大。</p>
-<p>我们可以将上式变换得到：</p>
-<script type="math/tex; mode=display">
-\alpha_1=(\zeta-\alpha_2y^{(2)})\frac{1}{y^{(1)}}</script><p>可以将上式带入$L(\alpha)$中，便得到：</p>
-<script type="math/tex; mode=display">
-L(\alpha_1,\alpha_2,\dots,\alpha_n)=L((\zeta-\alpha_2y^{(2)})\frac{1}{y^{(1)}},\alpha_2,\dots,\alpha_n)</script><p>由于$\alpha_3,\alpha_4\dots,\alpha_n$为常数，则目标函数就变为了关于$\alpha_2$的函数。通过求导，便可得到该函数的最值。</p>
-<p>下面为SMO具体的算法：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210501221431.png" alt></p>
-]]></content>
-      <tags>
-        <tag>ML</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>论文插入高清位图</title>
-    <url>/2021/09/16/%E8%AE%BA%E6%96%87%E5%BC%95%E5%85%A5%E9%AB%98%E6%B8%85%E5%9B%BE/</url>
-    <content><![CDATA[<h1 id="绘图软件"><a href="#绘图软件" class="headerlink" title="绘图软件"></a>绘图软件</h1><p>在写作论文中，我们可能会经常遇到画示意图，来帮助更好的分析问题。但论文里插入的图片若不是高清图，会导致pdf放大后图片出现模糊的情况。一定程度上会影响论文的整体美观。</p>
-<p>在过去，我主要使用过的绘图软件有：Edraw、PowerPoint、Visio与LaTeX自带的宏包TIKZ。</p>
-<p>在这四种工具中，TIKZ是最复杂的，上手难度也比较高，画一些简单的示意图是比较好用的，但是画复杂的示意图就绘画者的要求就比较高了，需要很好的掌握TIKZ宏包以及其代码用法。</p>
-<p>PowerPoint应该是四种里面比较容易掌握的，但由于其对单独生成图片并不友好，即另存为图片并不算是高清图片，一般我很少用它来单独生成图片。</p>
-<p>我的主力工具主要有：Edraw与Visio，Edraw算是我用过绘图工具里比较强大的了，它的模板也非常丰富，配色也挺好看，也可以直接导出pdf、eps等形式，无奈的是以上都是会员才能享有的功能。于是最后我选择使用Visio。</p>
-<p>Visio也是微软公司的，但它不会在赠送的Office家庭版里，需要进行单独购买，不过这个东西在淘宝上一搜很多激活码。</p>
-<h1 id="Visio绘图"><a href="#Visio绘图" class="headerlink" title="Visio绘图"></a>Visio绘图</h1><p>Visio的具体绘制这里不再赘述，当画好图后，如下所示：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916225807.png" style="zoom: 33%;"></p>
-<p>点击[设计]-[大小]-[适应绘图]，如图所示：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916225950.png" style="zoom: 33%;"></p>
-<p>随后画布便会根据所画图形的大小，自动调整到合适的边距：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916230051.png" style="zoom: 33%;"></p>
-<h1 id="输出PDF格式"><a href="#输出PDF格式" class="headerlink" title="输出PDF格式"></a>输出PDF格式</h1><p>依次点击Visio的[文件]-[另存为]，选择保存地址，选择保存类型为pdf：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916230728.png" style="zoom:33%;"></p>
-<p>注意：点击选项，将<strong>辅助功能文档结构标记</strong>取消。这个可以让生成的pdf没有黑边。如下所示：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20210916234559.png" style="zoom:33%;"></p>
-<p>将图像转成pdf格式，可以使用LaTeX进行引用，并且可以无损显示。</p>
-]]></content>
-      <tags>
-        <tag>paper</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>初识GOLANG</title>
-    <url>/2021/10/25/GO%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h1 id="语法基础"><a href="#语法基础" class="headerlink" title="语法基础"></a>语法基础</h1><h2 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h2><p>go语言的变量使用<strong>var</strong>关键字，其需要定义变量的类型，采用如下格式：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span></span><br><span class="line"><span class="keyword">var</span> pi <span class="keyword">float64</span></span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
-<p>已定义的变量可以使用“=”来赋值：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span></span><br><span class="line"><span class="keyword">var</span> pi <span class="keyword">float64</span></span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br><span class="line"></span><br><span class="line">a = <span class="number">32</span></span><br><span class="line">pi = <span class="number">3.14</span></span><br><span class="line">str = <span class="string">&quot;hello&quot;</span></span><br></pre></td></tr></table></figure>
-<p>也可以定义变量类型时进行赋值：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int32</span> = <span class="number">50</span></span><br></pre></td></tr></table></figure>
-<p>也可以进行类型推导，并且支持对多个变量进行赋值</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b, c, d = <span class="number">32</span>, <span class="number">3.34</span>, <span class="string">&quot;left&quot;</span></span><br></pre></td></tr></table></figure>
-<p>var关键字也可以省略，如下：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">a, b, c := <span class="number">3</span>, <span class="number">45</span>, <span class="number">9.1</span></span><br></pre></td></tr></table></figure>
-<p>但这样写的前提是，至少保证<strong>:=</strong>左侧的变量名有一个是在代码段中是第一次出现，否则会报错。<strong>:=</strong>的语句必须出现在函数内部，全局变量中不允许使用<strong>:=</strong>定义。</p>
-<p><strong>go语言中，变量一旦定义了就必须使用，否则编译器会认为存在错误。</strong></p>
-<h2 id="定义常量"><a href="#定义常量" class="headerlink" title="定义常量"></a>定义常量</h2><p>常量和变量的区别就是常量一旦定义便不可以改变，其关键字为：<strong>const</strong>。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> pi <span class="keyword">float32</span></span><br><span class="line">pi = <span class="number">3.14</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pi = <span class="number">32</span></span><br></pre></td></tr></table></figure>
-<p>下面是一个计算圆周率的例子：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 在go语言中，定义了变量必须使用</span></span><br><span class="line">	<span class="keyword">var</span> r = <span class="number">3.0</span></span><br><span class="line">	<span class="keyword">const</span> pi = <span class="number">3.14</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;area:&quot;</span>, r*r*pi)</span><br><span class="line">	r = <span class="number">4.0</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;area:&quot;</span>, r*r*pi)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>与print相关的函数在<strong>fmt</strong>这个包中，用“import”导入fmt包后，就可以使用该包的函数了。Println打印输出后会自动换行，这是它与Printf的区别。</p>
-]]></content>
-      <tags>
-        <tag>Go</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ipynb转换py文件</title>
-    <url>/2021/11/05/ipynb%E8%BD%ACpy%E6%96%87%E4%BB%B6(PyCharm%E6%93%8D%E4%BD%9C)/</url>
-    <content><![CDATA[<p><strong>前情提要：本博客仅针对在PyCharm中使用jupyter的重度用户。</strong></p>
-<p>由于我本身喜欢jupyter的这种独立运行结构，可以很好的进行代码的调试，互相并不影响。故初期我是使用jupyter notebook的，但jupyter notebook的代码提示说实话并不是很好，也不够流畅。故后面我转战了Pycharm，现在的感觉就是Pycharm真香。</p>
-<p>在PyCharm中使用建立ipynb文件，使用体验还算不错。逐渐我也基本使用ipynb来代替py文件。但近期我也发现了一个问题，就是在实现一个稍大一点的项目文件时，需要将其封装为一个模块，来供之后的文件调用。而ipynb文件不能当作包来调用，故需先将其转换为py文件。</p>
-<p>重点来了，起初我都是人工转换😂，每个cell全选幅值粘贴，但这样一旦ipynb文件的cell多了起来，就比较麻烦。于是下面将介绍如何利用PyCharm终端，实现对ipynb文件的转换。</p>
-<h2 id="PyCharm终端替换为Git-Bash"><a href="#PyCharm终端替换为Git-Bash" class="headerlink" title="PyCharm终端替换为Git Bash"></a>PyCharm终端替换为Git Bash</h2><p>打开PyCharm，打开setting(设置)-&gt;tool(工具)-&gt;terminal(终端)，如下图：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105215857.png" alt></p>
-<p>在Shell路径中，默认一般是CMD，只要将其替换成<strong>“D:\Git\bit\sh.exe” —login</strong>，便可以将终端换为bash。这个是bash安装的文件路径，替换成自己便可以了。注意不要漏掉login，否则不会在终端中集成，而是会弹出窗口。</p>
-<h2 id="ipynb转换为py文件"><a href="#ipynb转换为py文件" class="headerlink" title="ipynb转换为py文件"></a>ipynb转换为py文件</h2><p>这一步较为简单，只需要运行一条命令，但注意首先需要进入该ipynb文件的文件目录，然后再运行命令，否则可能找不到文件。命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jupyter nbconvert --to script myprogram.ipynb</span><br></pre></td></tr></table></figure>
-<p>执行成功后，会在该文件目录发现与ipynb文件同名的py文件，例如上述命令就会产生一个myprogram.py文件。</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105221046.png" alt></p>
-<p>执行成功后，如上图所示。</p>
-<p>很多博客到这里就结束了，但奈何本人是个强迫症，这样转换后的py文件有一个小问题，就是它仍存在ipynb里面cell的In[1]，就和下面一样：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105221401.png" alt></p>
-<p>强迫症的我这能忍的了？但奈何网上也没有针对这个的特效方法，于是我便想能否读取py文件，对这几个字符进行匹配，将其换为空字符或者空格。</p>
-<h2 id="批量替换In-1"><a href="#批量替换In-1" class="headerlink" title="批量替换In[1]"></a>批量替换In[1]</h2><p>在这里我使用linux中的sed命令。sed全名叫stream editor，流编辑器，用程序的方式来编辑文本。sed基本上就是玩正则模式匹配，由于我也是临时发现有这么一个东西，所以也还并不熟练使用它，在这里就不详细介绍了，google有很多更详细的教程。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed [option] <span class="string">&#x27;command&#x27;</span> input_file</span><br></pre></td></tr></table></figure>
-<p>在这里由于我们是要替换掉这些多余的字符，故使用sed s替换脚本命令。其基本用法如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed <span class="string">&#x27;s/原字符串/替换字符串/&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>现在我们只需要将原字符串表达出来，将替换字符串为空，便可以实现删除。</p>
-<p>现在我们看看要删除的字符，它的形式是这样的：<strong>“# In[num]:”</strong>，中括号中间为一个数字。</p>
-<p>那么可以写出一个正则表达式来匹配它，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;# In\[[1-9].*\]&quot;</span></span><br></pre></td></tr></table></figure>
-<p>其中\可以实现对[]的转义，[1-9]表示可以匹配1到9中任意一个数字，而 . 可以代表任意一个字符（除换行符），m<em> 表示可以匹配出现任意次m的字符串。故 [1-9].</em>表示可以匹配一个以1-9中数字开头，以出现任意次的任意字符的字符串。</p>
-<p>执行命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed <span class="string">&#x27;s/# In\[[1-9].*\]/ /&#x27;</span> model.py</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105224037.png" alt></p>
-<p>在终端上会打印出model.py的内容，可以发现“# In[num]:”字符串已经没有了。但看model.py文件，可以发现它并没有修改。</p>
-<p>这是因为sed命令若没有指定模式，其输出的只是位于缓存区的内容，并不会直接修改源文件。而修改源文件只需要加上-i。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/# In\[[1-9].*\]/ /&#x27;</span> model.py</span><br></pre></td></tr></table></figure>
-<p><img src="https://gitee.com/Lehrmann/figure/raw/master/image/20211105224525.png" alt></p>
-<p>在源文件已经删除了该字符串。</p>
-]]></content>
-      <tags>
-        <tag>ipynb</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>实用机器学习</title>
-    <url>/2021/10/20/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</url>
-    <content><![CDATA[<p>这次课是李沐老师在斯坦福大学进行讲授的，华人之光了属于是。李沐老师在b站也进行了中文讲授。这篇博客是课堂的一些笔记，更新可能较慢，因为最近作业好多😢。</p>
-<h1 id="数据探索性分析"><a href="#数据探索性分析" class="headerlink" title="数据探索性分析"></a>数据探索性分析</h1><p>采用pandas进行数据的读取，查看</p>
-<ol>
-<li>若数据集每一列中， 有超过30%的数据是没有的，则将其丢弃。（data.drop())</li>
-<li>查看数据类型是否正确，若不正确，将其类型进行转换。 (data.dtypes)</li>
-<li>查看特征的某一些数学特性，例如：均值、标准差、最小值、最大值。（data,describe())</li>
-<li>对不正常的数据进行过滤，例如某些数据过小或者过大。</li>
-<li>查看特征的直方图，从而可以了解该特征的数据分布情况（sns.histplot())</li>
-</ol>
-<h1 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h1><h2 id="types-of-error"><a href="#types-of-error" class="headerlink" title="types of error"></a>types of error</h2><ol>
-<li>Outliers</li>
-<li>Rule violations</li>
-<li>Pattern violations</li>
-</ol>
 ]]></content>
       <tags>
         <tag>ML</tag>
